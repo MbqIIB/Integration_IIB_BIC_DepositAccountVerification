@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<msgCoreModel:MRMessageSet xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:MSGModel="http://www.ibm.com/msgmodel/2003/MSGModel" xmlns:msgCoreModel="http://www.ibm.com/msgmodel/2003/MSGCoreModel" name="CICS_Commarea_Message_Setv1.1" namespacesEnabled="false" msetVersionNo="1.1" defaultRep="//Binary1" currentMessageSetId="//@MRMessageSetID.0">
+  <MRMessageSetRep xsi:type="MSGModel:MRCWFMessageSetRep" name="Binary1" daysInFirstWeekOfTheYear="Four" firstDayOfWeek="Monday" timeZoneID="0" allowLenientDateTimes="false"/>
+  <MRMessageSetID repositoryId="167958982" messageSetId="1"/>
+</msgCoreModel:MRMessageSet>

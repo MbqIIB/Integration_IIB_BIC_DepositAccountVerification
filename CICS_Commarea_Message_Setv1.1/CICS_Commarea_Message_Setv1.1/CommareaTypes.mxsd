@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:complexType name="CallingProgram_Type">
+    <xsd:sequence>
+      <xsd:element ref="CallingProgram">
+        <xsd:annotation>
+          <xsd:appinfo source="WMQI_APPINFO">
+            <cwfInclRep messageSetDefaultRep="Binary1">
+              <cwfSimpleRep encodingNull="NullLiteralFill" encodingNullValue="0x00" mrLengthEncoding="fixedLength" paddingCharacter="SPACE" stringJustification="leftJustify" typeName="MRCWFStringRep"/>
+            </cwfInclRep>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CallingService_Type">
+    <xsd:sequence>
+      <xsd:element ref="CallingService">
+        <xsd:annotation>
+          <xsd:appinfo source="WMQI_APPINFO">
+            <cwfInclRep messageSetDefaultRep="Binary1">
+              <cwfSimpleRep encodingNull="NullLiteralFill" encodingNullValue="0x00" mrLengthEncoding="fixedLength" paddingCharacter="SPACE" stringJustification="leftJustify" typeName="MRCWFStringRep"/>
+            </cwfInclRep>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Channel_Type">
+    <xsd:sequence>
+      <xsd:element ref="Channel">
+        <xsd:annotation>
+          <xsd:appinfo source="WMQI_APPINFO">
+            <cwfInclRep messageSetDefaultRep="Binary1">
+              <cwfSimpleRep encodingNull="NullLiteralFill" encodingNullValue="0x00" mrLengthEncoding="fixedLength" paddingCharacter="SPACE" stringJustification="leftJustify" typeName="MRCWFStringRep"/>
+            </cwfInclRep>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Revision_Type">
+    <xsd:sequence>
+      <xsd:element ref="Revision">
+        <xsd:annotation>
+          <xsd:appinfo source="WMQI_APPINFO">
+            <cwfInclRep messageSetDefaultRep="Binary1">
+              <cwfSimpleRep encodingNull="NullLiteralFill" encodingNullValue="0x00" mrLengthEncoding="fixedLength" paddingCharacter="'0'" stringJustification="rightJustify" typeName="MRCWFStringRep"/>
+            </cwfInclRep>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="StatusDisposition_Type">
+    <xsd:sequence>
+      <xsd:element ref="StatusDisposition">
+        <xsd:annotation>
+          <xsd:appinfo source="WMQI_APPINFO">
+            <cwfInclRep messageSetDefaultRep="Binary1">
+              <cwfSimpleRep encodingNull="NullLiteralFill" encodingNullValue="0x00" mrLengthEncoding="fixedLength" paddingCharacter="SPACE" stringJustification="leftJustify" typeName="MRCWFStringRep"/>
+            </cwfInclRep>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Version_Type">
+    <xsd:sequence>
+      <xsd:element ref="Version">
+        <xsd:annotation>
+          <xsd:appinfo source="WMQI_APPINFO">
+            <cwfInclRep messageSetDefaultRep="Binary1">
+              <cwfSimpleRep encodingNull="NullLiteralFill" encodingNullValue="0x00" mrLengthEncoding="fixedLength" paddingCharacter="'0'" stringJustification="rightJustify" typeName="MRCWFStringRep"/>
+            </cwfInclRep>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="CallingProgram_sType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="8"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CallingService_sType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="20"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Channel_sType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Revision_sType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="StatusDisposition_sType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="1"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Version_sType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="2"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="Version" type="Version_sType"/>
+  <xsd:group name="CICSHeader_Group">
+    <xsd:sequence>
+      <xsd:element name="Version" nillable="true" type="Version_Type"/>
+      <xsd:element name="Revision" nillable="true" type="Revision_Type"/>
+      <xsd:element name="Channel" nillable="true" type="Channel_Type"/>
+      <xsd:element name="CallingProgram" nillable="true" type="CallingProgram_Type"/>
+      <xsd:element name="CallingService" nillable="true" type="CallingService_Type"/>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:element name="Revision" type="Revision_sType"/>
+  <xsd:element name="Channel" type="Channel_sType"/>
+  <xsd:element name="CallingProgram" type="CallingProgram_sType"/>
+  <xsd:element name="CallingService" type="CallingService_sType"/>
+  <xsd:element name="StatusDisposition" type="StatusDisposition_sType"/>
+  <xsd:group name="CICSReturn_Group">
+    <xsd:sequence>
+      <xsd:element name="StatusDisposition" nillable="false" type="StatusDisposition_Type"/>
+            <xsd:element name="StatusCode" nillable="false" type="StatusCode_Type"/>
+            <xsd:element name="StatusSubCode" nillable="false" type="xsd:string">
+        <xsd:annotation>
+          <xsd:appinfo source="WMQI_APPINFO">
+            <cwfInclRep messageSetDefaultRep="Binary1">
+              <cwfSimpleRep encodingNull="NullLogicalValue" mrLengthEncoding="fixedLength" paddingCharacter="NUL" stringJustification="leftJustify" typeName="MRCWFStringRep" width="4"/>
+            </cwfInclRep>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+            <xsd:element name="StatusDesc" nillable="false" type="xsd:string">
+        <xsd:annotation>
+          <xsd:appinfo source="WMQI_APPINFO">
+            <cwfInclRep messageSetDefaultRep="Binary1">
+              <cwfSimpleRep encodingNull="NullLogicalValue" mrLengthEncoding="fixedLength" paddingCharacter="NUL" stringJustification="leftJustify" typeName="MRCWFStringRep" width="30"/>
+            </cwfInclRep>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+            <xsd:element name="StatusSource" nillable="false" type="xsd:string">
+        <xsd:annotation>
+          <xsd:appinfo source="WMQI_APPINFO">
+            <cwfInclRep messageSetDefaultRep="Binary1">
+              <cwfSimpleRep encodingNull="NullLogicalValue" mrLengthEncoding="fixedLength" paddingCharacter="NUL" stringJustification="leftJustify" typeName="MRCWFStringRep" width="8"/>
+            </cwfInclRep>
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+        </xsd:sequence>
+  </xsd:group>
+    <xsd:simpleType name="StatusCode_sType">
+    <xsd:restriction base="xsd:string">
+      <xsd:length value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:element name="StatusCode" type="StatusCode_sType"/>
+    <xsd:complexType name="StatusCode_Type">
+    <xsd:sequence>
+      <xsd:element ref="StatusCode"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="CICSHeader_Type">
+    <xsd:sequence>
+      <xsd:group ref="CICSHeader_Group"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="CICSReturn_Type">
+    <xsd:sequence>
+      <xsd:group ref="CICSReturn_Group"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
