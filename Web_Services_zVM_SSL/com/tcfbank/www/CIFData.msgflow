@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmSOAPExtract.msgnode="ComIbmSOAPExtract.msgnode" xmlns:ComIbmSOAPInput.msgnode="ComIbmSOAPInput.msgnode" xmlns:ComIbmSOAPRequest.msgnode="ComIbmSOAPRequest.msgnode" xmlns:ExtractInput.msgflow="ExtractInput.msgflow" xmlns:LogResponseTime_BuildLog.msgflow="LogResponseTime_BuildLog.msgflow" xmlns:SOAPReply.msgflow="SOAPReply.msgflow" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow"
+    xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/tcfbank/www/CIFData.msgflow"
+    nsPrefix="com_tcfbank_www_CIFData.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="CIFData" bundleName="com/tcfbank/www/CIFData" pluginId="Web_Services_zVM_SSL"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj16/CIFData.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj30/CIFData.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmSOAPInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="9,63" wsdlFileName="Web_Services_Message_Setv1.1/com/tcfbank/www/CIFDataService.wsdl" selectedPortType="CIFDataPortType" selectedBinding="CIFDataBinding" selectedPort="CIFDataProvider" targetNamespace="http://www.tcfbank.com" useHTTPTransport="true" urlSelector="/mb/TLR/CIFData" useHTTPS="true" allowQueryWSDL="true" messageSetProperty="Web_Services_Message_Setv1.1" parserXmlnscBuildTreeUsingXMLSchema="false"
+          validateMaster="none" componentLevel="node" additionalInstances="5">
+        <translation xmi:type="utility:ConstantString" string="SOAP Input"/>
+      </nodes>
+      <nodes xmi:type="ExtractInput.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_2" location="85,63">
+        <translation xmi:type="utility:ConstantString" string="ExtractInput"/>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPRequest.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="257,63" wsdlFileName="Web_Services_Message_Setv1.1/com/tcfbank/www/cif/CIFChangeService.wsdl" selectedPortType="CIFWebService" selectedBinding="CIFWebServiceSOAP" selectedOperation="CIFChange" selectedPort="CIFWebServiceSOAP" targetNamespace="http://www.tcfbank.com/cif/" useHTTPTransport="true" webServiceURL="https://mn-webdev.tcfbank.com:8443/cif-ssl/CIFWebService" sslProtocol="SSL" messageSetProperty="Web_Services_Message_Setv1.1">
+        <translation xmi:type="utility:ConstantString" string="CIFChangeService"/>
+      </nodes>
+      <nodes xmi:type="SOAPReply.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_7" location="552,63">
+        <translation xmi:type="utility:ConstantString" string="SOAPReply"/>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPExtract.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_10" location="363,63">
+        <translation xmi:type="utility:ConstantString" string="SOAPExtract"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_9" location="152,63" computeExpression="esql://routine/com.tcfbank.www#CIFData_In.Main">
+        <translation xmi:type="utility:ConstantString" string="CIFData_CIFChange"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_12" location="441,63" computeExpression="esql://routine/com.tcfbank.www#CIFData_Out.Main">
+        <translation xmi:type="utility:ConstantString" string="CIFChange_CIFData"/>
+      </nodes>
+      <nodes xmi:type="LogResponseTime_BuildLog.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_4" location="616,63">
+        <translation xmi:type="utility:ConstantString" string="Write Log"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_31" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_9" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_10" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_12" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_12" sourceNode="FCMComposite_1_10" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_12" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_9" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

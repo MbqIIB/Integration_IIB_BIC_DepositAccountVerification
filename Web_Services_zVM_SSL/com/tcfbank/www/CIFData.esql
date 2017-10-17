@@ -1,0 +1,137 @@
+BROKER SCHEMA com.tcfbank.www
+
+
+CREATE COMPUTE MODULE CIFData_In
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE I INT;
+		CALL CopyMessageHeaders();   
+		SET OutputRoot.Properties.Encoding                         = 785;   
+		SET OutputRoot.Properties.CodedCharSetId				   = 1208;
+	 
+		SET Environment.Variables.EnterpriseHeader.Username        = InputRoot.XMLNSC.tns:CIFDataRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		SET Environment.Variables.EnterpriseHeader.Password        = InputRoot.XMLNSC.tns:CIFDataRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		SET Environment.Variables.EnterpriseHeader.IdentitySource  = InputRoot.XMLNSC.tns:CIFDataRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource;
+		SET Environment.Variables.EnterpriseHeader.MessageVersion  = InputRoot.XMLNSC.tns:CIFDataRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET Environment.Variables.EnterpriseHeader.MessageRevision = InputRoot.XMLNSC.tns:CIFDataRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET Environment.Variables.EnterpriseHeader.Channel         = InputRoot.XMLNSC.tns:CIFDataRequest.tns:EnterpriseHeader.tns:Channel;
+ 		SET Environment.Variables.EnterpriseHeader.MessageDateTime = InputRoot.XMLNSC.tns:CIFDataRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+ 	
+
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.tns:BankNumber                                            = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.tns:BankNumber;
+  		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.tns:BranchNumber                                          = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.tns:BranchNumber;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.tns:TellerNumber                                          = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.tns:TellerNumber;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.tns:AccountNumber                                         = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.tns:AccountNumber;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:SpecificInstructions                                  = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:SpecificInstructions;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:CurrentInformation.tns:FullName                       = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:CurrentInformation.tns:FullName;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:CurrentInformation.tns:DateOfBirth                    = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:CurrentInformation.tns:DateOfBirth;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:CurrentInformation.tns:TaxIdentificationNumber        = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:CurrentInformation.tns:TaxIdentificationNumber;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:CurrentInformation.tns:IDNumber                       = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:CurrentInformation.tns:IDNumber;
+ 		SET I = 1;
+ 		WHILE InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:CurrentInformation.cif:CurrentAddress.tns:AddressLine[I] IS NOT NULL DO
+			SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:CurrentInformation.cif:CurrentAddress.tns:AddressLine[I] = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:CurrentInformation.cif:CurrentAddress.tns:AddressLine[I];
+ 			SET I = I + 1;
+ 		END WHILE;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:CurrentInformation.cif:CurrentAddress.tns:City        = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:CurrentInformation.cif:CurrentAddress.tns:City;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:CurrentInformation.cif:CurrentAddress.tns:State       = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:CurrentInformation.cif:CurrentAddress.tns:State;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:CurrentInformation.cif:CurrentAddress.tns:ZipCode     = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:CurrentInformation.cif:CurrentAddress.tns:ZipCode;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:AdditionalCustomer1.tns:FullName                      = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AdditionalCustomer1.tns:FullName;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:AdditionalCustomer1.tns:TaxIdentificationNumber       = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AdditionalCustomer1.tns:TaxIdentificationNumber;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:AdditionalCustomer1.tns:DateOfBirth                   = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AdditionalCustomer1.tns:DateOfBirth;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:AdditionalCustomer2.tns:FullName                      = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AdditionalCustomer2.tns:FullName;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:AdditionalCustomer2.tns:TaxIdentificationNumber       = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AdditionalCustomer2.tns:TaxIdentificationNumber;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:AdditionalCustomer2.tns:DateOfBirth                   = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AdditionalCustomer2.tns:DateOfBirth;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:DateOfBirth                           = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:DateOfBirth;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:IDNumber                              = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:IDNumber;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:IDType                                = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:IDType;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:IDIssuedLocation                      = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:IDIssuedLocation;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:IDIssuedDate                          = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:IDIssuedDate;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:IDExpirationDate                      = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:IDExpirationDate;
+ 		SET I = 1;
+ 		WHILE InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.cif:ChangedAddress.tns:AddressLine[I] IS NOT NULL DO
+	 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.cif:ChangedAddress.tns:AddressLine[I]     = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.cif:ChangedAddress.tns:AddressLine[I];
+ 			SET I = I + 1;
+ 		END WHILE;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.cif:ChangedAddress.tns:City               = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.cif:ChangedAddress.tns:City;
+		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.cif:ChangedAddress.tns:State              = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.cif:ChangedAddress.tns:State;
+		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.cif:ChangedAddress.tns:ZipCode            = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.cif:ChangedAddress.tns:ZipCode;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:EmailAddress                          = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:EmailAddress;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:HomePhoneNumber                       = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:HomePhoneNumber;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:WorkPhoneNumber                       = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:WorkPhoneNumber;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:Gender                                = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:Gender;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:EmployerName                          = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:EmployerName;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:Occupation                            = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:Occupation;
+ 		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:IsUSCitizen                           = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:IsUSCitizen;
+		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:ChangedInfo.tns:IsAddressInUSA                        = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:ChangedInfo.tns:IsAddressInUSA;
+		SET I = 1;
+		WHILE InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AlternateAddress.tns:AddressLine[I] IS NOT NULL DO
+			SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:AlternateAddress.tns:AddressLine[I]                   = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AlternateAddress.tns:AddressLine[I];
+			SET I = I + 1;
+		END WHILE;
+		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:AlternateAddress.tns:City                             = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AlternateAddress.tns:City;
+		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:AlternateAddress.tns:State                            = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AlternateAddress.tns:State;
+		SET OutputRoot.XMLNSC.cif:CIFChangeRequest.cif:AlternateAddress.tns:ZipCode                          = InputRoot.XMLNSC.tns:CIFDataRequest.cif:CIFChangeRequest.cif:AlternateAddress.tns:ZipCode;
+ 		
+ 		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+CREATE COMPUTE MODULE CIFData_Out
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders(); 
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:EnterpriseHeader.tns:Identity.tns:Username                 = Environment.Variables.EnterpriseHeader.Username;
+		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:EnterpriseHeader.tns:Identity.tns:Username                 = Environment.Variables.EnterpriseHeader.Username;
+		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:EnterpriseHeader.tns:Identity.tns:Password                 = Environment.Variables.EnterpriseHeader.Password;
+		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource           = Environment.Variables.EnterpriseHeader.IdentitySource;
+		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion            = Environment.Variables.EnterpriseHeader.MessageVersion;
+		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision           = Environment.Variables.EnterpriseHeader.MessageRevision;
+		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:EnterpriseHeader.tns:Channel                               = Environment.Variables.EnterpriseHeader.Channel;
+ 		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:EnterpriseHeader.tns:MessageDateTime                       = Environment.Variables.EnterpriseHeader.MessageDateTime;
+ 		
+		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:Status.tns:StatusDisposition                               = InputRoot.XMLNSC.cif:CIFChangeResponse.tns:StatusDisposition;                  
+ 		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:Status.tns:StatusCode                                      = '000' || InputRoot.XMLNSC.cif:CIFChangeResponse.tns:StatusDisposition;
+ 		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:Status.tns:StatusDetail.tns:StatusCode                     = '000' || InputRoot.XMLNSC.cif:CIFChangeResponse.tns:StatusDisposition; 
+ 		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode                  = '000' || InputRoot.XMLNSC.cif:CIFChangeResponse.tns:StatusDisposition;
+ 		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:Status.tns:StatusDetail.tns:StatusDescription              = InputRoot.XMLNSC.cif:CIFChangeResponse.tns:StatusDescription;
+  		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:Status.tns:StatusDetail.tns:StatusSource                   = 'CIFChgSv';
+ 		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:Status.tns:Repeatable                                      = TRUE;
+ 		
+ 		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:CIFDataOutput.cif:CIFChangeResponse.tns:StatusDisposition  = InputRoot.XMLNSC.cif:CIFChangeResponse.tns:StatusDisposition;
+ 		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:CIFDataOutput.cif:CIFChangeResponse.tns:StatusDescription  = InputRoot.XMLNSC.cif:CIFChangeResponse.tns:StatusDescription;
+ 		SET OutputRoot.XMLNSC.tns:CIFDataResponse.tns:CIFDataOutput.cif:CIFChangeResponse.cif:CaseNumber         = InputRoot.XMLNSC.cif:CIFChangeResponse.cif:CaseNumber;
+ 
+ 		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() 
+	BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+

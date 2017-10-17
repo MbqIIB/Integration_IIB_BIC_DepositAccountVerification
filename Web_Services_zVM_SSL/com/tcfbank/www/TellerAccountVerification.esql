@@ -1,0 +1,166 @@
+BROKER SCHEMA com.tcfbank.www
+
+CREATE COMPUTE MODULE TellerAccountVerificationRequest_TEL7276Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN 
+		CALL CopyMessageHeaders();
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 						= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 			= 500;
+		SET OutputRoot.Properties.Encoding  				= 785;
+		SET OutputRoot.Properties.ExpirationTime			= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add	
+		CALL CopyEnterpriseHeader();
+		CALL CopyInputData();
+
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEnterpriseHeader() 
+	BEGIN
+		SET Environment.Variables.EnterpriseHeader.Identity.Username 				= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		SET Environment.Variables.EnterpriseHeader.Identity.Password 				= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource 			= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		SET Environment.Variables.EnterpriseHeader.Version.MessageVersion 			= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET Environment.Variables.EnterpriseHeader.Version.MessageRevision 			= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET Environment.Variables.EnterpriseHeader.Channel 							= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:EnterpriseHeader.tns:Channel;
+		SET Environment.Variables.EnterpriseHeader.MessageDateTime 					= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+	END;
+
+	CREATE PROCEDURE CopyInputData() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet 										= 'CICS_Commarea_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType 										= 'TEL7276Input';
+		SET OutputRoot.Properties.MessageFormat 									= 'Binary1';
+
+		SET OutputRoot.MRM.tel7276_input_header.Version.Version 					= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET OutputRoot.MRM.tel7276_input_header.Revision.Revision 					= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET OutputRoot.MRM.tel7276_input_header.Channel.Channel 					= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:EnterpriseHeader.tns:Channel;
+		SET OutputRoot.MRM.tel7276_input_header.CallingProgram.CallingProgram 		= 'BROKER';
+		SET OutputRoot.MRM.tel7276_input_header.CallingService.CallingService 		= 'TELACCTVERIFY';	
+		SET OutputRoot.MRM.tel7276_output_return VALUE 								= NULL;
+
+		SET OutputRoot.MRM.tel7276_input_area.tel7276_Function 	 					= 'B';
+
+		SET OutputRoot.MRM.tel7276_input_area.tel7276_AccountNumber					= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:AccountNumber;
+		IF InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:Application IS NOT NULL THEN
+			SET OutputRoot.MRM.tel7276_input_area.tel7276_Application					= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:Application;
+		ELSE
+			SET OutputRoot.MRM.tel7276_input_area.tel7276_Application VALUE				= NULL;
+		END IF;
+		IF InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:BankNumber IS NOT NULL THEN
+			SET OutputRoot.MRM.tel7276_input_area.tel7276_BankNumber					= InputRoot.XMLNSC.tns:TellerAccountVerificationRequest.tns:BankNumber;
+		ELSE
+			SET OutputRoot.MRM.tel7276_input_area.tel7276_BankNumber VALUE				= NULL;
+		END IF;
+
+		SET OutputRoot.MRM.tel7276_output_area VALUE 								= NULL;	
+	END;
+
+END MODULE;
+
+
+CREATE COMPUTE MODULE TEL7276Output_TellerAccountVerificationResponse
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN 
+		CALL CopyMessageHeaders();
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 									= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding											= Environment.Variables.Encoding;
+
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier 			= CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+		CALL BuildOutput();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE BuildOutput() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet 																			= 'Web_Services_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType 																			= 'TellerAccountVerificationResponse';
+		SET OutputRoot.Properties.MessageFormat 																		= 'XML1';
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:Status.tns:StatusDisposition 					= InputRoot.MRM.tel7276_output_return.StatusDisposition.StatusDisposition;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:Status.tns:StatusCode 							= InputRoot.MRM.tel7276_output_return.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusCode 			= InputRoot.MRM.tel7276_output_return.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode 		= InputRoot.MRM.tel7276_output_return.StatusSubCode;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusDescription 	= InputRoot.MRM.tel7276_output_return.StatusDesc;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusSource 		= InputRoot.MRM.tel7276_output_return.StatusSource;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:Status.tns:Repeatable 							= TRUE;
+
+		CALL ReplaceEnterpriseHeader();
+		
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:AccountNumber 									= InputRoot.MRM.tel7276_input_area.tel7276_AccountNumber;
+		IF InputRoot.MRM.tel7276_input_area.tel7276_BankNumber IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:BankNumber 									= InputRoot.MRM.tel7276_input_area.tel7276_BankNumber;
+		END IF;
+		IF InputRoot.MRM.tel7276_input_area.tel7276_Application IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:Application 								= InputRoot.MRM.tel7276_input_area.tel7276_Application;
+		END IF;
+
+		IF InputRoot.MRM.tel7276_output_return.StatusCode.StatusCode = '0000' THEN
+			IF InputRoot.MRM.tel7276_output_area.tel7276_7276_output_where_found IS NOT NULL THEN
+				SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:TellerAccountVerificationOutput.tns:TellerAccountVerificationResponseWhereFound = InputRoot.MRM.tel7276_output_area.tel7276_7276_output_where_found;
+			END IF;
+			DECLARE I INTEGER 1;
+			WHILE ((I < 10) AND (InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_bank IS NOT NULL)) DO
+				IF InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_bank IS NOT NULL THEN
+					SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:TellerAccountVerificationOutput.tns:TellerAccountVerificationInformation[I].tns:BankNumber = InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_bank;
+				END IF;
+				IF InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_application IS NOT NULL THEN
+					SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:TellerAccountVerificationOutput.tns:TellerAccountVerificationInformation[I].tns:Application = InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_application;
+				END IF;
+				IF InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_status IS NOT NULL THEN
+					BEGIN
+						IF InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_status = '' THEN
+							SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:TellerAccountVerificationOutput.tns:TellerAccountVerificationInformation[I].tns:OpenClosedStatus = 'Open';
+						ELSE
+							SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:TellerAccountVerificationOutput.tns:TellerAccountVerificationInformation[I].tns:OpenClosedStatus = 'Closed';
+						END IF;
+					END;
+				END IF;
+				IF InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_type IS NOT NULL THEN
+					SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:TellerAccountVerificationOutput.tns:TellerAccountVerificationInformation[I].tns:AccountTypeValue = InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_type;
+				END IF;
+				IF InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_branch IS NOT NULL THEN
+					SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:TellerAccountVerificationOutput.tns:TellerAccountVerificationInformation[I].tns:BranchNumber = InputRoot.MRM.tel7276_output_area.tel7276_output_data[I].tel7276_7276_output_branch;
+				END IF;
+			SET I = I + 1;	
+			END WHILE;
+		END IF;
+	END;
+	
+	CREATE PROCEDURE ReplaceEnterpriseHeader() 
+	BEGIN
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:EnterpriseHeader.tns:Identity.tns:Username = Environment.Variables.EnterpriseHeader.Identity.Username;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:EnterpriseHeader.tns:Identity.tns:Password = NULL;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion = Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:EnterpriseHeader.tns:Channel = Environment.Variables.EnterpriseHeader.Channel;
+		SET OutputRoot.XMLNSC.tns:TellerAccountVerificationResponse.tns:EnterpriseHeader.tns:MessageDateTime = Environment.Variables.EnterpriseHeader.MessageDateTime;
+	END;
+	
+
+END MODULE;

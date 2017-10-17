@@ -1,0 +1,182 @@
+BROKER SCHEMA com.tcfbank.www
+
+CREATE COMPUTE MODULE OverdraftOptInInformation_DEP7208Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN 
+		 CALL CopyMessageHeaders();
+		 
+		 SET OutputRoot.Properties.MessageSet = 'CICS_Commarea_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'DEP7208Input';
+		 SET OutputRoot.Properties.MessageFormat = 'Binary1';	
+
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add		 
+
+		 SET Environment.Variables.EnterpriseHeader.Identity.Username	 		= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		 SET Environment.Variables.EnterpriseHeader.Identity.Password 			= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		 SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource 	= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		 SET Environment.Variables.EnterpriseHeader.Version.MessageVersion 		= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		 SET Environment.Variables.EnterpriseHeader.Version.MessageRevision 	= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		 SET Environment.Variables.EnterpriseHeader.Channel 					= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:EnterpriseHeader.tns:Channel;
+		 SET Environment.Variables.EnterpriseHeader.MessageDateTime 			= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+		 
+		 SET OutputRoot.MRM.dep7208_input_header.Version.Version 				= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		 SET OutputRoot.MRM.dep7208_input_header.Revision.Revision				= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		 SET OutputRoot.MRM.dep7208_input_header.Channel.Channel 				= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:EnterpriseHeader.tns:Channel;
+		 SET OutputRoot.MRM.dep7208_input_header.CallingProgram.CallingProgram 	= 'BROKER';
+		 SET OutputRoot.MRM.dep7208_input_header.CallingService.CallingService	= 'OVERDRAFTOPTINFO';	
+		 SET OutputRoot.MRM.dep7208_output_return 		VALUE  		 			= NULL;
+
+		 SET OutputRoot.MRM.dep7208_input_area.DEP7208_BKNBR 					= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:AccountIdentifier.tns:BankNumber;
+		 SET OutputRoot.MRM.dep7208_input_area.DEP7208_APPL						= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:AccountIdentifier.tns:Application;
+		 SET OutputRoot.MRM.dep7208_input_area.DEP7208_ACCOUNT					= InputRoot.XMLNSC.tns:OverdraftOptInInformationRequest.tns:AccountIdentifier.tns:AccountNumber;		 
+
+		 SET OutputRoot.MRM.dep7208_input_area.DEP7208_FUNCTION					= 'I';
+		 
+		 IF Environment.Variables.EnterpriseHeader.Channel = 'IVR' THEN
+	 		SET OutputRoot.MRM.dep7208_input_area.DEP7208_SUBFUNCTION				= '';
+		 ELSE
+		 	SET OutputRoot.MRM.dep7208_input_area.DEP7208_SUBFUNCTION				= 'P';
+		 END IF;
+		 SET OutputRoot.MRM.dep7208_input_area.DEP7208_TELLER		 		    = '';
+		 SET OutputRoot.MRM.dep7208_input_area.DEP7208_OPTIN_NEW				= '';		 
+		 SET OutputRoot.MRM.dep7208_output_area			 VALUE   				= NULL;
+		 
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;
+
+CREATE COMPUTE MODULE OverdraftOptInInformation_DEP7208Output_Response
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN 
+		 CALL CopyMessageHeaders();
+
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+
+		 SET OutputRoot.Properties.MessageSet = 'Web_Services_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'OverdraftOptInInformationResponse';
+		 SET OutputRoot.Properties.MessageFormat = 'XML1';
+
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:Status.tns:StatusDisposition 					= InputRoot.MRM.dep7208_output_return.StatusDisposition.StatusDisposition;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:Status.tns:StatusCode 							= InputRoot.MRM.dep7208_output_return.StatusCode.StatusCode;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:Status.tns:StatusDetail.tns:StatusCode 		= InputRoot.MRM.dep7208_output_return.StatusCode.StatusCode;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode 		= InputRoot.MRM.dep7208_output_return.StatusSubCode;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:Status.tns:StatusDetail.tns:StatusDescription 	= InputRoot.MRM.dep7208_output_return.StatusDesc;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:Status.tns:StatusDetail.tns:StatusSource 		= InputRoot.MRM.dep7208_output_return.StatusSource;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:Status.tns:Repeatable 							= TRUE;
+		 
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:EnterpriseHeader.tns:Identity.tns:Username 			= Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:EnterpriseHeader.tns:Identity.tns:Password 			= NULL;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource 		= Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion 		= Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision 		= Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:EnterpriseHeader.tns:Channel 							= Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:EnterpriseHeader.tns:MessageDateTime 					= Environment.Variables.EnterpriseHeader.MessageDateTime;
+		
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:AccountIdentifier.tns:AccountNumber 				= InputRoot.MRM.dep7208_input_area.DEP7208_ACCOUNT;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:AccountIdentifier.tns:BankNumber 					= InputRoot.MRM.dep7208_input_area.DEP7208_BKNBR;
+		 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:AccountIdentifier.tns:Application 					= InputRoot.MRM.dep7208_input_area.DEP7208_APPL;		 
+
+		 IF InputRoot.MRM.dep7208_output_return.StatusDisposition.StatusDisposition = '0' THEN
+
+--*******************Begin of Current Information*********************
+--***The Current Information will be populated only if the OPTIN value is not null.
+
+--******CURRENT STATUS*********
+
+		   IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN IS NOT NULL THEN
+		   	IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN <> ''  THEN
+	         	SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:OverdraftOptInInformationOutput.tns:OverdraftOptInCurrentInformation.tns:OverdraftOptInStatus 	 = InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN;   
+		   	END IF;
+		   END IF;
+
+--******CURRENT OPTIN DATE*****
+			IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_DATE IS NOT NULL THEN
+				SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:OverdraftOptInInformationOutput.tns:OverdraftOptInCurrentInformation.tns:OverdraftOptInDate 	= InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_DATE;   
+			END IF;
+
+--******CURRENT CHANNEL********
+			IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_CHANNEL IS NOT NULL THEN
+			 	SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:OverdraftOptInInformationOutput.tns:OverdraftOptInCurrentInformation.tns:Channel 				= InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_CHANNEL;   
+			END IF;
+
+--*****************************************END OF CURRENT INFORMATION*****************************************
+
+--*****************************************BEGIN OF PENDING INFORMATION***************************************
+
+--*********The Pending Information is Populated only if OPTIN-PEND is not NULL**************
+			IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_PEND IS NOT NULL THEN
+			 IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_PEND <> '' THEN
+
+--******PENDING OPT OUT STATUS***********			 	
+			 SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:OverdraftOptInInformationOutput.tns:OverdraftOptInPendingInformation.tns:OverdraftOptInStatus  = InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_PEND;   
+
+--******PENDING OPTIN DATE***************
+			IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_PEND_DATE IS NOT NULL THEN
+			 	SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:OverdraftOptInInformationOutput.tns:OverdraftOptInPendingInformation.tns:OverdraftOptInDate	= InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_PEND_DATE;   
+			END IF;
+
+--******PENDING CHANNEL***************
+			  IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_PEND_CHANNEL IS NOT NULL THEN
+ 			 	SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:OverdraftOptInInformationOutput.tns:OverdraftOptInPendingInformation.tns:Channel 	 			= InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_PEND_CHANNEL;   
+			  END IF;
+
+--******PENDING TELLER NUMBER*********
+			  IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_PEND_TELLER IS NOT NULL THEN
+ 			 	SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:OverdraftOptInInformationOutput.tns:OverdraftOptInPendingInformation.tns:TellerNumber 	 	= InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_PEND_TELLER;    			 
+			  END IF;
+
+			  END IF;
+			END IF;
+--******************END OF PENDING INFORMATION*********			
+
+--******PENDING INTERCEPT DATE/LAST MSG****************
+			  IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_LASTMSG IS NOT NULL THEN
+ 			 	SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:OverdraftOptInInformationOutput.tns:LastMessageInterceptDate 									= InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_OPTIN_LASTMSG; 			 
+			  END IF;
+
+--******PENDING PRODUCT DESCRIPTION*******************
+			  IF InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_PROD_DESC IS NOT NULL THEN
+ 			 	SET OutputRoot.XMLNSC.tns:OverdraftOptInInformationResponse.tns:OverdraftOptInInformationOutput.tns:ProductDescription		 									= InputRoot.MRM.dep7208_output_area.DEP7208_DATA.DEP7208_PROD_DESC;
+			  END IF;
+
+		 END IF;
+		 
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

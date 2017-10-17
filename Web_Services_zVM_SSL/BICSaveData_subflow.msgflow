@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ComIbmPassthru.msgnode="ComIbmPassthru.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="BICSaveData_subflow.msgflow"
+    nsPrefix="BICSaveData_subflow.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.Request_queue" name="Request_queue" defaultValueLiteral="TCFWMBMQ.DEPOSITACCOUNTVERIFICATION.REQUEST">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.Response_queue" name="Response_queue" defaultValueLiteral="TCFWMBMQ.DEPOSITACCOUNTVERIFICATION.RESPONSE">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.SaveData_queue" name="SaveData_queue" defaultValueLiteral="TCFWMBMQ.DEPOSITACCOUNTVERI.ETBICWSS.SAVEDATA">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="BICSaveData_subflow" bundleName="BICSaveData_subflow" pluginId="Web_Services_zVM_SSL"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj16/BICSaveData_subflow.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj30/BICSaveData_subflow.gif"/>
+    <longDescription xmi:type="utility:ConstantString" string="&#xD;&#xA;&#xD;&#xA;Versioning:&#xD;&#xA;1.0 -> original coding"/>
+    <version xmi:type="utility:ConstantString" string="1.0"/>
+    <composition>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="202,44" queueName="TCFWMBMQ.REQUEST.SERVICENAME" newMsgId="true" newCorrelId="true" request="true" replyToQ="TCFWMBMQ.RESPONSE.SERVICENAME">
+        <translation xmi:type="utility:ConstantString" string="MQOutput to CICS"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="416,49" queueName="TCFWMBMQ.SAVEDATA" destinationMode="list">
+        <translation xmi:type="utility:ConstantString" string="MQOutput to SaveData"/>
+      </nodes>
+      <nodes xmi:type="eflow:FCMSource" xmi:id="InTerminal.Input" location="30,44">
+        <translation xmi:type="utility:TranslatableString" key="InTerminal.Input" bundleName="BICSaveData_subflow" pluginId="Web_Services_zVM_SSL"/>
+      </nodes>
+      <nodes xmi:type="ComIbmPassthru.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="112,44" label="$MQSI Subflow Version: SaveData = 1.0 MQSI$">
+        <translation xmi:type="utility:ConstantString" string="Version 1.0"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Version Label"/>
+        <longDescription xmi:type="utility:ConstantString" string="This node exists simply to version the subflow.  &#xD;&#xA;&#xD;&#xA;To change the version:&#xD;&#xA;1)  Change the Node name on this page&#xD;&#xA;2) Change the Label on the Basic page&#xD;&#xA;3) Add version comments to the Long Description section of the subflow"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="312,52" computeExpression="esql://routine/com.tcfbank.www#BICSaveData_subflow_BuildBicSaveData.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="Build BIC SaveData"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_4" sourceNode="InTerminal.Input" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Basic" configurable="true" describedAttribute="Property.Request_queue">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.Request_queue" bundleName="SaveData_subflow" pluginId="Web_Services_zVM"/>
+        <propertyDescriptor groupName="Group.Basic" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.RequestListenerPropertyEditor" configurable="true" describedAttribute="Property.Response_queue">
+          <propertyName xmi:type="utility:TranslatableString" key="Property.Response_queue" bundleName="SaveData_subflow" pluginId="Web_Services_zVM"/>
+          <propertyDescriptor groupName="Group.Basic" configurable="true" describedAttribute="Property.SaveData_queue">
+            <propertyName xmi:type="utility:TranslatableString" key="Property.SaveData_queue" bundleName="SaveData_subflow" pluginId="Web_Services_zVM"/>
+          </propertyDescriptor>
+        </propertyDescriptor>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <attributeLinks promotedAttribute="Property.Request_queue" overriddenNodes="FCMComposite_1_1">
+      <overriddenAttribute href="ComIbmMQOutput.msgnode#Property.queueName"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.Response_queue" overriddenNodes="FCMComposite_1_1">
+      <overriddenAttribute href="ComIbmMQOutput.msgnode#Property.replyToQ"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.SaveData_queue" overriddenNodes="FCMComposite_1_2">
+      <overriddenAttribute href="ComIbmMQOutput.msgnode#Property.queueName"/>
+    </attributeLinks>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

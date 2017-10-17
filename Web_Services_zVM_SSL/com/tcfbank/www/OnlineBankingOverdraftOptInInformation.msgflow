@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmSOAPInput.msgnode="ComIbmSOAPInput.msgnode" xmlns:ExtractInput.msgflow="ExtractInput.msgflow" xmlns:LogResponseTime_BuildLog.msgflow="LogResponseTime_BuildLog.msgflow" xmlns:RetrieveSaveData_subflow.msgflow="RetrieveSaveData_subflow.msgflow" xmlns:SOAPReply.msgflow="SOAPReply.msgflow" xmlns:SaveData_subflow.msgflow="SaveData_subflow.msgflow" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow"
+    xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/tcfbank/www/OnlineBankingOverdraftOptInInformation.msgflow"
+    nsPrefix="com_tcfbank_www_OnlineBankingOverdraftOptInInformation.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="OnlineBankingOverdraftOptInInformation" bundleName="com/tcfbank/www/OnlineBankingOverdraftOptInInformation" pluginId="Web_Services_zVM_SSL"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj16/OnlineBankingOverdraftOptInInformation.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj30/OnlineBankingOverdraftOptInInformation.gif"/>
+    <version xmi:type="utility:ConstantString" string="1.1"/>
+    <composition>
+      <nodes xmi:type="ComIbmSOAPInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="24,56" wsdlFileName="Web_Services_Message_Setv1.1/com/tcfbank/www/OnlineBankingOverdraftOptInInformationService.wsdl" selectedPortType="OnlineBankingOverdraftOptInInformationPortType" selectedBinding="OnlineBankingOverdraftOptInInformationBinding" selectedPort="OnlineBankingOverdraftOptInInformationProvider" targetNamespace="http://www.tcfbank.com" useHTTPTransport="true" urlSelector="/mb/claws/OnlineBankingOverdraftOptInInformation"
+          useHTTPS="true" allowQueryWSDL="true" sendProcessingFaultsToFailure="true" messageSetProperty="Web_Services_Message_Setv1.1" parserXmlnscBuildTreeUsingXMLSchema="false" validateMaster="none" validateFailureAction="exceptionList" componentLevel="node" additionalInstances="10">
+        <translation xmi:type="utility:ConstantString" string="SOAP Input"/>
+      </nodes>
+      <nodes xmi:type="ExtractInput.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_13" location="94,56">
+        <translation xmi:type="utility:ConstantString" string="ExtractInput"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="248,55" computeExpression="esql://routine/com.tcfbank.www#OnlineBankingOverdraftOptInInformation_WEB7203Input.Main">
+        <translation xmi:type="utility:ConstantString" string="XML_WEB7203"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_6" location="123,128" computeExpression="esql://routine/com.tcfbank.www#OnlineBankingOverdraftOptInInformation_WEB7203Output_Response.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="WEB7203_XML"/>
+      </nodes>
+      <nodes xmi:type="SOAPReply.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_7" location="220,129">
+        <translation xmi:type="utility:ConstantString" string="SOAPReply"/>
+      </nodes>
+      <nodes xmi:type="LogResponseTime_BuildLog.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_8" location="304,128">
+        <translation xmi:type="utility:ConstantString" string="Write Log"/>
+      </nodes>
+      <nodes xmi:type="SaveData_subflow.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_3" location="345,56" Request_queue="TCFWMBMQ.OBOVERDRAFTOPTIN.REQUEST" Response_queue="TCFWMBMQ.OBOVERDRAFTOPTIN.RESPONSE" SaveData_queue="TCFWMBMQ.OBOVERDRAFTOPTIN.SAVESSL">
+        <translation xmi:type="utility:ConstantString" string="SaveData"/>
+      </nodes>
+      <nodes xmi:type="RetrieveSaveData_subflow.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_4" location="15,127" Response_queue="TCFWMBMQ.OBOVERDRAFTOPTIN.RESPONSE" SaveData_queue="TCFWMBMQ.OBOVERDRAFTOPTIN.SAVESSL" messageTypeProperty="WEB7203Output">
+        <translation xmi:type="utility:ConstantString" string="RetrieveSaveData"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_13" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_8" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_6" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_13" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

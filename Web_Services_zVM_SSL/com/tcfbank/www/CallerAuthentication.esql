@@ -1,0 +1,162 @@
+BROKER SCHEMA com.tcfbank.www
+
+CREATE COMPUTE MODULE CallerAuthenticationRequest_WMB7210Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 CALL CopyMessageHeaders();
+		 SET OutputRoot.Properties.MessageSet = 'CICS_Commarea_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'WMB7210Input';
+		 SET OutputRoot.Properties.MessageFormat = 'Binary1';	
+		 
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add		 
+		 	 
+		 SET Environment.Variables.EnterpriseHeader.Identity.Username = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		 SET Environment.Variables.EnterpriseHeader.Identity.Password = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		 SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		 SET Environment.Variables.EnterpriseHeader.Version.MessageVersion = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		 SET Environment.Variables.EnterpriseHeader.Version.MessageRevision = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		 SET Environment.Variables.EnterpriseHeader.Channel = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:EnterpriseHeader.tns:Channel;
+		 SET Environment.Variables.EnterpriseHeader.MessageDateTime = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+		 
+		 SET OutputRoot.MRM.WMB7210InputHeader.Version.Version = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		 SET OutputRoot.MRM.WMB7210InputHeader.Revision.Revision = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		 SET OutputRoot.MRM.WMB7210InputHeader.Channel.Channel = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:EnterpriseHeader.tns:Channel;
+		 SET OutputRoot.MRM.WMB7210InputHeader.CallingProgram.CallingProgram = 'BROKER';
+		 SET OutputRoot.MRM.WMB7210InputHeader.CallingService.CallingService = 'CALLERAUTH';	
+		 SET OutputRoot.MRM.WMB7210OutputHeader VALUE = NULL;
+		 SET OutputRoot.MRM.WMB7210InputArea.WMB7210_func = 'R';
+		 SET OutputRoot.MRM.WMB7210InputArea.WMB7210_c_cust_nameid VALUE = NULL;
+
+		 SET OutputRoot.MRM.WMB7210InputArea.WMB7210_r_acct_key.WMB7210_r_acct = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:IdentificationNumber;
+ 		 SET OutputRoot.MRM.WMB7210InputArea.WMB7210_r_acct_key.WMB7210_r_bank VALUE = NULL;
+		 SET OutputRoot.MRM.WMB7210InputArea.WMB7210_r_acct_key.WMB7210_r_prod VALUE = NULL;
+
+		 SET OutputRoot.MRM.WMB7210InputArea.WMB7210_r_taxid.fill_0 VALUE = NULL;
+		 IF InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:TinLastFour IS NULL THEN
+		 	SET OutputRoot.MRM.WMB7210InputArea.WMB7210_r_taxid.WMB7210_r_taxid_4 VALUE = NULL;
+		 ELSE 
+		    SET OutputRoot.MRM.WMB7210InputArea.WMB7210_r_taxid.WMB7210_r_taxid_4 = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:TinLastFour;
+		 END IF;
+		 SET OutputRoot.MRM.WMB7210InputArea.WMB7210_r_PIN = InputRoot.XMLNSC.tns:CallerAuthenticationRequest.tns:SecretCode;
+		 		 		 		 		 		 
+ 		 SET OutputRoot.MRM.WMB7210OutputArea VALUE = NULL;
+		-- CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+
+CREATE COMPUTE MODULE WMB7210Output_CallerAuthenticationResponse
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 DECLARE I INT 1;
+		 CALL CopyMessageHeaders();
+		 
+-- ADDED for MQ interface
+		
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add		 
+		 
+		 SET OutputRoot.Properties.MessageSet = 'Web_Services_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'CallerAuthenticationResponse';
+		 SET OutputRoot.Properties.MessageFormat = 'XML1';
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:Status.tns:StatusDisposition = InputRoot.MRM.WMB7210_output_return.StatusDisposition.StatusDisposition;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:Status.tns:StatusCode = InputRoot.MRM.WMB7210_output_return.StatusCode.StatusCode;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:Status.tns:StatusDetail.tns:StatusCode = InputRoot.MRM.WMB7210_output_return.StatusCode.StatusCode;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode = InputRoot.MRM.WMB7210_output_return.StatusSubCode;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = InputRoot.MRM.WMB7210_output_return.StatusDesc;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:Status.tns:StatusDetail.tns:StatusSource = InputRoot.MRM.WMB7210_output_return.StatusSource;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:Status.tns:Repeatable = TRUE;
+
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:EnterpriseHeader.tns:Identity.tns:Username = Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:EnterpriseHeader.tns:Identity.tns:Password = NULL;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion = Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:EnterpriseHeader.tns:Channel = Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:EnterpriseHeader.tns:MessageDateTime = Environment.Variables.EnterpriseHeader.MessageDateTime;
+		 	 
+
+		 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:IdentificationNumber = InputRoot.MRM.WMB7210_input_area.WMB7210_r_acct_key.WMB7210_r_acct;
+		 IF InputRoot.MRM.WMB7210_input_area.WMB7210_r_taxid.WMB7210_r_taxid_4 IS NOT NULL THEN
+		 	SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:TinLastFour = InputRoot.MRM.WMB7210_input_area.WMB7210_r_taxid.WMB7210_r_taxid_4;
+		 END IF;
+		 IF InputRoot.MRM.WMB7210_output_return.StatusDisposition.StatusDisposition = '0' OR
+		 	InputRoot.MRM.WMB7210_output_return.StatusCode.StatusCode = '0003' THEN
+		 	SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:AuthenticationType = InputRoot.MRM.WMB7210_output_area.WMB7210_auth_type;
+		 	SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:CustomerNumber = InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_cust_nameid; 
+		 	SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:TaxIdentificationNumber = InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_cust_taxid;
+		 	IF InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_cust_bal IS NOT NULL THEN
+		    	 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:AggregateBalance.tns:BalanceAmount = InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_cust_bal; 
+		 	ELSE
+		    	 SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:AggregateBalance.tns:BalanceAmount = 0;
+		 	END IF;
+		 	SET I = 1;
+		 	WHILE ((InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_crd_prop[I].WMB7210_crd_new IS NOT NULL) AND (I < 7)) DO
+		 		SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:CardActionGroup[I].tns:CardNumber = InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_crd_prop[I].WMB7210_crd_new;
+				SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:CardActionGroup[I].tns:CardMajorStatus = InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_crd_prop[I].WMB7210_crd_maj;
+				SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:CardActionGroup[I].tns:CardMinorStatus = InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_crd_prop[I].WMB7210_crd_min;
+				IF InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_crd_prop[I].WMB7210_crd_dact IS NOT NULL THEN
+					SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:CardActionGroup[I].tns:CardStatusDate = InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_crd_prop[I].WMB7210_crd_dact;
+				END IF;
+				SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:CardActionGroup[I].tns:CardOldLastFour = NULLIF(InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_crd_prop[I].WMB7210_crd_old4, '');
+		 		SET I = I + 1;
+		 	END WHILE;
+		 	IF NOT InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_cust_vip = ' ' THEN
+		 		SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:VIPStatus = InputRoot.MRM.WMB7210_output_area.WMB7210_cust.WMB7210_cust_vip;
+		 	ELSE
+		 		SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:VIPStatus = NULL;
+		 	END IF;
+		 	IF InputRoot.MRM.WMB7210_output_area.WMB7210_cust.dep7320_olb_prop.dep7320_olb_flags IS NOT NULL THEN
+		 		SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:OnlineBankingCombinedStatus = InputRoot.MRM.WMB7210_output_area.WMB7210_cust.dep7320_olb_prop.dep7320_olb_flags;
+		 	END IF;
+		 	SET I = 1;
+--		 	WHILE ((I < 31) AND (InputRoot.MRM.WMB7210_output_area.WMB7210_rel_acct[I].WMB7210_acct IS NOT NULL)) DO
+		 	WHILE ((I < 1001) AND (InputRoot.MRM.WMB7210_output_area.WMB7210_rel_acct[I].WMB7210_acct IS NOT NULL)) DO
+		 		SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:Identifier[I].tns:IdentificationNumber = InputRoot.MRM.WMB7210_output_area.WMB7210_rel_acct[I].WMB7210_acct;
+		 		SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:Identifier[I].tns:BankNumber = InputRoot.MRM.WMB7210_output_area.WMB7210_rel_acct[I].WMB7210_bank;
+		 		SET OutputRoot.XMLNSC.tns:CallerAuthenticationResponse.tns:CallerAuthenticationOutput.tns:Identifier[I].tns:Application = InputRoot.MRM.WMB7210_output_area.WMB7210_rel_acct[I].WMB7210_appl;
+		 		SET I = I + 1;
+		 	END WHILE;
+		 END IF;	 	
+		 -- CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

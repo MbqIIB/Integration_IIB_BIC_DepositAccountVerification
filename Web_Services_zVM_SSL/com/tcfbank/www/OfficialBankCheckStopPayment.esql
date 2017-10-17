@@ -1,0 +1,144 @@
+BROKER SCHEMA com.tcfbank.www
+
+
+CREATE COMPUTE MODULE OfficialBankCheckStopPaymentRequest_SMX7003Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add	
+		CALL CopyEnterpriseHeader();
+		CALL CopyInputData();
+		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+	
+	CREATE PROCEDURE CopyEnterpriseHeader() 
+	BEGIN
+		SET Environment.Variables.EnterpriseHeader.Identity.Username       = InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		SET Environment.Variables.EnterpriseHeader.Identity.Password       = InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource = InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		SET Environment.Variables.EnterpriseHeader.Version.MessageVersion  = InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET Environment.Variables.EnterpriseHeader.Version.MessageRevision = InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET Environment.Variables.EnterpriseHeader.Channel                 = InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:EnterpriseHeader.tns:Channel;
+		SET Environment.Variables.EnterpriseHeader.MessageDateTime         = InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+	END;
+	
+	CREATE PROCEDURE CopyInputData() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'CICS_Commarea_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'SMX7003Input';
+		SET OutputRoot.Properties.MessageFormat = 'Binary1';	
+		
+		SET OutputRoot.MRM.SMX7003_INPUT_HEADER.Version.Version              	= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET OutputRoot.MRM.SMX7003_INPUT_HEADER.Revision.Revision             	= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET OutputRoot.MRM.SMX7003_INPUT_HEADER.Channel.Channel               	= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:EnterpriseHeader.tns:Channel;
+		SET OutputRoot.MRM.SMX7003_INPUT_HEADER.CallingProgram.CallingProgram 	= 'BROKER';
+		SET OutputRoot.MRM.SMX7003_INPUT_HEADER.CallingService.CallingService 	= 'OBCSTOPPAY';	
+		SET OutputRoot.MRM.SMX7003_OUTPUT_RETURN VALUE = NULL;
+	
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_INPUT_FUNCTION	  					= 'STP';
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_ACCOUNT_NUMBER	  					= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckAccountNumber;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_SERIAL_NUMBER           				= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckSerialNumber;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_REQ_IDENTITY.SMX7003_BANK_NUMBER		= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckRequestIdentity.tns:BankNumber;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_REQ_IDENTITY.SMX7003_BRANCH_NUMBER	= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckRequestIdentity.tns:BranchNumber;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_REQ_IDENTITY.SMX7003_ID_NUMBER		= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckRequestIdentity.tns:OfficialBankCheckIDNumber;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_REQ_IDENTITY.SMX7003_ID_TYPE			= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckRequestIdentity.tns:OfficialBankCheckIDType;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_KEY_IDENTITY.SMX7003_BANK_NUMBER		= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckKeyIdentity.tns:BankNumber;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_KEY_IDENTITY.SMX7003_BRANCH_NUMBER	= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckKeyIdentity.tns:BranchNumber;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_KEY_IDENTITY.SMX7003_ID_NUMBER		= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckKeyIdentity.tns:OfficialBankCheckIDNumber;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_KEY_IDENTITY.SMX7003_ID_TYPE			= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckKeyIdentity.tns:OfficialBankCheckIDType;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_INPUT_AMOUNT            				= InputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentRequest.tns:OfficialBankCheckAmount;
+		SET OutputRoot.MRM.SMX7003_INPUT_AREA.fill_0 VALUE = NULL;
+		SET OutputRoot.MRM.SMX7003_OUTPUT_AREA VALUE = NULL;
+	END;
+END MODULE;
+
+	CREATE COMPUTE MODULE SMX7003Output_OfficialBankCheckStopPaymentResponse	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+		CALL BuildOutput();
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+
+CREATE PROCEDURE BuildOutput() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'Web_Services_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'OfficialBankCheckStopPaymentResponse';
+		SET OutputRoot.Properties.MessageFormat = 'XML1';
+		
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:Status.tns:StatusDisposition                  = InputRoot.MRM.SMX7003_OUTPUT_RETURN.StatusDisposition.StatusDisposition;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:Status.tns:StatusCode                         = InputRoot.MRM.SMX7003_OUTPUT_RETURN.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:Status.tns:StatusDetail.tns:StatusCode        = InputRoot.MRM.SMX7003_OUTPUT_RETURN.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode     = InputRoot.MRM.SMX7003_OUTPUT_RETURN.StatusSubCode;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = InputRoot.MRM.SMX7003_OUTPUT_RETURN.StatusDesc;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:Status.tns:StatusDetail.tns:StatusSource      = InputRoot.MRM.SMX7003_OUTPUT_RETURN.StatusSource;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:Status.tns:Repeatable                         = 'TRUE';
+	
+		CALL ReplaceEnterpriseHeader();
+		
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckAccountNumber 									= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_ACCOUNT_NUMBER;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckSerialNumber 									= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_SERIAL_NUMBER;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckRequestIdentity.tns:BankNumber 					= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_REQ_IDENTITY.SMX7003_BANK_NUMBER;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckRequestIdentity.tns:BranchNumber 				= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_REQ_IDENTITY.SMX7003_BRANCH_NUMBER;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckRequestIdentity.tns:OfficialBankCheckIDNumber 	= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_REQ_IDENTITY.SMX7003_ID_NUMBER;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckRequestIdentity.tns:OfficialBankCheckIDType 	= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_REQ_IDENTITY.SMX7003_ID_TYPE;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckKeyIdentity.tns:BankNumber 						= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_KEY_IDENTITY.SMX7003_BANK_NUMBER;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckKeyIdentity.tns:BranchNumber 					= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_KEY_IDENTITY.SMX7003_BRANCH_NUMBER;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckKeyIdentity.tns:OfficialBankCheckIDNumber 		= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_KEY_IDENTITY.SMX7003_ID_NUMBER;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckKeyIdentity.tns:OfficialBankCheckIDType 		= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_KEY_IDENTITY.SMX7003_ID_TYPE;
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckAmount 											= InputRoot.MRM.SMX7003_INPUT_AREA.SMX7003_INPUT_AMOUNT;
+		
+		SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckStopPaymentOutput.tns:OfficialBankCheckPayee	= NULLIF(InputRoot.MRM.SMX7003_OUTPUT_AREA.SMX7003_CHECK_PAYEE, '');
+		IF InputRoot.MRM.SMX7003_OUTPUT_AREA.SMX7003_CHECK_DATE IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:OfficialBankCheckStopPaymentOutput.tns:CheckDate				= InputRoot.MRM.SMX7003_OUTPUT_AREA.SMX7003_CHECK_DATE;
+		END IF;
+	END;
+		
+
+CREATE PROCEDURE ReplaceEnterpriseHeader() 
+	BEGIN
+		 SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:EnterpriseHeader.tns:Identity.tns:Username       = Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:EnterpriseHeader.tns:Identity.tns:Password       = NULL;
+		 SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion  = Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:EnterpriseHeader.tns:Channel                     = Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:OfficialBankCheckStopPaymentResponse.tns:EnterpriseHeader.tns:MessageDateTime             = Environment.Variables.EnterpriseHeader.MessageDateTime;
+	END;
+	
+
+END MODULE;

@@ -1,0 +1,129 @@
+BROKER SCHEMA com.tcfbank.www
+
+CREATE COMPUTE MODULE CheckPaidInformationRequest_DEP7210Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add	
+		CALL CopyEnterpriseHeader();
+		CALL CopyInputData();
+
+		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+	
+	CREATE PROCEDURE CopyEnterpriseHeader() 
+	BEGIN
+		SET Environment.Variables.EnterpriseHeader.Identity.Username       = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		SET Environment.Variables.EnterpriseHeader.Identity.Password       = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		SET Environment.Variables.EnterpriseHeader.Version.MessageVersion  = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET Environment.Variables.EnterpriseHeader.Version.MessageRevision = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET Environment.Variables.EnterpriseHeader.Channel                 = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:EnterpriseHeader.tns:Channel;
+		SET Environment.Variables.EnterpriseHeader.MessageDateTime         = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+	END;
+	
+	CREATE PROCEDURE CopyInputData() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'CICS_Commarea_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'DEP7201Input';
+		SET OutputRoot.Properties.MessageFormat = 'Binary1';	
+		-- Header		
+		SET OutputRoot.MRM.dep7201_input_header.Version.Version               = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET OutputRoot.MRM.dep7201_input_header.Revision.Revision             = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET OutputRoot.MRM.dep7201_input_header.Channel.Channel               = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:EnterpriseHeader.tns:Channel;
+		SET OutputRoot.MRM.dep7201_input_header.CallingProgram.CallingProgram = 'BROKER';
+		SET OutputRoot.MRM.dep7201_input_header.CallingService.CallingService = 'CHKPAIDINFO';	
+		SET OutputRoot.MRM.dep7201_output_return VALUE                        = NULL;
+		-- Application data
+		SET OutputRoot.MRM.dep7201_input_area.dep7201_bknbr                   = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:AccountIdentifier.tns:BankNumber;
+		SET OutputRoot.MRM.dep7201_input_area.dep7201_appl                    = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:AccountIdentifier.tns:Application;
+		SET OutputRoot.MRM.dep7201_input_area.dep7201_account                 = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:AccountIdentifier.tns:AccountNumber;
+		SET OutputRoot.MRM.dep7201_input_area.dep7201_check                   = InputRoot.XMLNSC.tns:CheckPaidInformationRequest.tns:SerialNumber;
+		-- Default
+		SET OutputRoot.MRM.dep7201_output_area VALUE                          = NULL;
+	END;
+END MODULE;
+
+	CREATE COMPUTE MODULE DEP7201Output_CheckPaidInformationResponse	
+		CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+
+		CALL BuildOutput();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+
+CREATE PROCEDURE BuildOutput() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'Web_Services_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'CheckPaidInformationResponse';
+		SET OutputRoot.Properties.MessageFormat = 'XML1';
+		
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:Status.tns:StatusDisposition                  = InputRoot.MRM.dep7201_output_return.StatusDisposition.StatusDisposition;
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:Status.tns:StatusCode                         = InputRoot.MRM.dep7201_output_return.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:Status.tns:StatusDetail.tns:StatusCode        = InputRoot.MRM.dep7201_output_return.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode     = InputRoot.MRM.dep7201_output_return.StatusSubCode;
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = InputRoot.MRM.dep7201_output_return.StatusDesc;
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:Status.tns:StatusDetail.tns:StatusSource      = InputRoot.MRM.dep7201_output_return.StatusSource;
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:Status.tns:Repeatable                         = TRUE;
+		
+		CALL ReplaceEnterpriseHeader();
+		
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:AccountIdentifier.tns:AccountNumber = InputRoot.MRM.dep7201_input_area.dep7201_account;
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:AccountIdentifier.tns:BankNumber = InputRoot.MRM.dep7201_input_area.dep7201_bknbr;
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:AccountIdentifier.tns:Application = InputRoot.MRM.dep7201_input_area.dep7201_appl;
+		SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:SerialNumber = InputRoot.MRM.dep7201_input_area.dep7201_check;
+		
+		IF InputRoot.MRM.dep7201_output_return.StatusDisposition.StatusDisposition = '0' THEN
+			SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:CheckPaidInformationOutput.tns:CheckAmount    = InputRoot.MRM.dep7201_output_area.dep7201_tramt;
+			SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:CheckPaidInformationOutput.tns:PostedDate    = InputRoot.MRM.dep7201_output_area.dep7201_trprocdt;
+		END IF;
+	END;
+		
+
+CREATE PROCEDURE ReplaceEnterpriseHeader() 
+	BEGIN
+	SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:EnterpriseHeader.tns:Identity.tns:Username            = Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:EnterpriseHeader.tns:Identity.tns:Password       = NULL;
+		 SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion  = Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:EnterpriseHeader.tns:Channel                     = Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:CheckPaidInformationResponse.tns:EnterpriseHeader.tns:MessageDateTime             = Environment.Variables.EnterpriseHeader.MessageDateTime;
+	END;
+	
+
+END MODULE;

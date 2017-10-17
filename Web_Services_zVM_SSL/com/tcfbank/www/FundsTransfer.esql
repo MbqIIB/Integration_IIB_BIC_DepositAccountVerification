@@ -1,0 +1,150 @@
+BROKER SCHEMA com.tcfbank.www
+
+CREATE COMPUTE MODULE FundsTransferRequest_TEL7273Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add		
+		CALL CopyEnterpriseHeader();
+		CALL CopyInputData();
+ 
+
+		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+	
+	CREATE PROCEDURE CopyEnterpriseHeader() 
+	BEGIN
+		SET Environment.Variables.EnterpriseHeader.Identity.Username       = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		SET Environment.Variables.EnterpriseHeader.Identity.Password       = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		SET Environment.Variables.EnterpriseHeader.Version.MessageVersion  = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET Environment.Variables.EnterpriseHeader.Version.MessageRevision = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET Environment.Variables.EnterpriseHeader.Channel                 = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:EnterpriseHeader.tns:Channel;
+		SET Environment.Variables.EnterpriseHeader.MessageDateTime         = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+	END;
+	
+	CREATE PROCEDURE CopyInputData() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'CICS_Commarea_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'TEL7273Input';
+		SET OutputRoot.Properties.MessageFormat = 'Binary1';	
+		
+		
+		SET OutputRoot.MRM.tel7273_input_header.Version.Version               = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET OutputRoot.MRM.tel7273_input_header.Revision.Revision             = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET OutputRoot.MRM.tel7273_input_header.Channel.Channel               = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:EnterpriseHeader.tns:Channel;
+		SET OutputRoot.MRM.tel7273_input_header.CallingProgram.CallingProgram = 'BROKER';
+		SET OutputRoot.MRM.tel7273_input_header.CallingService.CallingService = 'FUNDSXFER';
+			
+		SET OutputRoot.MRM.tel7273_output_return VALUE                        = NULL;
+
+		SET OutputRoot.MRM.tel7273_input_area.tel7273_from_cust_key           = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:CustomerNumber;		
+		SET OutputRoot.MRM.tel7273_input_area.tel7273_from_bank               = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:TransferSource.tns:AccountIdentifier.tns:BankNumber;
+		SET OutputRoot.MRM.tel7273_input_area.tel7273_from_appl               = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:TransferSource.tns:AccountIdentifier.tns:Application;
+		SET OutputRoot.MRM.tel7273_input_area.tel7273_from_account            = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:TransferSource.tns:AccountIdentifier.tns:AccountNumber;
+		SET OutputRoot.MRM.tel7273_input_area.tel7273_to_account              = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:TransferTarget.tns:AccountNumber;
+		SET OutputRoot.MRM.tel7273_input_area.tel7273_transfer_amt            = InputRoot.XMLNSC.tns:FundsTransferRequest.tns:TransferAmount;
+		
+		SET OutputRoot.MRM.tel7273_output_area VALUE                          = NULL;
+	END;
+END MODULE;
+
+	CREATE COMPUTE MODULE TEL7273Output_FundsTransferResponse	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+		CALL BuildOutput();
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+
+CREATE PROCEDURE BuildOutput() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'Web_Services_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'FundsTransferResponse';
+		SET OutputRoot.Properties.MessageFormat = 'XML1';
+		
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:Status.tns:StatusDisposition                  = InputRoot.MRM.tel7273_output_return.StatusDisposition.StatusDisposition;
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:Status.tns:StatusCode                         = InputRoot.MRM.tel7273_output_return.StatusCode.StatusCode;		 
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:Status.tns:StatusDetail.tns:StatusCode        = InputRoot.MRM.tel7273_output_return.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode     = InputRoot.MRM.tel7273_output_return.StatusSubCode;
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = InputRoot.MRM.tel7273_output_return.StatusDesc;
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:Status.tns:StatusDetail.tns:StatusSource      = InputRoot.MRM.tel7273_output_return.StatusSource;
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:Status.tns:Repeatable						  = TRUE;
+		
+		CALL ReplaceEnterpriseHeader();
+		
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:CustomerNumber                                         = InputRoot.MRM.tel7273_input_area.tel7273_from_cust_key; 
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:TransferSource.tns:AccountIdentifier.tns:AccountNumber = InputRoot.MRM.tel7273_input_area.tel7273_from_account; 
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:TransferSource.tns:AccountIdentifier.tns:BankNumber    = InputRoot.MRM.tel7273_input_area.tel7273_from_bank;
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:TransferSource.tns:AccountIdentifier.tns:Application   = InputRoot.MRM.tel7273_input_area.tel7273_from_appl;
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:TransferTarget.tns:AccountNumber = InputRoot.MRM.tel7273_input_area.tel7273_to_account;
+		SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:TransferAmount                                         = InputRoot.MRM.tel7273_input_area.tel7273_transfer_amt;
+		
+		IF InputRoot.MRM.tel7273_output_return.StatusDisposition.StatusDisposition = '0' 
+		OR InputRoot.MRM.tel7273_output_return.StatusCode.StatusCode = '3006' THEN
+			SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:FundsTransferOutput.tns:Relationship             = InputRoot.MRM.tel7273_output_area.tel7273_related; 
+			SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:FundsTransferOutput.tns:TransferAmountRemaining  = InputRoot.MRM.tel7273_output_area.tel7273_from_remaining;
+			SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:FundsTransferOutput.tns:TransferDailyLimit       = InputRoot.MRM.tel7273_output_area.tel7273_daily_limit;
+			SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:FundsTransferOutput.tns:TransferTransactionLimit = InputRoot.MRM.tel7273_output_area.tel7273_per_tran_limit;
+			IF InputRoot.MRM.tel7273_output_return.StatusDisposition.StatusDisposition = '0' THEN
+				SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:FundsTransferOutput.tns:TransferReferenceNumber                 = InputRoot.MRM.tel7273_output_area.tel7273_reference_nbr;
+				IF InputRoot.MRM.tel7273_output_area.tel7273_from_acct_bal IS NOT NULL THEN
+					SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:FundsTransferOutput.tns:TransferSourceBalance.tns:BalanceAmount = InputRoot.MRM.tel7273_output_area.tel7273_from_acct_bal;
+				END IF;
+				IF InputRoot.MRM.tel7273_output_area.tel7273_to_acct_bal IS NOT NULL THEN
+					SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:FundsTransferOutput.tns:TransferTargetBalance.tns:BalanceAmount = InputRoot.MRM.tel7273_output_area.tel7273_to_acct_bal;
+				END IF;
+				SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:FundsTransferOutput.tns:TransferEffectiveDate                   = InputRoot.MRM.tel7273_output_area.tel7273_processing_date;
+			END IF;
+		END IF;
+	END;
+		
+
+CREATE PROCEDURE ReplaceEnterpriseHeader() 
+	BEGIN
+		 SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:EnterpriseHeader.tns:Identity.tns:Username       = Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:EnterpriseHeader.tns:Identity.tns:Password       = NULL;
+		 SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion  = Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:EnterpriseHeader.tns:Channel                     = Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:FundsTransferResponse.tns:EnterpriseHeader.tns:MessageDateTime             = Environment.Variables.EnterpriseHeader.MessageDateTime;
+	END;
+	
+
+END MODULE;

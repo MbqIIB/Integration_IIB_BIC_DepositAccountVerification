@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmFilter.msgnode="ComIbmFilter.msgnode" xmlns:ComIbmFlowOrder.msgnode="ComIbmFlowOrder.msgnode" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ComIbmSOAPExtract.msgnode="ComIbmSOAPExtract.msgnode" xmlns:ComIbmSOAPInput.msgnode="ComIbmSOAPInput.msgnode" xmlns:ComIbmSOAPReply.msgnode="ComIbmSOAPReply.msgnode" xmlns:ComIbmSOAPRequest.msgnode="ComIbmSOAPRequest.msgnode" xmlns:ComIbmTrace.msgnode="ComIbmTrace.msgnode"
+    xmlns:ComIbmTryCatch.msgnode="ComIbmTryCatch.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/tcfbank/www/AnderaPrescreen.msgflow"
+    nsPrefix="com_tcfbank_www_AnderaPrescreen.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.MB_user" name="MB_user" lowerBound="1" defaultValueLiteral="empty">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="AnderaPrescreen" bundleName="com/tcfbank/www/AnderaPrescreen" pluginId="Web_Services_zVM_SSL"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj16/AnderaPrescreen.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj30/AnderaPrescreen.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmSOAPInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="7,63" wsdlFileName="Web_Services_Message_Setv1.1/com/tcfbank/www/AnderaPrescreenServiceService.wsdl" selectedPortType="AnderaPrescreenPortType" selectedBinding="AnderaPrescreenBinding" selectedPort="AnderaPrescreenProvider" targetNamespace="http://www.tcfbank.com" useHTTPTransport="true" urlSelector="/mb/NAO/AnderaPrescreen" useHTTPS="true" allowQueryWSDL="true" messageSetProperty="Web_Services_Message_Setv1.1"
+          parserXmlnscBuildTreeUsingXMLSchema="false">
+        <translation xmi:type="utility:ConstantString" string="SOAP Input"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="385,127" computeExpression="esql://routine/com.tcfbank.www#AnderaPrescreen_Convert_Request.Main">
+        <translation xmi:type="utility:ConstantString" string="Convert Request"/>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPRequest.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="495,128" wsdlFileName="Web_Services_Message_Setv1.1/com/tcfbank/teller/CustomerWS.wsdl" selectedPortType="CustomerWSSoap" selectedBinding="CustomerWSSoap" selectedOperation="PreScreen" selectedPort="CustomerWSSoap" targetNamespace="http://teller.tcfbank.com" useHTTPTransport="true" webServiceURL="https://tellertest.tcfbank.com/CustomerWS/CustomerWS.asmx" sslProtocol="SSL" messageSetProperty="Web_Services_Message_Setv1.1"
+          parserXmlnscBuildTreeUsingXMLSchema="false" validateMaster="none">
+        <translation xmi:type="utility:ConstantString" string="SOAP Request"/>
+        <longDescription xmi:type="utility:ConstantString" string="https://tellertest.tcfbank.com/CustomerWS/CustomerWS.asmx&#xD;&#xA;&#xD;&#xA;http://tellertest.tcfbank.com:8088/QACustomer/customer.asmx"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="696,132" computeExpression="esql://routine/com.tcfbank.www#AnderaPrescreen_Convert_Response.Main">
+        <translation xmi:type="utility:ConstantString" string="Convert Response"/>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPExtract.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_9" location="599,128">
+        <translation xmi:type="utility:ConstantString" string="SOAPExtract"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTryCatch.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_16" location="270,79">
+        <translation xmi:type="utility:ConstantString" string="TryCatch"/>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPExtract.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_17" location="76,63">
+        <translation xmi:type="utility:ConstantString" string="SOAPExtract1"/>
+      </nodes>
+      <nodes xmi:type="ComIbmFilter.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_18" location="180,67" filterExpression="esql://routine/com.tcfbank.www#AnderaPrescreen_Save_Input.Main" treatWarningsAsErrors="true">
+        <translation xmi:type="utility:ConstantString" string="Save Input"/>
+      </nodes>
+      <nodes xmi:type="ComIbmFlowOrder.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_23" location="605,74">
+        <translation xmi:type="utility:ConstantString" string="FlowOrder"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_24" location="713,74" computeExpression="esql://routine/com.tcfbank.www#AnderaPrescreen_Build_Failure.Main">
+        <translation xmi:type="utility:ConstantString" string="Build Failure"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_27" location="709,20" computeExpression="esql://routine/com.tcfbank.www#AnderaPrescreen_Save_Failure.Main">
+        <translation xmi:type="utility:ConstantString" string="Save Failure"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_28" location="823,21" queueName="TCFWMBMQ.WS.CATCH.ERRORS">
+        <translation xmi:type="utility:ConstantString" string="Log Failure"/>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_6" location="814,107">
+        <translation xmi:type="utility:ConstantString" string="SOAP Reply1"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="621,214" destination="file" filePath="/var/mqsi/common/log/AnderaPresscreen_SR_FF.log" pattern="Root = ${Root}&#xD;&#xA;Environment = ${Environment}&#xD;&#xA;Local Environment = ${LocalEnvironment}&#xD;&#xA;Exception List = ${ExceptionList}">
+        <translation xmi:type="utility:ConstantString" string="SR FF"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="519,226" destination="file" filePath="/var/mqsi/common/log/AnderaPresscreen_CR_Out.log" pattern="Root = ${Root}&#xD;&#xA;Environment = ${Environment}&#xD;&#xA;Local Environment = ${LocalEnvironment}&#xD;&#xA;Exception List = ${ExceptionList}">
+        <translation xmi:type="utility:ConstantString" string="CR Out"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTrace.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_8" location="429,18" destination="file" filePath="/var/mqsi/common/log/AnderaPresscreen_TC_Catch.log" pattern="${Root}">
+        <translation xmi:type="utility:ConstantString" string="TC Catch"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_24" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_9" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_37" targetNode="FCMComposite_1_18" sourceNode="FCMComposite_1_17" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_52" targetNode="FCMComposite_1_17" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_54" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_16" sourceTerminalName="OutTerminal.try" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_55" targetNode="FCMComposite_1_23" sourceNode="FCMComposite_1_16" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_59" targetNode="FCMComposite_1_24" sourceNode="FCMComposite_1_23" sourceTerminalName="OutTerminal.first" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_71" targetNode="FCMComposite_1_27" sourceNode="FCMComposite_1_23" sourceTerminalName="OutTerminal.second" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_72" targetNode="FCMComposite_1_28" sourceNode="FCMComposite_1_27" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_24" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_16" sourceNode="FCMComposite_1_18" sourceTerminalName="OutTerminal.true" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_23" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.failure" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_11" targetNode="FCMComposite_1_23" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.fault" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_12" targetNode="FCMComposite_1_9" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.fault" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.failure" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_8" sourceNode="FCMComposite_1_16" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_13" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.MB_user">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.MB_user" bundleName="com/tcfbank/www/AnderaPrescreen" pluginId="Web_Services_zVM_SSL"/>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

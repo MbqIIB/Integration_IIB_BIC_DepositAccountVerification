@@ -1,0 +1,40 @@
+BROKER SCHEMA com.tcfbank.www
+
+CREATE FILTER MODULE CopySaveDataToEnvironment
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE I INT 0;
+		SET Environment.Variables = Root.XMLNSC.Output;
+		WHILE ((LENGTH(Environment.Variables.StartTime) < 26) AND (I < 5)) DO
+			SET Environment.Variables.StartTime = Environment.Variables.StartTime || '0';
+			SET I = I + 1;
+		END WHILE;
+		DECLARE pattern CHARACTER 'yyyy-MM-dd''T''HH:mm:ss.SSSSSS';
+		SET Environment.Variables.StartTime 		= CAST(Environment.Variables.StartTime AS TIMESTAMP FORMAT pattern); 
+		RETURN TRUE;
+	END;
+END MODULE;
+
+CREATE COMPUTE MODULE BuildSaveData
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.Properties.MessageSet = '';
+		SET OutputRoot.Properties.MessageType = '';
+		SET OutputRoot.Properties.MessageFormat = 'XMLNSC';
+		
+		DECLARE mFlowName CHARACTER MessageFlowLabel;
+		SET mFlowName = UPPER(REPLACE(mFlowName,'com.tcfbank.www.',''));
+		-- Change the TCFWMBPQ to TCFWMBMQ for test system
+		SET OutputLocalEnvironment.Destination.MQ.DestinationData[1].queueName = 'TCFWMBMQ.'||LEFT(mFlowName , 18)||'.'||ExecutionGroupLabel||'.SAVEDATA';
+			
+		SET OutputRoot.MQMD.MsgId = InputLocalEnvironment.WrittenDestination.MQ.DestinationData.msgId;
+		
+		SET OutputRoot.XMLNSC.Output.CCSID					= Environment.Variables.CCSID;
+		SET OutputRoot.XMLNSC.Output.Encoding				= Environment.Variables.Encoding;
+		SET OutputRoot.XMLNSC.Output.StartTime 				= Environment.Variables.StartTime;
+		SET OutputRoot.XMLNSC.Output.EnterpriseHeader 		= Environment.Variables.EnterpriseHeader;
+		SET OutputRoot.XMLNSC.Output.HTTP.RequestIdentifier = InputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier;
+		
+		RETURN TRUE;
+	END;
+END MODULE;

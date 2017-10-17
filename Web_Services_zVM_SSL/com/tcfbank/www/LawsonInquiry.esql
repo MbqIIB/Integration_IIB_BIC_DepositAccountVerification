@@ -1,0 +1,110 @@
+BROKER SCHEMA com.tcfbank.www
+
+CREATE COMPUTE MODULE LawsonInquiryRequest_HRS7000COMMAREA
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 CALL CopyMessageHeaders();
+		 
+		 SET OutputRoot.Properties.MessageSet = 'CICS_Commarea_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'HRS7000COMMAREA';
+		 SET OutputRoot.Properties.MessageFormat = 'Binary1';	
+		 
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add		 
+
+		 SET Environment.Variables.EnterpriseHeader.Identity.Username	 	= InputRoot.XMLNSC.tns:LawsonInquiryRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		 SET Environment.Variables.EnterpriseHeader.Identity.Password 		= InputRoot.XMLNSC.tns:LawsonInquiryRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		 SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource = InputRoot.XMLNSC.tns:LawsonInquiryRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		 SET Environment.Variables.EnterpriseHeader.Version.MessageVersion 	= InputRoot.XMLNSC.tns:LawsonInquiryRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		 SET Environment.Variables.EnterpriseHeader.Version.MessageRevision = InputRoot.XMLNSC.tns:LawsonInquiryRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		 SET Environment.Variables.EnterpriseHeader.Channel 				= InputRoot.XMLNSC.tns:LawsonInquiryRequest.tns:EnterpriseHeader.tns:Channel;
+		 SET Environment.Variables.EnterpriseHeader.MessageDateTime 		= InputRoot.XMLNSC.tns:LawsonInquiryRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+	 
+		SET OutputRoot.MRM.hrs7000_input_area.HRS7000LawsonId = InputRoot.XMLNSC.tns:LawsonInquiryRequest.tns:LawsonId;
+		SET OutputRoot.MRM.hrs7000_input_area.HRS7000LawsonRuleName = InputRoot.XMLNSC.tns:LawsonInquiryRequest.tns:LawsonRuleName;
+		SET OutputRoot.MRM.hrs7000_input_area.fill_0 = '';
+		SET OutputRoot.MRM.hrs7000_output_area.HRS7000ServiceResponse = '';
+		SET OutputRoot.MRM.hrs7000_output_area.fill_1 = '';		 
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;		
+
+CREATE COMPUTE MODULE HRS7000COMMAREA_LawsonInquiryResponse
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN 
+		 CALL CopyMessageHeaders();
+		 
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+		 
+		 SET OutputRoot.Properties.MessageSet = 'Web_Services_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'LawsonInquiryResponse';
+		 SET OutputRoot.Properties.MessageFormat = 'XML1';
+		 IF InputRoot.MRM.hrs7000_output_area.HRS7000ServiceResponse = 'Y' THEN	
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDisposition = '0';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusCode = '0000';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusCode = '0000';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode = '0000';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = 'Request Completed';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusSource = 'HRS7000';
+		 ELSEIF InputRoot.MRM.hrs7000_output_area.HRS7000ServiceResponse = 'N' THEN	
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDisposition = '0';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusCode = '0001';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusCode = '0001';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode = '0001';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = 'Rule not found';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusSource = 'HRS7000';
+		 ELSE 
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDisposition = '2';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusCode = '0002';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusCode = '0002';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode = '0002';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = 'Error reading file';
+		 	SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:StatusDetail.tns:StatusSource = 'HRS7000';		 	
+		 END IF;	
+		 SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:Status.tns:Repeatable = TRUE;
+		 
+		 SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:EnterpriseHeader.tns:Identity.tns:Username = Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:EnterpriseHeader.tns:Identity.tns:Password = NULL;
+		 SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion = Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:EnterpriseHeader.tns:Channel = Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:LawsonInquiryResponse.tns:EnterpriseHeader.tns:MessageDateTime = Environment.Variables.EnterpriseHeader.MessageDateTime;
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

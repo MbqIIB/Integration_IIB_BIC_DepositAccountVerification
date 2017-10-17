@@ -1,0 +1,255 @@
+BROKER SCHEMA com.tcfbank.www
+
+
+CREATE COMPUTE MODULE TimeAccountInformationRequest_TIM7200Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add	
+		CALL CopyEnterpriseHeader();
+		CALL CopyInputData();
+
+		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+	
+	CREATE PROCEDURE CopyEnterpriseHeader() 
+	BEGIN
+		SET Environment.Variables.EnterpriseHeader.Identity.Username       = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		SET Environment.Variables.EnterpriseHeader.Identity.Password       = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		SET Environment.Variables.EnterpriseHeader.Version.MessageVersion  = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET Environment.Variables.EnterpriseHeader.Version.MessageRevision = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET Environment.Variables.EnterpriseHeader.Channel                 = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:EnterpriseHeader.tns:Channel;
+		SET Environment.Variables.EnterpriseHeader.MessageDateTime         = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+	END;
+	
+	CREATE PROCEDURE CopyInputData() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'CICS_Commarea_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'TIM7200Input';
+		SET OutputRoot.Properties.MessageFormat = 'Binary1';	
+				
+		SET OutputRoot.MRM.tim7200_input_header.Version.Version  	      		= InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET OutputRoot.MRM.tim7200_input_header.Revision.Revision             = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET OutputRoot.MRM.tim7200_input_header.Channel.Channel               = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:EnterpriseHeader.tns:Channel;
+		SET OutputRoot.MRM.tim7200_input_header.CallingProgram.CallingProgram = 'BROKER';
+		SET OutputRoot.MRM.tim7200_input_header.CallingService.CallingService = 'TIMEACCTINFO';	
+		SET OutputRoot.MRM.tim7200_output_return VALUE                        = NULL;
+		
+		SET OutputRoot.MRM.tim7200_input_area.tim7200_bknbr                   = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:AccountIdentifier.tns:BankNumber;
+		SET OutputRoot.MRM.tim7200_input_area.tim7200_appl                    = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:AccountIdentifier.tns:Application;
+		SET OutputRoot.MRM.tim7200_input_area.tim7200_account                 = InputRoot.XMLNSC.tns:TimeAccountInformationRequest.tns:AccountIdentifier.tns:AccountNumber;
+
+		SET OutputRoot.MRM.tim7200_output_area VALUE                          = NULL;
+	END;
+END MODULE;
+
+	CREATE COMPUTE MODULE TIM7200Output_TimeAccountInformationResponse	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+		CALL BuildOutput();
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+
+CREATE PROCEDURE BuildOutput() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'Web_Services_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'TimeAccountInformationResponse';
+		SET OutputRoot.Properties.MessageFormat = 'XML1';
+		
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:Status.tns:StatusDisposition                  = InputRoot.MRM.tim7200_output_return.StatusDisposition.StatusDisposition;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:Status.tns:StatusCode                         = InputRoot.MRM.tim7200_output_return.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:Status.tns:StatusDetail.tns:StatusCode        = InputRoot.MRM.tim7200_output_return.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode     = InputRoot.MRM.tim7200_output_return.StatusSubCode;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = InputRoot.MRM.tim7200_output_return.StatusDesc;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:Status.tns:StatusDetail.tns:StatusSource      = InputRoot.MRM.tim7200_output_return.StatusSource;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:Status.tns:Repeatable                         = TRUE;
+		
+		CALL ReplaceEnterpriseHeader();
+		
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:AccountIdentifier.tns:AccountNumber 	   = InputRoot.MRM.tim7200_input_area.tim7200_account;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:AccountIdentifier.tns:BankNumber 		   = InputRoot.MRM.tim7200_input_area.tim7200_bknbr;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:AccountIdentifier.tns:Application 		   = InputRoot.MRM.tim7200_input_area.tim7200_appl;
+
+	IF InputRoot.MRM.tim7200_output_return.StatusDisposition.StatusDisposition = '0' THEN
+	    BEGIN
+		IF InputRoot.MRM.tim7200_output_area.tim7200_balavail IS NOT NULL THEN
+		   SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:AvailableBalance.tns:BalanceAmount 	 = InputRoot.MRM.tim7200_output_area.tim7200_balavail;
+		END IF;
+		IF InputRoot.MRM.tim7200_output_area.tim7200_balcur IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:CurrentBalance.tns:BalanceAmount   	 = InputRoot.MRM.tim7200_output_area.tim7200_balcur;
+		END IF;
+		IF InputRoot.MRM.tim7200_output_area.tim7200_fedexpdt IS NOT NULL THEN	
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:FederalExpirationDate 			 	 = InputRoot.MRM.tim7200_output_area.tim7200_fedexpdt;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:FederalTaxExemptCode 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_fedtaxexmpt, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_fedtaxhold IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:FederalTaxWithholdAmount 			  	 = InputRoot.MRM.tim7200_output_area.tim7200_fedtaxhold;
+		END IF;
+		IF InputRoot.MRM.tim7200_output_area.tim7200_fedtaxytd IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:FederalTaxWithheldYTDAmount 		 	 = InputRoot.MRM.tim7200_output_area.tim7200_fedtaxytd;
+		END IF;
+		IF InputRoot.MRM.tim7200_output_area.tim7200_fedtax1099 IS NOT NULL THEN	
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:FederalTaxWithheld1099Amount 		  	 = InputRoot.MRM.tim7200_output_area.tim7200_fedtax1099;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestAccountNumber 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intacct, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestApplication 			 	 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intappl, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_intavail IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestAvailableAmount 			 	 = InputRoot.MRM.tim7200_output_area.tim7200_intavail;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestCompoundingDay 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intcmpday, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestCompoundingFrequency 		 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intcmpfreq, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestCompoundingTerm 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intcmpterm, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestPaymentDay 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intday, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestPaymentDisposition 		 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intdisp, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_intenp IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestEarnedSinceLastPayment 	 	 = InputRoot.MRM.tim7200_output_area.tim7200_intenp;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestPaymentFrequency 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intfreq, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestMethod 				 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intmeth, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_intnxt IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:NextInterestPaymentDate 			 	 = InputRoot.MRM.tim7200_output_area.tim7200_intnxt;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:LastInterestPaymentAmount 		 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intpaid, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_intpddt IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:LastInterestPaymentDate 			 	 = InputRoot.MRM.tim7200_output_area.tim7200_intpddt;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestPenaltyYTDAmount 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intpenytd, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestPenalty1099Amount 		 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intpen1099, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestRate 				 			 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intrate, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestPaymentTerm 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intterm, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestPaidYTDAmount 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_intytd, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestPaid1099Amount 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_int1099, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:IRAKeoghCode 				 			 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_iracode, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_issdate IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:CertificateIssueDate 			 		 = InputRoot.MRM.tim7200_output_area.tim7200_issdate;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:CertificateIssueValue 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_issvalue, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_mactdt IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:LastActivityDate 				 		 = InputRoot.MRM.tim7200_output_area.tim7200_mactdt;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:AccountDesignationCode 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mades, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:PrincipleTransferAccountNumber 	 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_matacct, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:PrincipleTransferApplication 		 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_matappl, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:FinalDispositionCode 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_matdisp, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:FinalMaturityDispositionCode 		 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_matdispcode, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_matfinal IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:FinalMaturityDate 			 		 = InputRoot.MRM.tim7200_output_area.tim7200_matfinal;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:AccountCode 				 			 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_matured, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_mcontdt IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:LastContactDate 				 		 = InputRoot.MRM.tim7200_output_area.tim7200_mcontdt;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:LastDepositAmount 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mdepamt, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_mdepdt IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:LastDepositDate 				 		 = InputRoot.MRM.tim7200_output_area.tim7200_mdepdt;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:DormantCode 				 			 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mdorm, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_mdormdt IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:DormantDate 				 			 = InputRoot.MRM.tim7200_output_area.tim7200_mdormdt;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:EmployeeCode 				 			 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mempcd, '');
+		DECLARE I INT 1;
+		WHILE InputRoot.MRM.tim7200_output_area.tim7200_mfcamt[I] IS NOT NULL DO
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:CustomerFloatAccount[I] 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mfcamt[I], '');
+		    SET I = I + 1;
+		END WHILE;
+		SET I = 1;
+  		WHILE InputRoot.MRM.tim7200_output_area.tim7200_mfbamt[I] IS NOT NULL DO
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:BankFloatAccount[I]				 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mfbamt[I], '');
+			SET I = I + 1;
+  		END WHILE;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:Flag3 					 		 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mflag3, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:Flag5 					 			 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mflag5, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_mmntdt IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:LastMaintenanceDate 			 		 = InputRoot.MRM.tim7200_output_area.tim7200_mmntdt;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:NewBranchNumber 				 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mnewbranch, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:NewAccountType 				 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mnewtype, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:TDACloseToPostingStatus 				 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mnopost, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:PenaltyRoutine 				 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mpenrtn, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:TaxIdentificationNumber 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_msocsec, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:AccountStatusCode 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mstatus, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:LastWithdrawlAmount			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_mwdamt, '');		
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:InterestPerDiem 				 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_perdiem, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:AssignmentFlag 				 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_rassgn, '');
+		IF InputRoot.MRM.tim7200_output_area.tim7200_mwddt IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:LastWithdrawlDate 			 		 = InputRoot.MRM.tim7200_output_area.tim7200_mwddt;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:CautionFlag 				 			 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_rcaution, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:TotalChecksOutstandingAmount 		 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_rcksout, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:AccountClosingValueAmount 		 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_rclsval, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:SpecificRenewalDay 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_renday, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:RenewalFrequencyCode 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_renfreq, '');
+        IF InputRoot.MRM.tim7200_output_area.tim7200_renlast IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:LastRenewalDate 				 		 = InputRoot.MRM.tim7200_output_area.tim7200_renlast;
+		END IF;
+        IF InputRoot.MRM.tim7200_output_area.tim7200_rennext IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:NextRenewalDate 				 		 = InputRoot.MRM.tim7200_output_area.tim7200_rennext;
+		END IF;
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:RenewalOptionCode 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_renoptn, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:RenewalTerm 				 			 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_renterm, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:RenewalUseCode 				 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_renusecode, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:FederalTaxWithheldAmount 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_rfedamt, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:TotalAssignmentsAmount 			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_rholds, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:PenaltyAmount         			 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_rpenalty, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:StatementDisposition 			 		 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_stmdisp, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:UserArea 					 		 	 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_userarea_escheat, '');
+		SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:TypeName 					 			 = NULLIF(InputRoot.MRM.tim7200_output_area.tim7200_type_name, '');
+        IF InputRoot.MRM.tim7200_output_area.tim7200_tda_maturity_date IS NOT NULL THEN
+			SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:TimeAccountInformationOutput.tns:MaturityDate 				 			 = InputRoot.MRM.tim7200_output_area.tim7200_tda_maturity_date;
+		END IF;
+		END;
+	END IF;
+	END;
+		
+
+CREATE PROCEDURE ReplaceEnterpriseHeader() 
+	BEGIN
+		 SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:EnterpriseHeader.tns:Identity.tns:Username       = Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:EnterpriseHeader.tns:Identity.tns:Password       = NULL;
+		 SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion  = Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:EnterpriseHeader.tns:Channel                     = Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:TimeAccountInformationResponse.tns:EnterpriseHeader.tns:MessageDateTime             = Environment.Variables.EnterpriseHeader.MessageDateTime;
+	END;
+	
+
+END MODULE;

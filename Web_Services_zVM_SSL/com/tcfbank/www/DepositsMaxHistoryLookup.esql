@@ -1,0 +1,161 @@
+BROKER SCHEMA com.tcfbank.www
+
+CREATE COMPUTE MODULE DepositsMaxHistoryLookup_Max7200Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN 
+		 CALL CopyMessageHeaders();
+		 
+		 SET OutputRoot.Properties.MessageSet = 'CICS_Commarea_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'Max7200Input';
+		 SET OutputRoot.Properties.MessageFormat = 'Binary1';	
+
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add		 
+
+		 SET Environment.Variables.EnterpriseHeader.Identity.Username	 		= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		 SET Environment.Variables.EnterpriseHeader.Identity.Password 			= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		 SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource 	= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		 SET Environment.Variables.EnterpriseHeader.Version.MessageVersion 		= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		 SET Environment.Variables.EnterpriseHeader.Version.MessageRevision 	= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		 SET Environment.Variables.EnterpriseHeader.Channel 					= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:EnterpriseHeader.tns:Channel;
+		 SET Environment.Variables.EnterpriseHeader.MessageDateTime 			= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+		 
+		 SET OutputRoot.MRM.Max7200_input_header.Version.Version 				= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		 SET OutputRoot.MRM.Max7200_input_header.Revision.Revision				= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		 SET OutputRoot.MRM.Max7200_input_header.Channel.Channel 				= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:EnterpriseHeader.tns:Channel;
+		 SET OutputRoot.MRM.Max7200_input_header.CallingProgram.CallingProgram 	= 'BROKER';
+		 SET OutputRoot.MRM.Max7200_input_header.CallingService.CallingService	= 'DEPOSITMAXHISTORY';	
+		 SET OutputRoot.MRM.Max7200_output_return 		VALUE  		 			= NULL;
+
+		 SET OutputRoot.MRM.Max7200_input_area.MAX7200_BKNBR 					= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:AccountIdentifier.tns:BankNumber;
+		 SET OutputRoot.MRM.Max7200_input_area.MAX7200_APPL						= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:AccountIdentifier.tns:Application;
+		 SET OutputRoot.MRM.Max7200_input_area.MAX7200_ACCOUNT					= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:AccountIdentifier.tns:AccountNumber;		 
+
+		IF InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:DepositsMaxHistoryMatch IS NOT NULL THEN
+		 SET OutputRoot.MRM.Max7200_input_area.MAX7200_MATCH					= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:DepositsMaxHistoryMatch;
+		ELSE 
+		 SET OutputRoot.MRM.Max7200_input_area.MAX7200_MATCH					= 'EQ';
+		END IF;
+--		   InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:DepositsMaxHistoryFieldName
+		IF InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:DepositsMaxHistoryFieldName IS NOT NULL THEN
+		 SET OutputRoot.MRM.Max7200_input_area.MAX7200_FLD		 		    	= InputRoot.XMLNSC.tns:DepositsMaxHistoryLookupRequest.tns:DepositsMaxHistoryFieldName;
+		ELSE
+		 SET OutputRoot.MRM.Max7200_input_area.MAX7200_FLD	VALUE = NULL;
+		END IF;
+
+		 SET OutputRoot.MRM.Max7200_output_area			    VALUE = NULL;
+		 
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+END MODULE;
+
+CREATE COMPUTE MODULE DepositsMaxHistoryLookup_Max7200Output_Response
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN 
+		 CALL CopyMessageHeaders();
+
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+
+		 SET OutputRoot.Properties.MessageSet = 'Web_Services_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'DepositsMaxHistoryLookupResponse';
+		 SET OutputRoot.Properties.MessageFormat = 'XML1';
+
+--*******RESPONSE******************
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:Status.tns:StatusDisposition 					= InputRoot.MRM.Max7200_output_return.StatusDisposition.StatusDisposition;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:Status.tns:StatusCode 							= InputRoot.MRM.Max7200_output_return.StatusCode.StatusCode;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:Status.tns:StatusDetail.tns:StatusCode 			= InputRoot.MRM.Max7200_output_return.StatusCode.StatusCode;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode 		= InputRoot.MRM.Max7200_output_return.StatusSubCode;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:Status.tns:StatusDetail.tns:StatusDescription 	= InputRoot.MRM.Max7200_output_return.StatusDesc;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:Status.tns:StatusDetail.tns:StatusSource 		= InputRoot.MRM.Max7200_output_return.StatusSource;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:Status.tns:Repeatable 							= TRUE;
+
+--*******ENTERPRISE HEADER***********
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:EnterpriseHeader.tns:Identity.tns:Username 			= Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:EnterpriseHeader.tns:Identity.tns:Password 			= NULL;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource 		= Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion 		= Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision 		= Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:EnterpriseHeader.tns:Channel 							= Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:EnterpriseHeader.tns:MessageDateTime 					= Environment.Variables.EnterpriseHeader.MessageDateTime;
+
+--*******INPUT HEADER****************
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:AccountIdentifier.tns:AccountNumber			= InputRoot.MRM.Max7200_input_area.MAX7200_ACCOUNT;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:AccountIdentifier.tns:BankNumber			= InputRoot.MRM.Max7200_input_area.MAX7200_BKNBR;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:AccountIdentifier.tns:Application 			= InputRoot.MRM.Max7200_input_area.MAX7200_APPL;
+
+--*******HISTORY MATCH/HISTORY FIELDNAME***************
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:DepositsMaxHistoryMatch		= InputRoot.MRM.Max7200_input_area.MAX7200_MATCH;
+		 SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:DepositsMaxHistoryFieldName	= InputRoot.MRM.Max7200_input_area.MAX7200_FLD;
+
+		IF InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_CNT IS NOT NULL THEN
+--*******HISTORY RESULT COUNT**********
+		  IF InputRoot.MRM.Max7200_output_return.StatusDisposition.StatusDisposition = '0' THEN
+		   SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:DepositsMaxHistoryLookupOutput.tns:DepositsMaxHistoryResultCount	= InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_CNT;
+
+--*******HISTORY DATA******************
+
+		   DECLARE I INTEGER 1;
+		   WHILE (I <= InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_CNT) DO
+			IF InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_DATE IS NOT NULL THEN
+				SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:DepositsMaxHistoryLookupOutput.tns:DepositsMaxHistory[I].tns:DepositsMaxHistoryDate				= InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_DATE;
+			END IF;
+			IF InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_TERMID IS NOT NULL THEN
+				IF InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_TERMID <> '' THEN
+				SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:DepositsMaxHistoryLookupOutput.tns:DepositsMaxHistory[I].tns:TerminalID							= InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_TERMID;
+				END IF;
+			END IF;
+			IF InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_OPERID IS NOT NULL THEN
+				SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:DepositsMaxHistoryLookupOutput.tns:DepositsMaxHistory[I].tns:TellerNumber						= InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_OPERID;
+			END IF;
+			IF InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_FLDNAME IS NOT NULL THEN
+				SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:DepositsMaxHistoryLookupOutput.tns:DepositsMaxHistory[I].tns:DepositsMaxHistoryFieldName			= InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_FLDNAME;
+			END IF;
+			IF InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_FROM IS NOT NULL THEN	
+				SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:DepositsMaxHistoryLookupOutput.tns:DepositsMaxHistory[I].tns:DepositsMaxHistoryFieldFromValue	= InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_FROM;
+			END IF;
+			IF InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_TO IS NOT NULL THEN
+				SET OutputRoot.XMLNSC.tns:DepositsMaxHistoryLookupResponse.tns:DepositsMaxHistoryLookupOutput.tns:DepositsMaxHistory[I].tns:DepositsMaxHistoryFieldToValue		= InputRoot.MRM.Max7200_output_area.MAX7200_DATA.MAX7200_OPTIN_HIST[I].MAX7200_TO;
+			END IF;
+		    	SET I = I + 1;
+		   END WHILE;
+
+		  END IF;
+		END IF;
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

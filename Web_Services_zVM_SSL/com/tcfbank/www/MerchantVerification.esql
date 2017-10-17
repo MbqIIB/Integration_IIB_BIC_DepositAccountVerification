@@ -1,0 +1,122 @@
+BROKER SCHEMA com.tcfbank.www
+
+
+CREATE COMPUTE MODULE MerchantVerificationRequest_DEP7204Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add	
+		CALL CopyEnterpriseHeader();
+		CALL CopyInputData();
+
+		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+	
+	CREATE PROCEDURE CopyEnterpriseHeader() 
+	BEGIN
+		SET Environment.Variables.EnterpriseHeader.Identity.Username       = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		SET Environment.Variables.EnterpriseHeader.Identity.Password       = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		SET Environment.Variables.EnterpriseHeader.Version.MessageVersion  = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET Environment.Variables.EnterpriseHeader.Version.MessageRevision = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET Environment.Variables.EnterpriseHeader.Channel                 = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:EnterpriseHeader.tns:Channel;
+		SET Environment.Variables.EnterpriseHeader.MessageDateTime         = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+	END;
+	
+	CREATE PROCEDURE CopyInputData() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'CICS_Commarea_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'DEP7204Input';
+		SET OutputRoot.Properties.MessageFormat = 'Binary1';	
+		
+		SET OutputRoot.MRM.DEP7204_INPUT_HEADER.Version.Version               = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET OutputRoot.MRM.DEP7204_INPUT_HEADER.Revision.Revision             = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET OutputRoot.MRM.DEP7204_INPUT_HEADER.Channel.Channel               = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:EnterpriseHeader.tns:Channel;
+		SET OutputRoot.MRM.DEP7204_INPUT_HEADER.CallingProgram.CallingProgram = 'BROKER';
+		SET OutputRoot.MRM.DEP7204_INPUT_HEADER.CallingService.CallingService = 'MERCHVERF';	
+		SET OutputRoot.MRM.DEP7204_OUTPUT_RETURN VALUE         = NULL;
+		
+		SET OutputRoot.MRM.DEP7204_INPUT_AREA.DEP7204_ACCOUNT    = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:AccountNumber;
+		SET OutputRoot.MRM.DEP7204_INPUT_AREA.DEP7204_CHK_NBR    = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:SerialNumber;
+		SET OutputRoot.MRM.DEP7204_INPUT_AREA.DEP7204_CHK_AMOUNT = InputRoot.XMLNSC.tns:MerchantVerificationRequest.tns:CheckAmount;
+	END;
+END MODULE;
+
+	CREATE COMPUTE MODULE DEP7204Output_MerchantVerificationResponse	
+			CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+		CALL BuildOutput();
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+
+CREATE PROCEDURE BuildOutput() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'Web_Services_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'MerchantVerificationResponse';
+		SET OutputRoot.Properties.MessageFormat = 'XML1';
+		
+		SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:Status.tns:StatusDisposition                  = InputRoot.MRM.DEP7204_OUTPUT_RETURN.StatusDisposition.StatusDisposition;
+		SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:Status.tns:StatusCode                         = InputRoot.MRM.DEP7204_OUTPUT_RETURN.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusCode        = InputRoot.MRM.DEP7204_OUTPUT_RETURN.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode     = InputRoot.MRM.DEP7204_OUTPUT_RETURN.StatusSubCode;
+		SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = InputRoot.MRM.DEP7204_OUTPUT_RETURN.StatusDesc;
+		SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusSource      = InputRoot.MRM.DEP7204_OUTPUT_RETURN.StatusSource;
+		SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:Status.tns:Repeatable                         = TRUE;
+		
+		CALL ReplaceEnterpriseHeader();
+		
+		SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:AccountNumber = InputRoot.MRM.DEP7204_INPUT_AREA.DEP7204_ACCOUNT;
+		SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:SerialNumber  = InputRoot.MRM.DEP7204_INPUT_AREA.DEP7204_CHK_NBR;
+		SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:CheckAmount   = InputRoot.MRM.DEP7204_INPUT_AREA.DEP7204_CHK_AMOUNT;
+	END;
+		
+
+CREATE PROCEDURE ReplaceEnterpriseHeader() 
+	BEGIN
+		 SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:EnterpriseHeader.tns:Identity.tns:Username       = Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:EnterpriseHeader.tns:Identity.tns:Password       = NULL;
+		 SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion  = Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:EnterpriseHeader.tns:Channel                     = Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:MerchantVerificationResponse.tns:EnterpriseHeader.tns:MessageDateTime             = Environment.Variables.EnterpriseHeader.MessageDateTime;
+	END;
+	
+
+END MODULE;
+

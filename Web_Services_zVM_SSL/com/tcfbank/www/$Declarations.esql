@@ -1,0 +1,23 @@
+BROKER SCHEMA com.tcfbank.www
+
+DECLARE tns NAMESPACE 'http://www.tcfbank.com';
+DECLARE ns  NAMESPACE 'http://www.tcfbank.com/ctrmil/';
+DECLARE mns NAMESPACE 'http://teller.tcfbank.com/formdata';
+DECLARE lns NAMESPACE 'http://ws.lowrytech.com';
+DECLARE cif NAMESPACE 'http://www.tcfbank.com/cif/';
+DECLARE telns NAMESPACE 'http://teller.tcfbank.com';
+DECLARE andresns NAMESPACE 'http://www.andera.com/PassThruStartVerificationResponse.xsd';
+DECLARE andreqns NAMESPACE 'http://www.andera.com/PassThruStartVerificationRequest.xsd';
+DECLARE andcomns NAMESPACE 'http://www.andera.com/DMS/XMLTemplates/DMSCommonTypes.xsd';
+
+DECLARE SecretCodeAuthentication    SHARED CHARACTER 'Y'; 
+DECLARE BalanceInquiry              SHARED CHARACTER 'Y'; 
+DECLARE AccountProperties           SHARED CHARACTER 'Y'; 
+DECLARE Information1099             SHARED CHARACTER 'Y'; 
+DECLARE FundsTransfer               SHARED CHARACTER 'A'; 
+DECLARE OfficialBankCheck           SHARED CHARACTER 'Y';
+DECLARE MerchantVerification        SHARED CHARACTER 'Y';
+
+DECLARE Securitytable               SHARED ROW;
+DECLARE BICSecuritytable            SHARED ROW;
+DECLARE IPtable                     SHARED ROW;

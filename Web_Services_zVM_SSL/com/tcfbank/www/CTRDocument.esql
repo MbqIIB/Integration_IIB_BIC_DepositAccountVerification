@@ -1,0 +1,190 @@
+BROKER SCHEMA com.tcfbank.www
+
+
+CREATE COMPUTE MODULE CTRDocument_BuildMiddleTierRequest
+	DECLARE MB_user EXTERNAL CHARACTER;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 CALL CopyMessageHeaders();
+		SET OutputRoot.Properties.CodedCharSetId 	= 1208;
+		SET OutputRoot.Properties.Encoding			= 785;
+		
+		DECLARE user CHAR 'MB_user';
+--		DECLARE password CHAR 't17U9uRJ';
+		DECLARE password CHAR;
+		SET password = MB_user;
+		SET OutputRoot.HTTPRequestHeader."Authorization" = 'Basic '||base64Encode(user||':'||password);
+		 
+		 SET OutputRoot.XMLNSC.mns:AddFormDataRequest.mns:bankNumTeller = InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:BankNumTeller;
+		 SET OutputRoot.XMLNSC.mns:AddFormDataRequest.mns:branchNumTeller = InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:BranchNumTeller;
+		 SET OutputRoot.XMLNSC.mns:AddFormDataRequest.mns:tellerNum = InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:TellerNum;
+		 SET OutputRoot.XMLNSC.mns:AddFormDataRequest.mns:formType = 'CTR';
+		 SET OutputRoot.XMLNSC.mns:AddFormDataRequest.mns:messageData = InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument;
+--		 SET OutputRoot.XMLNSC.mns:AddFormDataRequest.mns:messageData.ns:GenusResponse = Environment.Variables.Description;
+		 SET OutputRoot.XMLNSC.mns:AddFormDataRequest.mns:messageData.ns:GenusResponse = CAST(ASBITSTREAM(Environment.Variables.Description)AS CHAR CCSID 1208 ENCODING 785);
+		 SET OutputRoot.HTTPInputHeader.SOAPAction = 'http://teller.tcfbank.com/formdata/AddFormData';
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+
+CREATE COMPUTE MODULE CTRDocument_BuildAttachments
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot = InputRoot;
+		SET OutputRoot.Properties.CodedCharSetId 	= 1208;
+		SET OutputRoot.Properties.Encoding			= 785;
+		
+		SET OutputRoot.XMLNSC = NULL;
+		SET OutputRoot.SOAP.Body.lns:saveEntity.inputStr1 = 'test';
+		SET OutputRoot.SOAP.Body.lns:saveEntity.inputStr2 = 'test';
+		
+		SET Environment.Variables.EnterpriseHeader.Username = InputRoot.XMLNSC.tns:CTRDocumentRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		SET Environment.Variables.EnterpriseHeader.Password = InputRoot.XMLNSC.tns:CTRDocumentRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		SET Environment.Variables.EnterpriseHeader.IdentitySource = InputRoot.XMLNSC.tns:CTRDocumentRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource;
+		SET Environment.Variables.EnterpriseHeader.MessageVersion = InputRoot.XMLNSC.tns:CTRDocumentRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET Environment.Variables.EnterpriseHeader.MessageRevision = InputRoot.XMLNSC.tns:CTRDocumentRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET Environment.Variables.EnterpriseHeader.Channel = InputRoot.XMLNSC.tns:CTRDocumentRequest.tns:EnterpriseHeader.tns:Channel;
+ 		SET Environment.Variables.EnterpriseHeader.MessageDateTime = InputRoot.XMLNSC.tns:CTRDocumentRequest.tns:EnterpriseHeader.tns:MessageDateTime;		
+		
+		Declare DEP_BankNum char;
+        Declare DEP_TranDate char;
+        Declare DEP_AcctNum1 char;
+        Declare DEP_AcctNum2 char;
+        Declare DEP_AcctNum3 char;
+        Declare DEP_CustName1 char;
+        Declare DEP_CustName2 char;
+        Declare DEP_CustName3 char;
+        Declare DEP_CustTIN1 char;
+        Declare DEP_CustTIN2 char;
+        Declare DEP_CustTIN3 char;
+        Declare TLR7_FormCode char;
+        Declare TLR7_FormStatus char;
+        Set DEP_BankNum = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:BankNumTeller as char);
+        Set DEP_TranDate = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:TranDate as char);
+        Set DEP_AcctNum1 = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:TranAcctNbr1 as char);  
+        Set DEP_AcctNum2 = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:TranAcctNbr2 as char);        
+        Set DEP_AcctNum3 = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:TranAcctNbr3 as char);
+        Set DEP_CustName1 = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Customer1Name.ns:CustFirstName as char) || ' ' || CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Customer1Name.ns:CustMiddleInitial as char) || ' ' || CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Customer1Name.ns:CustOrgLastName as char);
+        Set DEP_CustName1 = '<![CDATA[' || DEP_CustName1 || ']]>';
+        Set DEP_CustName2 = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Customer2Name.ns:CustFirstName as char) || ' ' || CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Customer2Name.ns:CustMiddleInitial as char) || ' ' || CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Customer2Name.ns:CustOrgLastName as char);
+        Set DEP_CustName2 = '<![CDATA[' || DEP_CustName2 || ']]>';
+        Set DEP_CustName3 = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Customer3Name.ns:CustFirstName as char) || ' ' || CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Customer3Name.ns:CustMiddleInitial as char) || ' ' || CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Customer3Name.ns:CustOrgLastName as char);
+        Set DEP_CustName3 = '<![CDATA[' || DEP_CustName3 || ']]>';
+        Set DEP_CustTIN1 = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Cust1SSN as char);
+        Set DEP_CustTIN2 = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Cust2SSN as char);
+        Set DEP_CustTIN3 = CAST(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument.ns:Cust3SSN as char);
+        Set TLR7_FormCode = 'CTR';
+        Set TLR7_FormStatus = 'New'; 
+        DECLARE AttachmentData char;
+        DECLARE AttachmentBlobData BLOB;
+		SET AttachmentData = '<?xml version="1.0" encoding="UTF-8"?><repository_data><comp folder="false" name="TLR7_FORM"><pid></pid><attr name="DEP_BankNum">' || DEP_BankNum || '</attr>' || '<attr name="DEP_TranDate">' || DEP_TranDate || '</attr>';
+		IF NOT DEP_AcctNum1 = '' THEN 
+		   SET AttachmentData = AttachmentData || '<comp name="TLR7_Accnts"><pid></pid><attr name="DEP_AcctNum">' || DEP_AcctNum1 || '</attr></comp>';
+		END IF;
+		IF NOT DEP_AcctNum2 = '' THEN
+		   SET AttachmentData = AttachmentData || '<comp name="TLR7_Accnts"><pid></pid><attr name="DEP_AcctNum">' || DEP_AcctNum2 || '</attr></comp>';
+		END IF;
+		IF NOT DEP_AcctNum3 = '' THEN
+		   SET AttachmentData = AttachmentData || '<comp name="TLR7_Accnts"><pid></pid><attr name="DEP_AcctNum">' || DEP_AcctNum3 || '</attr></comp>';
+		END IF;
+		IF NOT DEP_CustName1 = '  ' THEN
+		   SET AttachmentData = AttachmentData || '<comp name="TLR7_CustName"><pid></pid><attr name="DEP_CustName">' || DEP_CustName1 || '</attr></comp>';
+		END IF;
+		IF NOT DEP_CustName2 = '  ' THEN
+		   SET AttachmentData = AttachmentData || '<comp name="TLR7_CustName"><pid></pid><attr name="DEP_CustName">' || DEP_CustName2 || '</attr></comp>'; 
+		END IF; 
+		IF NOT DEP_CustName3 = '  ' THEN
+		   SET AttachmentData = AttachmentData || '<comp name="TLR7_CustName"><pid></pid><attr name="DEP_CustName">' || DEP_CustName3 || '</attr></comp>';
+		END IF;
+		IF NOT DEP_CustTIN1 = '' THEN
+		   SET AttachmentData = AttachmentData || '<comp name="TLR7_CustTIN"><pid></pid><attr name="DEP_CustTIN">' || DEP_CustTIN1 || '</attr></comp>';
+		END IF;
+		IF NOT DEP_CustTIN2 = '' THEN
+		   SET AttachmentData = AttachmentData || '<comp name="TLR7_CustTIN"><pid></pid><attr name="DEP_CustTIN">' || DEP_CustTIN2 || '</attr></comp>';
+		END IF;
+		IF NOT DEP_CustTIN3 = '' THEN
+		   SET AttachmentData = AttachmentData || '<comp name="TLR7_CustTIN"><pid></pid><attr name="DEP_CustTIN">' || DEP_CustTIN3 || '</attr></comp>';
+		END IF;
+		SET AttachmentData = AttachmentData || '<attr name="TLR7_FormCode">CTR</attr><attr name="TLR7_FormStatus">NEW</attr><resource mimetype="text/xml"><filename>MIL_Form.xml</filename><attachment_id>resource</attachment_id></resource></comp></repository_data>';
+        SET AttachmentBlobData = CAST(AttachmentData as blob ccsid 1208 ENCODING 785);
+        SET OutputRoot.SOAP.Attachment.xmldata.BLOB = CAST(AttachmentData as Blob CCSID 1208 ENCODING 785);
+
+		DECLARE IncomingBitStream BLOB CAST(ASBITSTREAM(InputRoot.XMLNSC.tns:CTRDocumentRequest.ns:CTRDocument OPTIONS FolderBitStream ENCODING 785 CCSID 1208) AS BLOB CCSID 1208 ENCODING 785);
+		SET OutputRoot.SOAP.Attachment.resource.BLOB = IncomingBitStream;
+		RETURN TRUE;
+	END;
+END MODULE;
+
+
+CREATE COMPUTE MODULE CTRDocument_ConvertReply
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders(); 
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		IF NOT InputRoot.XMLNSC.lns:messages.infomessage IS NULL THEN
+    	   SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDisposition = '0';
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusCode = '0000';
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDetail.tns:StatusCode = '0000'; 
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode = '0000';
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = InputRoot.XMLNSC.lns:messages.infomessage;
+		   SET Environment.Variables.Description = InputRoot.XMLNSC.lns:messages.infomessage;
+		ELSEIF NOT InputRoot.XMLNSC.lns:messages.warningmessage IS NULL THEN
+    	   SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDisposition = '1';
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusCode = '0001';
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDetail.tns:StatusCode = '0001'; 
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode = '0001';
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = InputRoot.XMLNSC.lns:messages.warningmessage;
+           SET Environment.Variables.Description = InputRoot.XMLNSC.lns:messages.warningmessage;
+		ELSE
+    	   SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDisposition = '2';
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusCode = '0002';
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDetail.tns:StatusCode = '0002'; 
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode = '0002';
+           SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = InputRoot.XMLNSC.lns:messages.errormessage;
+           SET Environment.Variables.Description = InputRoot.XMLNSC.lns:messages.errormessage;
+		END IF;
+
+        SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:StatusDetail.tns:StatusSource = 'Genus';
+		SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:Status.tns:Repeatable = TRUE;
+
+		SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:EnterpriseHeader.tns:Identity.tns:Username = Environment.Variables.EnterpriseHeader.Username; 
+		SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:EnterpriseHeader.tns:Identity.tns:Password = Environment.Variables.EnterpriseHeader.Password; 
+		SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.IdentitySource;
+		SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion = Environment.Variables.EnterpriseHeader.MessageVersion;
+		SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.MessageRevision;
+		SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:EnterpriseHeader.tns:Channel = Environment.Variables.EnterpriseHeader.Channel;
+		SET OutputRoot.XMLNSC.tns:CTRDocumentResponse.tns:EnterpriseHeader.tns:MessageDateTime = Environment.Variables.EnterpriseHeader.MessageDateTime;
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

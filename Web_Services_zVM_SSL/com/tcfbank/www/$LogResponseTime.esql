@@ -1,0 +1,174 @@
+BROKER SCHEMA com.tcfbank.www
+
+
+CREATE FILTER MODULE LogResponseTime_SetStartTime
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET Environment.Variables.StartTime 	= CURRENT_TIMESTAMP;
+		SET Environment.Variables.CCSID 		= Root.Properties.CodedCharSetId;
+		SET Environment.Variables.Encoding 		= Root.Properties.Encoding;
+		RETURN TRUE;
+	END;
+
+END MODULE;
+
+CREATE COMPUTE MODULE LogResponseTime_BuildLogMessage
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.Properties.CodedCharSetId = 500;
+		SET OutputRoot.Properties.Encoding  = 785;
+		SET OutputRoot.MQMD.CodedCharSetId = 500;
+		SET OutputRoot.MQMD.Encoding = 785;		
+		SET Environment.Variables.EndTime = CURRENT_TIMESTAMP;
+		DECLARE MyInterval INTERVAL;
+		SET MyInterval = (Environment.Variables.EndTime - Environment.Variables.StartTime) SECOND;
+		SET Environment.Variables.Interval = CAST(MyInterval AS DECIMAL);
+
+		IF ((Environment.Variables.Interval > 5)  OR 
+			(NOT InputRoot.XMLNSC.*.tns:Status.tns:StatusDisposition = '0')) THEN
+			SET OutputRoot.Properties.MessageFormat = 'Binary1';
+			SET OutputRoot.Properties.MessageSet = 'CICS_Commarea_Message_Setv1.1';
+			SET OutputRoot.Properties.MessageType = 'ServiceLogging';
+		ELSE 
+			RETURN FALSE;
+		END IF;
+		
+		
+--    Determine return MessageType		
+		DECLARE ServiceNameWithSchema CHARACTER MessageFlowLabel;
+  --  remove "com.tcfbank.www." from ServiceNameWithSchema
+	 	DECLARE myLength INT;
+	 	SET myLength = LENGTH(ServiceNameWithSchema) - 16;
+	 	DECLARE ServiceName CHARACTER;
+	 	SET ServiceName = RIGHT(ServiceNameWithSchema, myLength);
+	 	
+	 	IF ((ServiceName = 'CallerAuthentication') AND 
+	 		(InputRoot.XMLNSC.*.tns:Status.tns:StatusDisposition = '2') AND
+	 		(InputRoot.XMLNSC.*.tns:Status.tns:StatusCode = '0003')) THEN
+	 		RETURN FALSE;
+	 	END IF;
+		
+		SET OutputRoot.MRM.ServiceName = LEFT(ServiceName, 40);
+		SET OutputRoot.MRM.ServiceStartTime = Environment.Variables.StartTime;
+		SET OutputRoot.MRM.ServiceEndTime = Environment.Variables.EndTime;		
+		SET OutputRoot.MRM.ServiceInterval = CAST(MyInterval AS DECIMAL);
+		SET OutputRoot.MRM.ServiceResponseDisposition = InputRoot.XMLNSC.*.tns:Status.tns:StatusDisposition;
+		SET OutputRoot.MRM.ServiceResponseCode = InputRoot.XMLNSC.*.tns:Status.tns:StatusCode;
+		SET OutputRoot.MRM.ServiceResponseSubCode = InputRoot.XMLNSC.*.tns:Status.tns:StatusDetail.tns:StatusSubCode;
+		SET OutputRoot.MRM.ServiceResponseDescription = LEFT(InputRoot.XMLNSC.*.tns:Status.tns:StatusDetail.tns:StatusDescription, 30);
+		SET OutputRoot.MRM.ServiceResponseSource = LEFT(InputRoot.XMLNSC.*.tns:Status.tns:StatusDetail.tns:StatusSource, 8);
+		SET OutputRoot.MRM.ServiceEHChannel = LEFT(InputRoot.XMLNSC.*.tns:EnterpriseHeader.tns:Channel, 3);
+		SET OutputRoot.MRM.ServiceEHVersion = LEFT(InputRoot.XMLNSC.*.tns:EnterpriseHeader.tns:Version.tns:MessageVersion, 2);
+		SET OutputRoot.MRM.ServiceEHRevision = LEFT(InputRoot.XMLNSC.*.tns:EnterpriseHeader.tns:Version.tns:MessageRevision, 3);
+		SET OutputRoot.MRM.ServiceEHDateTime = LEFT(InputRoot.XMLNSC.*.tns:EnterpriseHeader.tns:MessageDateTime, 25);
+		SET OutputRoot.MRM.ServiceEHUsername = LEFT(InputRoot.XMLNSC.*.tns:EnterpriseHeader.tns:Identity.tns:Username, 20);
+		SET OutputRoot.MRM.ServiceEHSource = LEFT(InputRoot.XMLNSC.*.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource, 15);
+
+		IF InputRoot.XMLNSC.*.tns:AccountIdentifier.tns:AccountNumber IS NULL THEN
+			SET OutputRoot.MRM.ServiceRequestIdentificationNumber VALUE = NULL;
+		ELSE
+			SET OutputRoot.MRM.ServiceRequestIdentificationNumber = InputRoot.XMLNSC.*.tns:AccountIdentifier.tns:AccountNumber;
+		END IF;
+		IF InputRoot.XMLNSC.*.tns:AccountIdentifier.tns:BankNumber IS NULL THEN
+			SET OutputRoot.MRM.ServiceRequestBankNumber VALUE = NULL;
+		ELSE
+			SET OutputRoot.MRM.ServiceRequestBankNumber = InputRoot.XMLNSC.*.tns:AccountIdentifier.tns:BankNumber;
+		END IF;
+		IF InputRoot.XMLNSC.*.tns:AccountIdentifier.tns:Application IS NULL THEN
+			SET OutputRoot.MRM.ServiceRequestApplication VALUE = NULL;
+		ELSE 
+			SET OutputRoot.MRM.ServiceRequestApplication = InputRoot.XMLNSC.*.tns:AccountIdentifier.tns:Application; 
+		END IF;
+		IF InputRoot.XMLNSC.*.tns:CustomerNumber IS NULL THEN
+			SET OutputRoot.MRM.ServiceRequestCustomerNumber VALUE = NULL;
+		ELSE 
+			SET OutputRoot.MRM.ServiceRequestCustomerNumber = InputRoot.XMLNSC.*.tns:CustomerNumber;
+		END IF;
+		IF InputRoot.XMLNSC.*.tns:SerialNumber IS NULL THEN
+			SET OutputRoot.MRM.ServiceRequestSerialNumber VALUE = NULL;
+		ELSE 
+			SET OutputRoot.MRM.ServiceRequestSerialNumber = InputRoot.XMLNSC.*.tns:SerialNumber;
+		END IF;
+		IF ServiceName = 'FundsTransfer' THEN
+			IF InputRoot.XMLNSC.*.tns:TransferSource.tns:AccountIdentifier.tns:AccountNumber IS NULL THEN
+				SET OutputRoot.MRM.ServiceRequestIdentificationNumber VALUE = NULL;
+			ELSE 
+				SET OutputRoot.MRM.ServiceRequestIdentificationNumber = InputRoot.XMLNSC.*.tns:TransferSource.tns:AccountIdentifier.tns:AccountNumber;
+			END IF;
+		END IF;
+		IF ServiceName = 'MerchantVerification' OR 
+		   ServiceName = 'DepositsAccountVerification' THEN
+		   IF InputRoot.XMLNSC.*.tns:AccountNumber IS NULL THEN
+		   	  SET OutputRoot.MRM.ServiceRequestIdentificationNumber VALUE = NULL;
+		   ELSE
+		   	  SET OutputRoot.MRM.ServiceRequestIdentificationNumber = InputRoot.XMLNSC.*.tns:AccountNumber;
+		   END IF;
+		END IF;
+		IF ServiceName = 'DepositsAccountVerification' THEN
+			IF InputRoot.XMLNSC.*.tns:BankNumber IS NOT NULL THEN
+				SET OutputRoot.MRM.ServiceRequestBankNumber = InputRoot.XMLNSC.*.tns:BankNumber;
+			END IF;
+			IF InputRoot.XMLNSC.*.tns:Application IS NOT NULL THEN
+				SET OutputRoot.MRM.ServiceRequestApplication = InputRoot.XMLNSC.*.tns:Application;
+			END IF;
+		END IF;
+		IF ServiceName = 'CallerAuthentication' OR 
+		   ServiceName = 'SecretCodeAuthentication' THEN
+			SET OutputRoot.MRM.ServiceRequestIdentificationNumber = InputRoot.XMLNSC.*.tns:IdentificationNumber;
+		END IF;
+		IF ServiceName = 'CustomerRelationship' THEN
+			SET OutputRoot.MRM.ServiceRequestIdentificationNumber = InputRoot.XMLNSC.*.tns:Identifier.tns:IdentificationNumber;
+			SET OutputRoot.MRM.ServiceRequestBankNumber = InputRoot.XMLNSC.*.tns:Identifier.tns:BankNumber;
+			SET OutputRoot.MRM.ServiceRequestApplication = InputRoot.XMLNSC.*.tns:Identifier.tns:Application;
+		END IF;
+		IF ServiceName = 'CardActivation' OR 
+		   ServiceName = 'SecretCodeChange' OR 
+		   ServiceName = 'CardInformation'  THEN
+			SET OutputRoot.MRM.ServiceRequestIdentificationNumber = InputRoot.XMLNSC.*.tns:CardNumber;
+		END IF;		
+		IF InputRoot.XMLNSC.*.tns:SerialNumber IS NULL THEN
+			SET OutputRoot.MRM.ServiceRequestSerialNumber VALUE = NULL;
+		ELSE 
+			SET OutputRoot.MRM.ServiceRequestSerialNumber = InputRoot.XMLNSC.*.tns:SerialNumber;
+		END IF;		
+		IF InputRoot.XMLNSC.*.tns:TransferAmount IS NULL THEN
+			IF InputRoot.XMLNSC.*.tns:CheckAmount IS NULL THEN
+				SET OutputRoot.MRM.ServiceRequestAmount VALUE = NULL;
+			ELSE 
+				SET OutputRoot.MRM.ServiceRequestAmount = InputRoot.XMLNSC.*.tns:CheckAmount;
+			END IF;
+		ELSE 
+			SET OutputRoot.MRM.ServiceRequestAmount = InputRoot.XMLNSC.*.tns:TransferAmount;
+		END IF;
+		IF InputRoot.XMLNSC.*.tns:TinLastFour IS NULL THEN
+			SET OutputRoot.MRM.ServiceRequestTINLastFour VALUE = NULL;
+		ELSE 
+			SET OutputRoot.MRM.ServiceRequestTINLastFour = InputRoot.XMLNSC.*.tns:TinLastFour;
+		END IF;
+
+-- set output queue	
+		IF ((Environment.Variables.Interval > 5) AND
+			(InputRoot.XMLNSC.*.tns:Status.tns:StatusDisposition  <> '0'))THEN
+			PROPAGATE TO TERMINAL 'out2';
+		ELSEIF (Environment.Variables.Interval > 5) THEN
+			PROPAGATE TO TERMINAL 'out1';
+		ELSE
+			PROPAGATE TO TERMINAL 'out';
+		END IF;		
+		RETURN FALSE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

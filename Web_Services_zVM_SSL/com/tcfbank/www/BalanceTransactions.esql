@@ -1,0 +1,178 @@
+BROKER SCHEMA com.tcfbank.www
+
+
+CREATE COMPUTE MODULE BalanceTransactionsRequest_wmb7220Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add	
+		CALL CopyEnterpriseHeader();
+		CALL CopyInputData();
+		RETURN TRUE;
+	END;
+	
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+	
+	CREATE PROCEDURE CopyEnterpriseHeader() 
+	BEGIN
+		SET Environment.Variables.EnterpriseHeader.Identity.Username = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		SET Environment.Variables.EnterpriseHeader.Identity.Password = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		SET Environment.Variables.EnterpriseHeader.Version.MessageVersion = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET Environment.Variables.EnterpriseHeader.Version.MessageRevision = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET Environment.Variables.EnterpriseHeader.Channel = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:EnterpriseHeader.tns:Channel;
+		SET Environment.Variables.EnterpriseHeader.MessageDateTime = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+	END;
+	
+	CREATE PROCEDURE CopyInputData() 
+	BEGIN
+		SET OutputRoot.Properties.MessageSet    = 'CICS_Commarea_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   = 'WMB7220Input';
+		SET OutputRoot.Properties.MessageFormat = 'Binary1';	
+		-- CICS Header		
+		SET OutputRoot.MRM.wmb7220_input_header.Version.Version               = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET OutputRoot.MRM.wmb7220_input_header.Revision.Revision             = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET OutputRoot.MRM.wmb7220_input_header.Channel.Channel               = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:EnterpriseHeader.tns:Channel;
+		SET OutputRoot.MRM.wmb7220_input_header.CallingProgram.CallingProgram = 'BROKER';
+		SET OutputRoot.MRM.wmb7220_input_header.CallingService.CallingService = 'BALTRANS';	
+		SET OutputRoot.MRM.wmb7220_output_return VALUE                        = NULL;
+		-- Application Data
+		SET OutputRoot.MRM.wmb7220_input_area.wmb7220_input_account           = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:AccountIdentifier.tns:AccountNumber;
+		SET OutputRoot.MRM.wmb7220_input_area.wmb7220_input_bank              = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:AccountIdentifier.tns:BankNumber;
+		SET OutputRoot.MRM.wmb7220_input_area.wmb7220_input_appl              = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:AccountIdentifier.tns:Application;
+		IF InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:IncludedPostedTransactions = 'Credit' THEN
+		   SET OutputRoot.MRM.wmb7220_input_area.wmb7220_input_func = 'C';
+		ELSE	
+			IF InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:IncludedPostedTransactions = 'Debit' THEN
+				SET OutputRoot.MRM.wmb7220_input_area.wmb7220_input_func = 'D';
+			ELSE
+				SET OutputRoot.MRM.wmb7220_input_area.wmb7220_input_func = 'A';
+			END IF;
+		END IF;
+		IF InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:IncludedPendingTransactions = 'true' THEN
+			SET OutputRoot.MRM.wmb7220_input_area.wmb7220_pending_sel = 'Y';
+		ELSE
+			SET OutputRoot.MRM.wmb7220_input_area.wmb7220_pending_sel = 'N';
+		END IF;
+		SET OutputRoot.MRM.wmb7220_input_area.wmb7220_input_requested         = InputRoot.XMLNSC.tns:BalanceTransactionsRequest.tns:TransactionCountRequested;
+		-- Default
+		SET OutputRoot.MRM.wmb7220_input_area.fill_0 VALUE = NULL;
+		SET OutputRoot.MRM.wmb7220_output_area VALUE = NULL;
+	END;
+END MODULE;
+
+	CREATE COMPUTE MODULE wmb7220Output_BalanceTransactionsResponse	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+		
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+
+		CALL BuildOutput();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;	
+
+CREATE PROCEDURE BuildOutput() 
+	BEGIN
+		-- HEADER 
+		SET OutputRoot.Properties.MessageSet    	= 'Web_Services_Message_Setv1.1';
+		SET OutputRoot.Properties.MessageType   	= 'BalanceTransactionsResponse';
+		SET OutputRoot.Properties.MessageFormat 	= 'XML1';
+		SET OutputRoot.Properties.Encoding			= 785;
+		SET OutputRoot.Properties.CodedCharSetId	= 1208;
+		
+		SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:Status.tns:StatusDisposition                  = InputRoot.MRM.wmb7220_output_return.StatusDisposition.StatusDisposition;
+		SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:Status.tns:StatusCode                         = InputRoot.MRM.wmb7220_output_return.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:Status.tns:StatusDetail.tns:StatusCode        = InputRoot.MRM.wmb7220_output_return.StatusCode.StatusCode;
+		SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode     = InputRoot.MRM.wmb7220_output_return.StatusSubCode;
+		SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = InputRoot.MRM.wmb7220_output_return.StatusDesc;
+		SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:Status.tns:StatusDetail.tns:StatusSource      = InputRoot.MRM.wmb7220_output_return.StatusSource;
+		SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:Status.tns:Repeatable                         = TRUE;
+		
+		CALL ReplaceEnterpriseHeader();
+		
+		-- DATA
+		SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:PendingTransactionCount                 = InputRoot.MRM.wmb7220_output_area.wmb7220_pending_count;
+		DECLARE I INTEGER 1;
+		WHILE InputRoot.MRM.wmb7220_output_area.wmb7220_tran_entry[I].wmb7220_tran_code IS NOT NULL
+			DO
+				SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:Transaction[I].tns:TransactionCode         = InputRoot.MRM.wmb7220_output_area.wmb7220_tran_entry[I].wmb7220_tran_code;
+				SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:Transaction[I].tns:TransactionAmount       = InputRoot.MRM.wmb7220_output_area.wmb7220_tran_entry[I].wmb7220_tran_amount;
+				SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:Transaction[I].tns:TransactionDate         = InputRoot.MRM.wmb7220_output_area.wmb7220_tran_entry[I].wmb7220_tran_date;
+				SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:Transaction[I].tns:TransactionTime         = InputRoot.MRM.wmb7220_output_area.wmb7220_tran_entry[I].wmb7220_tran_time;
+				SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:Transaction[I].tns:TransactionDescription  = InputRoot.MRM.wmb7220_output_area.wmb7220_tran_entry[I].wmb7220_tran_desc1;
+				SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:Transaction[I].tns:TransactionDescription2 = InputRoot.MRM.wmb7220_output_area.wmb7220_tran_entry[I].wmb7220_tran_desc2;
+				SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:Transaction[I].tns:SerialNumber            = InputRoot.MRM.wmb7220_output_area.wmb7220_tran_entry[I].wmb7220_tran_check;
+				IF InputRoot.MRM.wmb7220_output_area.wmb7220_tran_entry[I].wmb7220_tran_pending = 'T' THEN
+					SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:Transaction[I].tns:PendingPosted = 'Posted';
+				ELSE 
+					SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:Transaction[I].tns:PendingPosted = 'Pending';
+				END IF;
+				SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:BalanceTransactionsOutput.tns:Transaction[I].tns:CreditDebit             = InputRoot.MRM.wmb7220_output_area.wmb7220_tran_entry[I].wmb7220_tran_drcr;
+				SET I = I + 1;
+		END WHILE; 
+	END;
+		
+
+CREATE PROCEDURE ReplaceEnterpriseHeader() 
+	BEGIN
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:EnterpriseHeader.tns:Identity.tns:Username       = Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:EnterpriseHeader.tns:Identity.tns:Password       = NULL;
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion  = Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:EnterpriseHeader.tns:Channel                     = Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:EnterpriseHeader.tns:MessageDateTime             = Environment.Variables.EnterpriseHeader.MessageDateTime;
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:AccountIdentifier.tns:AccountNumber              = InputRoot.MRM.wmb7220_input_area.wmb7220_input_account;
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:AccountIdentifier.tns:BankNumber                 = InputRoot.MRM.wmb7220_input_area.wmb7220_input_bank;
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:AccountIdentifier.tns:Application                = InputRoot.MRM.wmb7220_input_area.wmb7220_input_appl;
+		
+		IF InputRoot.MRM.wmb7220_input_area.wmb7220_pending_sel = 'Y' THEN
+		 	SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:IncludedPendingTransactions                      = TRUE;
+		ELSE
+		 	SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:IncludedPendingTransactions                      = FALSE;
+		END IF;			 
+		 IF InputRoot.MRM.wmb7220_input_area.wmb7220_input_func = 'C' THEN
+			SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:IncludedPostedTransactions                       = 'Credit';
+		 ELSEIF InputRoot.MRM.wmb7220_input_area.wmb7220_input_func = 'D' THEN
+		 	SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:IncludedPostedTransactions                       = 'Debit';
+		 ELSE 
+		 	SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:IncludedPostedTransactions                       = 'All';
+		 END IF;
+		 
+		 SET OutputRoot.XMLNSC.tns:BalanceTransactionsResponse.tns:TransactionCountRequested                        = InputRoot.MRM.wmb7220_input_area.wmb7220_input_requested;
+	END;
+END MODULE;
+
+

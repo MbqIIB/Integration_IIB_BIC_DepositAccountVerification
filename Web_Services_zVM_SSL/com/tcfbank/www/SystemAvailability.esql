@@ -1,0 +1,86 @@
+BROKER SCHEMA com.tcfbank.www
+
+CREATE COMPUTE MODULE SystemAvailability_Return_WebServices
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 CALL CopyMessageHeaders();
+		 SET OutputRoot.Properties.MessageSet = 'Web_Services_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'SystemAvailabilityResponse';
+		 SET OutputRoot.Properties.MessageFormat = 'XML1';
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:Status.tns:StatusDisposition = '0';
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:Status.tns:StatusCode = '0000';
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:Status.tns:StatusDetail.tns:StatusCode = '0000';
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode = '0000';
+ 		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:Status.tns:StatusDetail.tns:StatusDescription = 'Transaction Completed';
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:Status.tns:StatusDetail.tns:StatusSource = 'Broker';
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:Status.tns:Repeatable = TRUE;
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:EnterpriseHeader.tns:Identity.tns:Username =       InputRoot.XMLNSC.tns:SystemAvailabilityRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;		 
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = InputRoot.XMLNSC.tns:SystemAvailabilityRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion =  InputRoot.XMLNSC.tns:SystemAvailabilityRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;		 		 
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = InputRoot.XMLNSC.tns:SystemAvailabilityRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:EnterpriseHeader.tns:Channel =                     InputRoot.XMLNSC.tns:SystemAvailabilityRequest.tns:EnterpriseHeader.tns:Channel;
+		 SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:EnterpriseHeader.tns:MessageDateTime =             InputRoot.XMLNSC.tns:SystemAvailabilityRequest.tns:EnterpriseHeader.tns:MessageDateTime;		 		 		 
+		 
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[1].tns:ServiceName = 'CallerAuthentication';
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[1].tns:ServiceStatus = SecretCodeAuthentication;
+         
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[2].tns:ServiceName = 'AccountBalanceLookup';
+         IF BalanceInquiry = 'N' or AccountProperties = 'N' THEN
+         	SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[2].tns:ServiceStatus = 'N';
+         ELSE
+         	SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[2].tns:ServiceStatus = 'Y';
+         END IF;
+        
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[3].tns:ServiceName = 'Information1099';
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[3].tns:ServiceStatus = Information1099;
+         
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[4].tns:ServiceName = 'FundsTransfer';
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[4].tns:ServiceStatus = FundsTransfer;
+         
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[5].tns:ServiceName = 'OfficialBankCheck';
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[5].tns:ServiceStatus = OfficialBankCheck;
+         
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[6].tns:ServiceName = 'MerchantVerification';
+         SET OutputRoot.XMLNSC.tns:SystemAvailabilityResponse.tns:SystemAvailabilityOutput.tns:SystemAvailability[6].tns:ServiceStatus = MerchantVerification;
+         
+         RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+CREATE COMPUTE MODULE SystemAvailability_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		IF InputRoot.MRM.ServiceName = 'OfficialBankCheck' THEN
+			SET OfficialBankCheck = InputRoot.MRM.AfterFlag;
+		END IF; 
+		IF InputRoot.MRM.ServiceName = 'BalanceInquiry' THEN
+			SET BalanceInquiry = InputRoot.MRM.AfterFlag;
+		END IF;
+		IF InputRoot.MRM.ServiceName = 'AccountProperties' THEN
+			SET AccountProperties = InputRoot.MRM.AfterFlag;
+		END IF;
+		IF InputRoot.MRM.ServiceName = 'SecretCodeAuthentication' THEN
+			SET SecretCodeAuthentication = InputRoot.MRM.AfterFlag;
+		END IF;
+		IF InputRoot.MRM.ServiceName = 'Information1099' THEN
+			SET Information1099 = InputRoot.MRM.AfterFlag;
+		END IF;
+		IF InputRoot.MRM.ServiceName = 'FundsTransfer' THEN
+			SET FundsTransfer = InputRoot.MRM.AfterFlag;
+		END IF;
+		IF InputRoot.MRM.ServiceName = 'MerchantVerification' THEN
+			SET MerchantVerification = InputRoot.MRM.AfterFlag;
+		END IF;
+		RETURN TRUE;
+	END;
+END MODULE;

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmPassthru.msgnode="ComIbmPassthru.msgnode" xmlns:ComIbmSOAPReply.msgnode="ComIbmSOAPReply.msgnode" xmlns:ComIbmThrow.msgnode="ComIbmThrow.msgnode" xmlns:ComIbmTryCatch.msgnode="ComIbmTryCatch.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="ParseExceptionList.msgflow"
+    nsPrefix="ParseExceptionList.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="ParseExceptionList" bundleName="ParseExceptionList" pluginId="Web_Services_zVM"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM/icons/full/obj16/ParseExceptionList.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM/icons/full/obj30/ParseExceptionList.gif"/>
+    <shortDescription xmi:type="utility:ConstantString" string="Parse Exception List"/>
+    <longDescription xmi:type="utility:ConstantString" string="This subflow will attempt to determine the exact reason for the error using the InputExceptionList.  It will create the standard TCF web service response and will reply to the caller.  If there is an error on the reply to the caller, the flow will simply write an error to the syslog and stop processing.&#xD;&#xA;&#xD;&#xA;Versioning:&#xD;&#xA;1.0 -> original coding"/>
+    <version xmi:type="utility:ConstantString" string="1.0"/>
+    <composition>
+      <nodes xmi:type="eflow:FCMSource" xmi:id="InTerminal.Input" location="27,68">
+        <translation xmi:type="utility:TranslatableString" key="InTerminal.Input" bundleName="ParseExceptionList" pluginId="Web_Services_zVM"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Input to ParseExceptionList subflow"/>
+        <longDescription xmi:type="utility:ConstantString" string="Input to ParseExceptionList subflow"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="280,72" computeExpression="esql://routine/com.tcfbank.www#ErrorHandling_ParseInputExceptionList.Main">
+        <translation xmi:type="utility:ConstantString" string="Parse_InputExceptionList"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Parse InputExceptionList"/>
+        <longDescription xmi:type="utility:ConstantString" string="This ESQL will parse the InputExceptionList message and use it to build a response to the web service caller.  "/>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="426,73" validateMaster="none">
+        <translation xmi:type="utility:ConstantString" string="SOAP Reply"/>
+        <shortDescription xmi:type="utility:ConstantString" string="SOAP Reply"/>
+        <longDescription xmi:type="utility:ConstantString" string="Respond to caller of the web service"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTryCatch.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="197,68">
+        <translation xmi:type="utility:ConstantString" string="TryCatch"/>
+        <shortDescription xmi:type="utility:ConstantString" string="TryCatch"/>
+        <longDescription xmi:type="utility:ConstantString" string="Try to build standard TCF web service error response and reply to caller.  If unable to reply, send message to SYSLOG"/>
+      </nodes>
+      <nodes xmi:type="ComIbmThrow.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="302,15" messageText="Input Message Error - Throw Exception">
+        <translation xmi:type="utility:ConstantString" string="SYSLOG write"/>
+        <shortDescription xmi:type="utility:ConstantString" string="SYSLOG write"/>
+        <longDescription xmi:type="utility:ConstantString" string="Write error message to system log.  This will only occur if all other error handling methods have failed."/>
+      </nodes>
+      <nodes xmi:type="ComIbmPassthru.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="99,68" label="$MQSI Subflow Version: ParseExceptionList = 1.0 MQSI$">
+        <translation xmi:type="utility:ConstantString" string="Version 1.0"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Version Label"/>
+        <longDescription xmi:type="utility:ConstantString" string="This node exists simply to version the subflow.  &#xD;&#xA;&#xD;&#xA;To change the version:&#xD;&#xA;1)  Change the Node name on this page&#xD;&#xA;2) Change the Label on the Basic page&#xD;&#xA;3) Add version comments to the Long Description section of the subflow"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.try" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.catch" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_3" sourceNode="InTerminal.Input" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

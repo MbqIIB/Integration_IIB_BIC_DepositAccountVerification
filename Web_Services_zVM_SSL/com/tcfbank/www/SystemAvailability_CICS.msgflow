@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmTimeoutNotification.msgnode="ComIbmTimeoutNotification.msgnode" xmlns:GetData_subflow.msgflow="GetData_subflow.msgflow" xmlns:PutData_subflow.msgflow="PutData_subflow.msgflow" xmlns:SystemAvailabilityLog.msgflow="SystemAvailabilityLog.msgflow" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/tcfbank/www/SystemAvailability_CICS.msgflow"
+    nsPrefix="com_tcfbank_www_SystemAvailability_CICS.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="SystemAvailability_CICS" bundleName="com/tcfbank/www/SystemAvailability_CICS" pluginId="Web_Services_zVM_SSL"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj16/SystemAvailability_CICS.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj30/SystemAvailability_CICS.gif"/>
+    <version xmi:type="utility:ConstantString" string="1.1"/>
+    <composition>
+      <nodes xmi:type="ComIbmTimeoutNotification.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="14,175" uniqueIdentifier="AvailTEL" transactionMode="no" timeoutInterval="60">
+        <translation xmi:type="utility:ConstantString" string="Start TEL"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="332,111" computeExpression="esql://routine/com.tcfbank.www#SystemAvailability_CICS_Set_DEP.Main">
+        <translation xmi:type="utility:ConstantString" string="Set Deposit Services"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_21" location="339,34" computeExpression="esql://routine/com.tcfbank.www#SystemAvailability_CICS_Set_CIS.Main">
+        <translation xmi:type="utility:ConstantString" string="Set CIS Services"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_23" location="340,175" computeExpression="esql://routine/com.tcfbank.www#SystemAvailability_CICS_Set_TEL.Main">
+        <translation xmi:type="utility:ConstantString" string="Set TEL Services"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="90,35" computeExpression="esql://routine/com.tcfbank.www#SystemAvailability_CICS_Build_CIS7220.Main">
+        <translation xmi:type="utility:ConstantString" string="Build_CIS7220"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="88,110" computeExpression="esql://routine/com.tcfbank.www#SystemAvailability_CICS_Build_DEP7200.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="Build_DEP7200"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="84,175" computeExpression="esql://routine/com.tcfbank.www#SystemAvailability_CICS_Build_TEL7275.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="Build_TEL7275"/>
+      </nodes>
+      <nodes xmi:type="PutData_subflow.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_11" location="178,111" RequestQ="TCFWMBMQ.SYSTEMAVAILABILITY.DEP.REQUEST" ResponseQ="TCFWMBMQ.SYSTEMAVAILABILITY.DEP.RESPONSE" SaveQ="TCFWMBMQ.SYSTEMAVAILABILITY.DEP.SAVEDATA">
+        <translation xmi:type="utility:ConstantString" string="PutDEPData"/>
+      </nodes>
+      <nodes xmi:type="PutData_subflow.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_14" location="176,176" RequestQ="TCFWMBMQ.SYSTEMAVAILABILITY.TEL.REQUEST" ResponseQ="TCFWMBMQ.SYSTEMAVAILABILITY.TEL.RESPONSE" SaveQ="TCFWMBMQ.SYSTEMAVAILABILITY.TEL.SAVEDATA">
+        <translation xmi:type="utility:ConstantString" string="PutTELData"/>
+      </nodes>
+      <nodes xmi:type="GetData_subflow.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_17" location="252,35" ResponseQueueName="TCFWMBMQ.SYSTEMAVAILABILITY.CIS.RESPONSE" messageTypeProperty="CIS7220COMMAREA" SaveDataQueue="TCFWMBMQ.SYSTEMAVAILABILITY.CIS.SAVEDATA">
+        <translation xmi:type="utility:ConstantString" string="GetCISData"/>
+      </nodes>
+      <nodes xmi:type="GetData_subflow.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_18" location="252,112" ResponseQueueName="TCFWMBMQ.SYSTEMAVAILABILITY.DEP.RESPONSE" messageTypeProperty="DEP7200COMMAREA" SaveDataQueue="TCFWMBMQ.SYSTEMAVAILABILITY.DEP.SAVEDATA">
+        <translation xmi:type="utility:ConstantString" string="GetDEPData"/>
+      </nodes>
+      <nodes xmi:type="GetData_subflow.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_19" location="251,175" ResponseQueueName="TCFWMBMQ.SYSTEMAVAILABILITY.TEL.RESPONSE" messageTypeProperty="TEL7275COMMAREA" SaveDataQueue="TCFWMBMQ.SYSTEMAVAILABILITY.TEL.SAVEDATA">
+        <translation xmi:type="utility:ConstantString" string="GetTELData"/>
+      </nodes>
+      <nodes xmi:type="PutData_subflow.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_25" location="174,35" RequestQ="TCFWMBMQ.SYSTEMAVAILABILITY.CIS.REQUEST" ResponseQ="TCFWMBMQ.SYSTEMAVAILABILITY.CIS.RESPONSE" SaveQ="TCFWMBMQ.SYSTEMAVAILABILITY.CIS.SAVEDATA">
+        <translation xmi:type="utility:ConstantString" string="PutCISData"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTimeoutNotification.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_8" location="20,35" uniqueIdentifier="AvailCIS" transactionMode="no" timeoutInterval="60">
+        <translation xmi:type="utility:ConstantString" string="Start CIS"/>
+      </nodes>
+      <nodes xmi:type="ComIbmTimeoutNotification.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_10" location="18,110" uniqueIdentifier="AvailDEP" transactionMode="no" timeoutInterval="60">
+        <translation xmi:type="utility:ConstantString" string="Start DEP"/>
+      </nodes>
+      <nodes xmi:type="SystemAvailabilityLog.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_22" location="434,34">
+        <translation xmi:type="utility:ConstantString" string="Log CIS"/>
+      </nodes>
+      <nodes xmi:type="SystemAvailabilityLog.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_26" location="440,112">
+        <translation xmi:type="utility:ConstantString" string="Log DEP"/>
+      </nodes>
+      <nodes xmi:type="SystemAvailabilityLog.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_27" location="436,176">
+        <translation xmi:type="utility:ConstantString" string="Log TEL"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_82" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_11" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_12" targetNode="FCMComposite_1_14" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_21" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_18" sourceTerminalName="OutTerminal.Out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_23" targetNode="FCMComposite_1_23" sourceNode="FCMComposite_1_19" sourceTerminalName="OutTerminal.Out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_8" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_10" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_25" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_15" targetNode="FCMComposite_1_21" sourceNode="FCMComposite_1_17" sourceTerminalName="OutTerminal.Out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_16" targetNode="FCMComposite_1_22" sourceNode="FCMComposite_1_21" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_17" targetNode="FCMComposite_1_26" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_18" targetNode="FCMComposite_1_27" sourceNode="FCMComposite_1_23" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmFilter.msgnode="ComIbmFilter.msgnode" xmlns:ComIbmMQOutput.msgnode="ComIbmMQOutput.msgnode" xmlns:ComIbmPassthru.msgnode="ComIbmPassthru.msgnode" xmlns:ComIbmSOAPReply.msgnode="ComIbmSOAPReply.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="InquirySecurityBIC.msgflow" nsPrefix="InquirySecurityBIC.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.TestingTool" name="TestingTool" lowerBound="1" defaultValueLiteral="empty">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.BIC_user" name="BIC_user" lowerBound="1" defaultValueLiteral="empty">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="InquirySecurityBIC" bundleName="InquirySecurityBIC" pluginId="Web_Services_zVM_SSL"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj16/InquirySecurityBIC.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj30/InquirySecurityBIC.gif"/>
+    <longDescription xmi:type="utility:ConstantString" string="&#xD;&#xA;&#xD;&#xA;Versioning:&#xD;&#xA;1.0 -> original coding"/>
+    <version xmi:type="utility:ConstantString" string="1.0"/>
+    <composition>
+      <nodes xmi:type="eflow:FCMSink" xmi:id="OutTerminal.Output" location="358,136">
+        <translation xmi:type="utility:TranslatableString" key="OutTerminal.Output" bundleName="InquirySecurityBIC" pluginId="Web_Services_zVM_SSL"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Output from ExtractInput subflow"/>
+        <longDescription xmi:type="utility:ConstantString" string="Output from ExtractInput subflow"/>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="614,19" validateMaster="none">
+        <translation xmi:type="utility:ConstantString" string="SOAP Reply"/>
+      </nodes>
+      <nodes xmi:type="eflow:FCMSource" xmi:id="InTerminal.Input" location="10,69">
+        <translation xmi:type="utility:TranslatableString" key="InTerminal.Input" bundleName="InquirySecurityBIC" pluginId="Web_Services_zVM_SSL"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Input to ExtractInput subflow"/>
+        <longDescription xmi:type="utility:ConstantString" string="Input to ExtractInput subflow"/>
+      </nodes>
+      <nodes xmi:type="ComIbmFilter.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="142,73" filterExpression="esql://routine/com.tcfbank.www#InquirySecurityBIC_CheckTable.Main">
+        <translation xmi:type="utility:ConstantString" string="InquirySecurityBICFilter"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="483,18" computeExpression="esql://routine/com.tcfbank.www#SecurityError_BuildResponse.Main">
+        <translation xmi:type="utility:ConstantString" string="Compute"/>
+      </nodes>
+      <nodes xmi:type="ComIbmMQOutput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="360,16" queueName="TCFWMBMQ.WS.SECURITY.VIOLATION">
+        <translation xmi:type="utility:ConstantString" string="MQOutput"/>
+      </nodes>
+      <nodes xmi:type="ComIbmPassthru.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="75,69" label="$MQSI Subflow Version: InquirySecurity = 1.0 MQSI$">
+        <translation xmi:type="utility:ConstantString" string="Version 1.0"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Version Label"/>
+        <longDescription xmi:type="utility:ConstantString" string="This node exists simply to version the subflow.  &#xD;&#xA;&#xD;&#xA;To change the version:&#xD;&#xA;1)  Change the Node name on this page&#xD;&#xA;2) Change the Label on the Basic page&#xD;&#xA;3) Add version comments to the Long Description section of the subflow"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_10" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_11" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.failure" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_7" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.unknown" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_8" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.failure" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_5" sourceNode="InTerminal.Input" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="OutTerminal.Output" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.true" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_4" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.false" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_13" targetNode="FCMComposite_1_1" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.TestingTool">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.TestingTool" bundleName="InquirySecurityBIC" pluginId="Web_Services_zVM_SSL"/>
+        <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.BIC_user">
+          <propertyName xmi:type="utility:TranslatableString" key="Property.BIC_user" bundleName="InquirySecurityBIC" pluginId="Web_Services_zVM_SSL"/>
+        </propertyDescriptor>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

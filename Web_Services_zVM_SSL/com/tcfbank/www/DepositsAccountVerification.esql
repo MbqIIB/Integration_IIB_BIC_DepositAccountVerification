@@ -1,0 +1,163 @@
+BROKER SCHEMA com.tcfbank.www
+
+CREATE COMPUTE MODULE DepositsAccountVerificationRequest_DEP7238Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN 
+		 CALL CopyMessageHeaders();
+-- #### added for MQ interface	
+		SET OutputRoot.HTTPInputHeader 				= NULL;	
+		SET OutputRoot.Properties.CodedCharSetId 	= 500;
+		SET OutputRoot.Properties.Encoding  		= 785;
+		SET OutputRoot.Properties.ExpirationTime	= 100;
+		CREATE NEXTSIBLING OF OutputRoot.Properties DOMAIN 'MQMD';
+-- #### end add	
+		 CALL CopyEnterpriseHeader();
+		 CALL CopyInputData();
+
+		 RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEnterpriseHeader() 
+	BEGIN
+		 SET Environment.Variables.EnterpriseHeader.Identity.Username 				= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		 SET Environment.Variables.EnterpriseHeader.Identity.Password 				= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		 SET Environment.Variables.EnterpriseHeader.Identity.IdentitySource 		= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource; 
+		 SET Environment.Variables.EnterpriseHeader.Version.MessageVersion 			= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		 SET Environment.Variables.EnterpriseHeader.Version.MessageRevision 		= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		 SET Environment.Variables.EnterpriseHeader.Channel 						= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:EnterpriseHeader.tns:Channel;
+		 SET Environment.Variables.EnterpriseHeader.MessageDateTime 				= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:EnterpriseHeader.tns:MessageDateTime;
+	END;
+
+	CREATE PROCEDURE CopyInputData() 
+	BEGIN
+		 SET OutputRoot.Properties.MessageSet = 'CICS_Commarea_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'DEP7238Input';
+		 SET OutputRoot.Properties.MessageFormat = 'Binary1';
+		 		 
+		 SET OutputRoot.MRM.dep7238_input_header.Version.Version 					= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		 SET OutputRoot.MRM.dep7238_input_header.Revision.Revision 					= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		 SET OutputRoot.MRM.dep7238_input_header.Channel.Channel 					= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:EnterpriseHeader.tns:Channel;
+		 SET OutputRoot.MRM.dep7238_input_header.CallingProgram.CallingProgram 		= 'BROKER';
+		 SET OutputRoot.MRM.dep7238_input_header.CallingService.CallingService 		= 'DEPACCTVERIFY';	
+		 SET OutputRoot.MRM.dep7238_output_return VALUE 							= NULL;
+		 
+		 SET OutputRoot.MRM.dep7238_input_area.dep7238_Function 	 				= '';
+		 
+		 SET OutputRoot.MRM.dep7238_input_area.dep7238_AccountNumber				= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:AccountNumber;
+		 IF InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:Application IS NOT NULL THEN
+		  SET OutputRoot.MRM.dep7238_input_area.dep7238_Application					= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:Application;
+		 ELSE
+		  SET OutputRoot.MRM.dep7238_input_area.dep7238_Application VALUE			= NULL;
+		 END IF;
+		 IF InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:BankNumber IS NOT NULL THEN
+		  SET OutputRoot.MRM.dep7238_input_area.dep7238_BankNumber					= InputRoot.XMLNSC.tns:DepositAccountVerificationRequest.tns:BankNumber;
+		 ELSE
+		  SET OutputRoot.MRM.dep7238_input_area.dep7238_BankNumber	VALUE			= NULL;
+		 END IF;
+
+		 SET OutputRoot.MRM.dep7238_output_area VALUE 								= NULL;	
+	END;
+
+END MODULE;
+
+
+CREATE COMPUTE MODULE DEP7238Output_DepositsAccountVerificationResponse
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN 
+		 CALL CopyMessageHeaders();
+-- ADDED for MQ interface
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+		SET OutputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier = CAST(Environment.Variables.HTTP.RequestIdentifier AS BLOB);		
+-- End add
+		 CALL BuildOutput();
+		 RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() 
+	BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+	
+	CREATE PROCEDURE BuildOutput() 
+	BEGIN
+		 SET OutputRoot.Properties.MessageSet = 'Web_Services_Message_Setv1.1';
+		 SET OutputRoot.Properties.MessageType = 'DepositAccountVerificationResponse';
+		 SET OutputRoot.Properties.MessageFormat = 'XML1';
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:Status.tns:StatusDisposition 					= InputRoot.MRM.dep7238_output_return.StatusDisposition.StatusDisposition;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:Status.tns:StatusCode 							= InputRoot.MRM.dep7238_output_return.StatusCode.StatusCode;		 
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusCode 			= InputRoot.MRM.dep7238_output_return.StatusCode.StatusCode;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusSubCode 		= InputRoot.MRM.dep7238_output_return.StatusSubCode;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusDescription 	= InputRoot.MRM.dep7238_output_return.StatusDesc;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:Status.tns:StatusDetail.tns:StatusSource 		= InputRoot.MRM.dep7238_output_return.StatusSource;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:Status.tns:Repeatable 							= TRUE;
+		 
+		 CALL ReplaceEnterpriseHeader();
+		
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:AccountNumber 									= InputRoot.MRM.dep7238_input_area.dep7238_AccountNumber;
+		 IF InputRoot.MRM.dep7238_input_area.dep7238_BankNumber IS NOT NULL THEN
+			 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:BankNumber 										= InputRoot.MRM.dep7238_input_area.dep7238_BankNumber;
+		 END IF;
+		 IF InputRoot.MRM.dep7238_input_area.dep7238_Application IS NOT NULL THEN
+			 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:Application	 									= InputRoot.MRM.dep7238_input_area.dep7238_Application;
+		 END IF;
+		 
+		 IF InputRoot.MRM.dep7238_output_return.StatusCode.StatusCode = '0000' THEN
+		 	DECLARE I INTEGER 1;
+		 	WHILE ((I < 10) AND (InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_bank IS NOT NULL)) DO
+		 		IF InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_bank IS NOT NULL THEN
+		 			SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:DepositAccountVerificationOutput.tns:DepositAccountVerificationInformation[I].tns:BankNumber = InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_bank;
+		 		END IF;
+		 		IF InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_application IS NOT NULL THEN
+		 			SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:DepositAccountVerificationOutput.tns:DepositAccountVerificationInformation[I].tns:Application = InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_application;
+		 		END IF;
+		 		IF InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_status IS NOT NULL THEN
+				BEGIN
+		 			IF InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_status = '' THEN
+		 				SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:DepositAccountVerificationOutput.tns:DepositAccountVerificationInformation[I].tns:OpenClosedStatus = 'Open';
+		 			ELSE
+		 				SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:DepositAccountVerificationOutput.tns:DepositAccountVerificationInformation[I].tns:OpenClosedStatus = 'Closed';
+		 			END IF;
+		 		END;
+		 		END IF;
+		 		IF InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_type IS NOT NULL THEN
+		 			SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:DepositAccountVerificationOutput.tns:DepositAccountVerificationInformation[I].tns:AccountTypeValue = InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_type;
+		 		END IF;
+		 		IF InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_branch IS NOT NULL THEN
+		 			SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:DepositAccountVerificationOutput.tns:DepositAccountVerificationInformation[I].tns:BranchNumber = InputRoot.MRM.dep7238_output_area.dep7238_output_data[I].dep7238_7238_output_branch;
+		 		END IF;
+		 	SET I = I + 1;	
+		 	END WHILE;
+		 END IF;
+	END;
+	 
+	CREATE PROCEDURE ReplaceEnterpriseHeader() 
+	BEGIN
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:EnterpriseHeader.tns:Identity.tns:Username = Environment.Variables.EnterpriseHeader.Identity.Username;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:EnterpriseHeader.tns:Identity.tns:Password = NULL;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource = Environment.Variables.EnterpriseHeader.Identity.IdentitySource;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageVersion = Environment.Variables.EnterpriseHeader.Version.MessageVersion;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:EnterpriseHeader.tns:Version.tns:MessageRevision = Environment.Variables.EnterpriseHeader.Version.MessageRevision;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:EnterpriseHeader.tns:Channel = Environment.Variables.EnterpriseHeader.Channel;
+		 SET OutputRoot.XMLNSC.tns:DepositAccountVerificationResponse.tns:EnterpriseHeader.tns:MessageDateTime = Environment.Variables.EnterpriseHeader.MessageDateTime;
+	END;
+	
+
+END MODULE;

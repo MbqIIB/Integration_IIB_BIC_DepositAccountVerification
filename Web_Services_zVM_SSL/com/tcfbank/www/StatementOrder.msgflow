@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmSOAPInput.msgnode="ComIbmSOAPInput.msgnode" xmlns:ExtractInput.msgflow="ExtractInput.msgflow" xmlns:LogResponseTime_BuildLog.msgflow="LogResponseTime_BuildLog.msgflow" xmlns:RetrieveSaveData_subflow.msgflow="RetrieveSaveData_subflow.msgflow" xmlns:SOAPReply.msgflow="SOAPReply.msgflow" xmlns:SaveData_subflow.msgflow="SaveData_subflow.msgflow" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow"
+    xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/tcfbank/www/StatementOrder.msgflow"
+    nsPrefix="com_tcfbank_www_StatementOrder.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="StatementOrder" bundleName="com/tcfbank/www/StatementOrder" pluginId="Web_Services_zVM_SSL"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj16/StatementOrder.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Web_Services_zVM_SSL/icons/full/obj30/StatementOrder.gif"/>
+    <version xmi:type="utility:ConstantString" string="1.1"/>
+    <composition>
+      <nodes xmi:type="ComIbmSOAPInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="6,87" wsdlFileName="Web_Services_Message_Setv1.1/com/tcfbank/www/StatementOrderService.wsdl" selectedPortType="StatementOrderPortType" selectedBinding="StatementOrderBinding" selectedPort="StatementOrderProvider" targetNamespace="http://www.tcfbank.com" useHTTPTransport="true" urlSelector="/mb/claws/StatementOrder" useHTTPS="true" maxClientWaitTime="30" allowQueryWSDL="true" sendProcessingFaultsToFailure="true"
+          messageSetProperty="Web_Services_Message_Setv1.1" parserXmlnscBuildTreeUsingXMLSchema="false" validateMaster="none" validateFailureAction="exceptionList" componentLevel="node" additionalInstances="5">
+        <translation xmi:type="utility:ConstantString" string="SOAP Input"/>
+      </nodes>
+      <nodes xmi:type="ExtractInput.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_13" location="82,86">
+        <translation xmi:type="utility:ConstantString" string="ExtractInput"/>
+      </nodes>
+      <nodes xmi:type="SOAPReply.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_2" location="223,189">
+        <translation xmi:type="utility:ConstantString" string="SOAPReply"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_5" location="253,86" computeExpression="esql://routine/com.tcfbank.www#StatementOrderRequest_DEP7234Input.Main">
+        <translation xmi:type="utility:ConstantString" string="XML_DEP7234"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_7" location="131,188" computeExpression="esql://routine/com.tcfbank.www#DEP7234Output_StatementOrderResponse.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="DEP7234_XML"/>
+      </nodes>
+      <nodes xmi:type="LogResponseTime_BuildLog.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_6" location="296,190">
+        <translation xmi:type="utility:ConstantString" string="Write Log"/>
+      </nodes>
+      <nodes xmi:type="RetrieveSaveData_subflow.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_3" location="14,188" Response_queue="TCFWMBMQ.STATEMENTORDER.RESPONSE" SaveData_queue="TCFWMBMQ.STATEMENTORDER.SAVESSL" messageTypeProperty="DEP7234COMMAREA">
+        <translation xmi:type="utility:ConstantString" string="RetrieveSaveData"/>
+      </nodes>
+      <nodes xmi:type="SaveData_subflow.msgflow:FCMComposite_1" xmi:id="FCMComposite_1_9" location="341,86" Request_queue="TCFWMBMQ.STATEMENTORDER.REQUEST" Response_queue="TCFWMBMQ.STATEMENTORDER.RESPONSE" SaveData_queue="TCFWMBMQ.STATEMENTORDER.SAVESSL">
+        <translation xmi:type="utility:ConstantString" string="SaveData"/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_9" targetNode="FCMComposite_1_13" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_6" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_9" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_13" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

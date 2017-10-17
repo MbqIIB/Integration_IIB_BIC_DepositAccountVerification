@@ -1,0 +1,402 @@
+BROKER SCHEMA com.tcfbank.www
+
+
+
+
+CREATE COMPUTE MODULE AnderaPrescreen_Convert_Request
+	DECLARE MB_user EXTERNAL CHARACTER;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+		DECLARE user CHAR 'MB_user';
+		DECLARE password CHAR;
+		SET password = MB_user;
+		SET OutputRoot.HTTPRequestHeader."Authorization" = 'Basic '||base64Encode(user||':'||password);
+
+-- set character set for call to tellerprescreen as unicode
+		SET OutputRoot.Properties.Encoding			= 785;   
+		SET OutputRoot.Properties.CodedCharSetId	= 1208;		 
+
+-- namespace declaration for tellerprescreen message
+		SET OutputRoot.XMLNS.telns:PreScreen.(XML.NamespaceDecl)xmlns	= telns;
+		
+-- set reference pointers
+		DECLARE OutputRef	REFERENCE TO OutputRoot.XMLNS.telns:PreScreen;
+		DECLARE EnvRef		REFERENCE TO Environment.XMLNSC.andreqns:PassThruStartVerificationRequest.andreqns:Applicants.andreqns:ApplicantInfo;
+		
+-- build tellerprescreenrequest		
+		SET OutputRef.telns:cpsRequest.telns:cpsBankNumber	= '073';
+		-- reset outputref pointer since cpsRequest folder has been built
+		MOVE OutputRef TO OutputRoot.XMLNS.telns:PreScreen.telns:cpsRequest;
+		SET OutputRef.telns:cpsBranchNumber					= '00189';
+		SET OutputRef.telns:cpsTellerNumber					= '89999';
+		SET OutputRef.telns:cpsLawsonID						= '000001';
+		SET OutputRef.telns:cpsPersonalNonpersonal			= 'P';
+		SET OutputRef.telns:cpsExistingNew					= 'N';
+		
+		-- build customername - teller requires one field, input has three		
+		DECLARE CustomerName CHAR;
+		IF EnvRef.andreqns:FirstName IS NOT NULL THEN
+			SET CustomerName = EnvRef.andreqns:FirstName;
+		END IF;
+		IF EnvRef.andreqns:MiddleName IS NOT NULL THEN
+			SET CustomerName = CustomerName || '|' || EnvRef.andreqns:MiddleName;
+		ELSE 
+			SET CustomerName = CustomerName || '||';
+		END IF;
+		IF EnvRef.andreqns:LastName IS NOT NULL THEN
+			SET CustomerName = CustomerName || '|' || EnvRef.andreqns:LastName;
+		END IF;
+		IF CustomerName IS NULL THEN
+			SET CustomerName = 'Unknown||Unknown';
+		END IF;
+		SET OutputRef.telns:cpsFullLegalName		= CustomerName;
+		SET OutputRef.telns:cpsStreetAddress		= EnvRef.andreqns:CurrentAddress.andreqns:StreetLine1;
+		SET OutputRef.telns:cpsAddressSupplement	= EnvRef.andreqns:CurrentAddress.andreqns:StreetLine2;
+		SET OutputRef.telns:cpsCityCountryCode		= '';
+		SET OutputRef.telns:cpsCity					= EnvRef.andreqns:CurrentAddress.andreqns:City;
+		SET OutputRef.telns:cpsState				= EnvRef.andreqns:CurrentAddress.andreqns:State;
+		SET OutputRef.telns:cpsZipCode				= EnvRef.andreqns:CurrentAddress.andreqns:PostalCode;
+		SET OutputRef.telns:cpsTaxIDNumber			= EnvRef.andreqns:TaxId;
+		SET OutputRef.telns:cpsDate					= EnvRef.andreqns:DateOfBirth;
+		SET OutputRef.telns:cpsGender 				= '';
+		-- set phone #'s to blank, then fill in if sent
+		SET OutputRef.telns:cpsPhone1				= '';
+		SET OutputRef.telns:cpsPhone2				= '';
+		IF EnvRef.andreqns:PhoneData.andreqns:Number[1] IS NOT NULL THEN
+			IF EnvRef.andreqns:PhoneData.andreqns:Type = 'Business' THEN
+				SET OutputRef.telns:cpsPhone2		= EnvRef.andreqns:PhoneData.Number[1];
+			ELSE 
+				SET OutputRef.telns:cpsPhone1		= EnvRef.andreqns:PhoneData.Number[1];
+			END IF;
+		END IF;
+		IF EnvRef.andreqns:PhoneData.andreqns:Number[2] IS NOT NULL THEN
+			IF EnvRef.andreqns:PhoneData.andreqns:Type = 'Business' THEN
+				SET OutputRef.telns:cpsPhone2		= EnvRef.andreqns:PhoneData.Number[2];
+			ELSE 
+				SET OutputRef.telns:cpsPhone1		= EnvRef.andreqns:PhoneData.Number[2];
+			END IF;
+		END IF;
+		SET OutputRef.telns:cpsIDNumber				= EnvRef.andcomns:IdentificationDocuments.andcomns:IdentificationDocument.andcomns:Number;
+		IF EnvRef.andcomns:IdentificationDocuments.andcomns:IdentificationDocument.andcomns:IdentificationType = 'DriversLicense' THEN
+			SET OutputRef.telns:cpsIDType			= 'D';
+			SET OutputRef.telns:cpsIssueByState		= EnvRef.andcomns:IdentificationDocuments.andcomns:IdentificationDocument.andcomns:StateOfIssue;
+			SET OutputRef.telns:cpsIssueByCountry	= '';
+		ELSEIF EnvRef.andcomns:IdentificationDocuments.andcomns:IdentificationDocument.andcomns:IdentificationType = 'StateId' THEN
+		    SET OutputRef.telns:cpsIDType			= 'S';
+			SET OutputRef.telns:cpsIssueByState		= EnvRef.andcomns:IdentificationDocuments.andcomns:IdentificationDocument.andcomns:StateOfIssue;
+			SET OutputRef.telns:cpsIssueByCountry	= '';
+		ELSEIF EnvRef.andcomns:IdentificationDocuments.andcomns:IdentificationDocument.andcomns:IdentificationType = 'MilitaryId' THEN
+		    SET OutputRef.telns:cpsIDType			= 'U';
+			SET OutputRef.telns:cpsIssueByState		= '';
+			SET OutputRef.telns:cpsIssueByCountry	= 'USA';
+		ELSEIF EnvRef.andcomns:IdentificationDocuments.andcomns:IdentificationDocument.andcomns:IdentificationType = 'Passport' THEN
+		    SET OutputRef.telns:cpsIDType			= 'P';
+			SET OutputRef.telns:cpsIssueByState		= '';
+			SET OutputRef.telns:cpsIssueByCountry	= 'USA';
+		END IF;
+		SET OutputRef.telns:cpsIssueDate		  	= CAST(EnvRef.andcomns:IdentificationDocuments.andcomns:IdentificationDocument.andcomns:IssuedDate AS CHAR FORMAT 'MMddyyyy');
+		SET OutputRef.telns:cpsExpirationDate	  	= CAST(EnvRef.andcomns:IdentificationDocuments.andcomns:IdentificationDocument.andcomns:ExpirationDate AS CHAR FORMAT 'MMddyyyy');
+		SET OutputRef.telns:cpsInquiryNumber	  	= '';
+		SET OutputRef.telns:cpsVersion				= 'MB';
+		                    
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+
+CREATE COMPUTE MODULE AnderaPrescreen_Convert_Response
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders(); 
+		
+-- set response character set = request character set		
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+-- set andera response namespace		
+		SET OutputRoot.XMLNS.andresns:PassThruStartVerificationResponse.(XML.NamespaceDecl)xmlns = andresns;
+		
+-- set reference pointers		
+		DECLARE OutputRef	REFERENCE TO OutputRoot.XMLNS.andresns:PassThruStartVerificationResponse;
+		DECLARE EnvRef		REFERENCE TO Environment.XMLNSC.andreqns:PassThruStartVerificationRequest;
+		DECLARE InputRef	REFERENCE TO InputRoot.XMLNSC.telns:PreScreenResponse.telns:PreScreenResult;
+
+-- build andera response		
+		SET OutputRef.andresns:PassThruId 																			= EnvRef.andreqns:PassThruId;
+		IF NOT InputRef.telns:cpsSuccessIndicator = 'S' THEN
+			IF InputRef.telns:cpsStatusFlag = 'U' THEN
+				SET OutputRef.andresns:Errors.andresns:ErrorInfo.andresns:ErrorDescription 							= InputRef.telns:cpsErrorMessage;
+				SET OutputRef.andresns:Errors.andresns:ErrorInfo.andresns:ErrorStatus								= 'Undefined';
+				SET OutputRef.andresns:WatchlistResult.andresns:Decision.andresns:DecisionType						= 'ERROR';
+				SET OutputRef.andresns:WatchlistResult.andresns:Decision.andresns:Description 						= InputRef.telns:cpsErrorMessage;
+				SET	OutputRef.andresns:WatchlistResult.andresns:ApplicantId 										= EnvRef.andreqns:Applicants.andreqns:ApplicantInfo.andreqns:Id;
+				SET	OutputRef.andresns:WatchlistResult.andresns:Watchlists.andresns:Watchlist.andresns:NumberOfHits = '1';
+			ELSE 
+				SET OutputRef.andresns:WatchlistResult.andresns:Decision.andresns:DecisionType 					= 'DECLINE';
+				SET OutputRef.andresns:WatchlistResult.andresns:Decision.andresns:Description 						= InputRef.telns:cpsErrorMessage;
+				SET	OutputRef.andresns:WatchlistResult.andresns:ApplicantId 										= EnvRef.andreqns:Applicants.andreqns:ApplicantInfo.andreqns:Id;
+				SET	OutputRef.andresns:WatchlistResult.andresns:Watchlists.andresns:Watchlist.andresns:NumberOfHits = '1';
+			END IF;
+		ELSE 
+			SET OutputRef.andresns:WatchlistResult.andresns:Decision.andresns:DecisionType	 						= 'ACCEPT';
+			SET	OutputRef.andresns:WatchlistResult.andresns:ApplicantId 											= EnvRef.andreqns:Applicants.andreqns:ApplicantInfo.andreqns:Id;
+			SET	OutputRef.andresns:WatchlistResult.andresns:Watchlists.andresns:Watchlist.andresns:NumberOfHits 	= '0';
+		END IF;
+
+-- build web service response		
+		-- create first element of web service response (element must exist before reference pointer can be set)
+		SET OutputRoot.XMLNSC.tns:AnderaPrescreenResponse.tns:Status.tns:StatusDisposition							= '0';
+		-- reset reference pointers
+		MOVE OutputRef	TO OutputRoot.XMLNSC.tns:AnderaPrescreenResponse;
+		MOVE EnvRef		TO Environment.Variables.EnterpriseHeader;	
+ 		
+ 		SET OutputRef.tns:Status.tns:StatusCode									= '0000';
+ 		SET OutputRef.tns:Status.tns:StatusDetail.tns:StatusCode				= '0000';
+ 		SET OutputRef.tns:Status.tns:StatusDetail.tns:StatusSubCode				= '0000';
+ 		SET OutputRef.tns:Status.tns:StatusDetail.tns:StatusDescription			= 'Transaction Complete';
+  		SET OutputRef.tns:Status.tns:StatusDetail.tns:StatusSource				= 'Broker';
+ 		SET OutputRef.tns:Status.tns:Repeatable									= TRUE;		
+		
+		
+		SET OutputRef.tns:EnterpriseHeader.tns:Identity.tns:Username			= EnvRef.Username;
+		SET OutputRef.tns:EnterpriseHeader.tns:Identity.tns:Username			= EnvRef.Username;
+		SET OutputRef.tns:EnterpriseHeader.tns:Identity.tns:Password			= EnvRef.Password;
+		SET OutputRef.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource		= EnvRef.IdentitySource;
+		SET OutputRef.tns:EnterpriseHeader.tns:Version.tns:MessageVersion		= EnvRef.MessageVersion;
+		SET OutputRef.tns:EnterpriseHeader.tns:Version.tns:MessageRevision		= EnvRef.MessageRevision;
+		SET OutputRef.tns:EnterpriseHeader.tns:Channel							= EnvRef.Channel;
+ 		SET OutputRef.tns:EnterpriseHeader.tns:MessageDateTime					= EnvRef.MessageDateTime;
+ 		
+		-- set andera response (full xml response sent as a string in web service response) 		
+ 		SET OutputRef.PrescreenResponse										= CAST(ASBITSTREAM(OutputRoot.XMLNS.andresns:PassThruStartVerificationResponse OPTIONS FolderBitStream ENCODING 785 CCSID 1208) AS CHAR CCSID 1208 ENCODING 785);
+ 		
+		-- remove temporary andera response 		
+		SET OutputRoot.XMLNS = NULL;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+
+CREATE FILTER MODULE AnderaPrescreen_Save_Input
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+-- save start time for possible logging
+		SET Environment.Variables.StartTime 						= CURRENT_TIMESTAMP;
+		
+-- save character set for response		
+		SET Environment.Variables.CCSID								= Root.Properties.CodedCharSetId;
+		SET Environment.Variables.Encoding							= Root.Properties.Encoding;
+
+-- save enterprise header for response
+ 		SET Environment.Variables.EnterpriseHeader.Username        	= Root.XMLNSC.tns:AnderaPrescreenRequest.tns:EnterpriseHeader.tns:Identity.tns:Username;
+		SET Environment.Variables.EnterpriseHeader.Password        	= Root.XMLNSC.tns:AnderaPrescreenRequest.tns:EnterpriseHeader.tns:Identity.tns:Password;
+		SET Environment.Variables.EnterpriseHeader.IdentitySource  	= Root.XMLNSC.tns:AnderaPrescreenRequest.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource;
+		SET Environment.Variables.EnterpriseHeader.MessageVersion  	= Root.XMLNSC.tns:AnderaPrescreenRequest.tns:EnterpriseHeader.tns:Version.tns:MessageVersion;
+		SET Environment.Variables.EnterpriseHeader.MessageRevision 	= Root.XMLNSC.tns:AnderaPrescreenRequest.tns:EnterpriseHeader.tns:Version.tns:MessageRevision;
+		SET Environment.Variables.EnterpriseHeader.Channel         	= Root.XMLNSC.tns:AnderaPrescreenRequest.tns:EnterpriseHeader.tns:Channel;
+ 		SET Environment.Variables.EnterpriseHeader.MessageDateTime 	= Root.XMLNSC.tns:AnderaPrescreenRequest.tns:EnterpriseHeader.tns:MessageDateTime;		
+
+-- pull out andera message, parse, and save for use in building teller request and andera response
+ 		DECLARE parseOptions INTEGER BITOR(RootBitStream, ValidateNone,
+      							           ValidateDeferred, ValidateLocalError);
+     	
+		DECLARE creationPtr REFERENCE TO Environment;
+		CREATE LASTCHILD OF creationPtr DOMAIN('XMLNSC') 
+				PARSE(Root.XMLNSC.tns:AnderaPrescreenRequest.PrescreenRequest
+					OPTIONS parseOptions
+					ENCODING Root.Properties.Encoding
+					CCSID Root.Properties.CodedCharSetId
+					SET 'WoltersKluwer_Message_Set'
+                  	TYPE 'PassThruStartVerificationRequest'
+                    FORMAT 'XMLNSC');
+		RETURN TRUE;
+	END;
+END MODULE;
+
+
+CREATE COMPUTE MODULE AnderaPrescreen_Build_Failure
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+ 		CALL CopyMessageHeaders();
+ 		
+-- set character set for response = character set of request 		
+		SET OutputRoot.Properties.CodedCharSetId 	= Environment.Variables.CCSID;
+		SET OutputRoot.Properties.Encoding			= Environment.Variables.Encoding;
+		
+-- create namespace declaration for Andera response		
+		SET OutputRoot.XMLNS.andresns:PassThruStartVerificationResponse.(XML.NamespaceDecl)xmlns	= andresns;
+
+-- set reference pointers		
+		DECLARE OutputRef 	REFERENCE TO OutputRoot.XMLNS.andresns:PassThruStartVerificationResponse;
+		DECLARE EnvRef 		REFERENCE TO Environment.XMLNSC.andreqns:PassThruStartVerificationRequest;
+		
+-- build andera response		
+		SET OutputRef.andresns:PassThruId																	= EnvRef.andreqns:PassThruId;
+		SET OutputRef.andresns:Errors.andresns:ErrorInfo.andresns:ErrorDescription							= 'Host Error';
+		SET OutputRef.andresns:Errors.andresns:ErrorInfo.andresns:ErrorStatus								= 'E';
+		SET OutputRef.andresns:WatchlistResult.andresns:Decision.andresns:DecisionType						= 'ERROR';
+		SET OutputRef.andresns:WatchlistResult.andresns:Decision.andresns:Description						= 'Host Error';
+		SET	OutputRef.andresns:WatchlistResult.andresns:ApplicantId											= EnvRef.andreqns:Applicants.andreqns:ApplicantInfo.andreqns:Id;
+		SET	OutputRef.andresns:WatchlistResult.andresns:Watchlists.andresns:Watchlist.andresns:NumberOfHits	= '1';
+
+-- build web service response
+		-- create first element of web service response (element must exist before reference pointer can be set)
+		SET OutputRoot.XMLNSC.tns:AnderaPrescreenResponse.tns:Status.tns:StatusDisposition					= '0';
+		
+		-- reset reference pointers		
+		MOVE OutputRef 	TO OutputRoot.XMLNSC.tns:AnderaPrescreenResponse;
+		MOVE EnvRef		TO Environment.Variables.EnterpriseHeader;
+			
+ 		SET OutputRef.tns:Status.tns:StatusCode								= '0000';
+ 		SET OutputRef.tns:Status.tns:StatusDetail.tns:StatusCode			= '0000';
+ 		SET OutputRef.tns:Status.tns:StatusDetail.tns:StatusSubCode			= '0000';
+ 		SET OutputRef.tns:Status.tns:StatusDetail.tns:StatusDescription		= 'Transaction Complete';
+  		SET OutputRef.tns:Status.tns:StatusDetail.tns:StatusSource			= 'Broker';
+ 		SET OutputRef.tns:Status.tns:Repeatable								= TRUE;		
+		SET OutputRef.tns:EnterpriseHeader.tns:Identity.tns:Username		= EnvRef.Username;
+		SET OutputRef.tns:EnterpriseHeader.tns:Identity.tns:Password		= EnvRef.Password;
+		SET OutputRef.tns:EnterpriseHeader.tns:Identity.tns:IdentitySource	= EnvRef.IdentitySource;
+		SET OutputRef.tns:EnterpriseHeader.tns:Version.tns:MessageVersion	= EnvRef.MessageVersion;
+		SET OutputRef.tns:EnterpriseHeader.tns:Version.tns:MessageRevision	= EnvRef.MessageRevision;
+		SET OutputRef.tns:EnterpriseHeader.tns:Channel						= EnvRef.Channel;
+ 		SET OutputRef.tns:EnterpriseHeader.tns:MessageDateTime				= EnvRef.MessageDateTime;
+		-- set andera response (full xml response sent as a string in web service response) 		
+ 		SET OutputRef.tns:PrescreenResponse									= CAST(ASBITSTREAM(OutputRoot.XMLNS.andresns:PassThruStartVerificationResponse OPTIONS FolderBitStream ENCODING 785 CCSID 1208) AS CHAR CCSID 1208 ENCODING 785);
+
+		-- remove temporary andera response
+		SET OutputRoot.XMLNS = NULL;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+
+CREATE COMPUTE MODULE AnderaPrescreen_Save_Failure
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		 CALL CopyMessageHeaders();
+		 SET OutputRoot.XMLNS.Failure.Root = InputRoot;
+		 SET OutputRoot.XMLNS.Failure.ExceptionList = InputExceptionList;
+		 SET OutputRoot.XMLNS.Failure.Environment = Environment;
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
+
+
+
+
+CREATE COMPUTE MODULE AnderaPrescreen_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL CopyMessageHeaders();
+		DECLARE user CHAR 'MB_user';
+		DECLARE password CHAR 'test';
+		SET OutputRoot.HTTPRequestHeader."Authorization" = 'Basic '||base64Encode(user||':'||password);
+
+-- set character set for call to tellerprescreen as unicode
+		SET OutputRoot.Properties.Encoding			= 785;   
+		SET OutputRoot.Properties.CodedCharSetId	= 1208;		 
+
+-- namespace declaration for tellerprescreen message
+		SET OutputRoot.XMLNS.telns:PreScreen.(XML.NamespaceDecl)xmlns	= telns;
+		
+-- set reference pointers
+		DECLARE OutputRef	REFERENCE TO OutputRoot.XMLNS.telns:PreScreen;
+		DECLARE EnvRef		REFERENCE TO Environment.XMLNSC.andreqns:PassThruStartVerificationRequest.andreqns:Applicants.andreqns:ApplicantInfo;
+		
+-- build tellerprescreenrequest		
+		SET OutputRef.telns:cpsRequest.telns:cpsBankNumber	= '073';
+		-- reset outputref pointer since cpsRequest folder has been built
+		MOVE OutputRef TO OutputRoot.XMLNS.telns:PreScreen.telns:cpsRequest;
+		SET OutputRef.telns:cpsBranchNumber					= '00189';
+		SET OutputRef.telns:cpsTellerNumber					= '89999';
+		SET OutputRef.telns:cpsLawsonID						= '000001';
+		SET OutputRef.telns:cpsPersonalNonpersonal			= 'P';
+		SET OutputRef.telns:cpsExistingNew					= 'N';
+		
+		-- build customername - teller requires one field, input has three
+		SET OutputRef.telns:cpsFullLegalName		= 'Sean J MacLeod';
+		SET OutputRef.telns:cpsStreetAddress		= '801 Marquette Ave';
+		SET OutputRef.telns:cpsAddressSupplement	= '001-13-X';
+		SET OutputRef.telns:cpsCityCountryCode		= '';
+		SET OutputRef.telns:cpsCity					= 'Minneapolis';
+		SET OutputRef.telns:cpsState				= 'MN';
+		SET OutputRef.telns:cpsZipCode				= '55402';
+		SET OutputRef.telns:cpsTaxIDNumber			= '475111111';
+		SET OutputRef.telns:cpsDate					= '19700109';
+		SET OutputRef.telns:cpsGender 				= '';
+		-- set phone #'s to blank, then fill in if sent
+		SET OutputRef.telns:cpsPhone1				= '';
+		SET OutputRef.telns:cpsPhone2				= '';
+		
+		SET OutputRef.telns:cpsIDNumber				= '1';
+		
+			SET OutputRef.telns:cpsIDType			= 'D';
+			SET OutputRef.telns:cpsIssueByState		= 'MN';
+			SET OutputRef.telns:cpsIssueByCountry	= '';
+		
+		SET OutputRef.telns:cpsIssueDate		  	= '01092010';
+		SET OutputRef.telns:cpsExpirationDate	  	= '01092020';
+		SET OutputRef.telns:cpsInquiryNumber	  	= '';
+		SET OutputRef.telns:cpsVersion				= 'MB';
+		                    
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+END MODULE;
