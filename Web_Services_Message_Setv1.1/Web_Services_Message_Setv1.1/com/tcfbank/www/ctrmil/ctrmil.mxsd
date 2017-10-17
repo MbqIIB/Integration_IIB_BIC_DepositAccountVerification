@@ -1,0 +1,1693 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	TCF CTR/MIL Document Schema
+	Version:	1.0
+	Date: 		07/30/2009 
+ -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.tcfbank.com/ctrmil/" targetNamespace="http://www.tcfbank.com/ctrmil/">
+    <complexType abstract="true" mixed="true" name="BaseData_Type">
+    	<simpleContent>
+    		<extension base="string">
+    			<attribute name="modified" type="boolean"/>
+    		</extension>
+    	</simpleContent>
+    </complexType>    
+    
+    <group name="TellerInformation_Group">
+    	<sequence>
+    		<element name="BankNumTeller">
+    			<simpleType>
+    				<restriction base="string">
+    					<maxLength value="3"/>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    		<element name="BranchNumTeller">
+    			<simpleType>
+    				<restriction base="string">
+    					<maxLength value="5"/>
+    				</restriction>
+    			</simpleType>    		
+    		</element>
+    		<element name="TellerNum">
+    			<simpleType>
+    				<restriction base="string">
+    					<maxLength value="5"/>
+    				</restriction>
+    			</simpleType>    		    		
+    		</element>
+    		<element name="LawsonID">
+    			<simpleType>
+    				<restriction base="string">
+    					<maxLength value="6"/>
+    				</restriction>
+    			</simpleType>    		
+    		</element>
+    		<element name="LU">
+    			<simpleType>
+    				<restriction base="string">
+    					<maxLength value="8"/>
+    				</restriction>
+    			</simpleType>    		
+    		</element>
+    		<element name="SoftwareVersion">
+    			<simpleType>
+    				<restriction base="string">
+    					<maxLength value="4"/>
+    				</restriction>
+    			</simpleType>
+    		</element>
+    	</sequence>
+    </group>
+        
+    <element name="MILDocument">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MILDocument;XSDElementDeclaration$MRObject"/>
+      </appinfo>
+    </annotation>
+        <complexType>
+	    	<sequence>
+	    		<group ref="tns:TellerInformation_Group"/>
+	    		<element name="BankName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="32"/>
+	    				</restriction>
+	    			</simpleType>	    		
+	    		</element>
+	    		<element name="TranDate">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>	    		
+	    		</element>
+	    		<element name="BusinessDate">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>	    		
+	    		</element>
+	    		<element name="AcctNbr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>	    		
+	    		</element>
+	    		<element name="CustNbr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>	    		
+	    		</element>		    		
+	    		<element name="FullLegalName1">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="40"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>
+	    		<element name="SSN1">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="9"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="BirthDate1">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="10"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Address1">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="40"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="CityState1">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+				<element name="Zip1">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="5"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust1IdentType">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="30"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Other1">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Issuer1">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="IDNumber1">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="FullLegalName2">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="40"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="SSN2">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="9"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="BirthDate2">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="10"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Address2">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="40"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="CityState2">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Zip2">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="5"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust2IdentType">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Other2">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Issuer2">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="IDNumber2">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="InstrType1">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Denom1">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="8"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="InstrAmt1">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="SerialNbr1">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="EndSerialNbr1">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    	
+	    		<element name="InstrType2">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    			
+				<element name="Denom2">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="8"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrAmt2">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="SerialNbr2">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="EndSerialNbr2">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrType3">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Denom3">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="8"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrAmt3">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="SerialNbr3">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="EndSerialNbr3">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrType4">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Denom4">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="8"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrAmt4">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="SerialNbr4">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="EndSerialNbr4">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrType5">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Denom5">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="8"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrAmt5">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="SerialNbr5">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="EndSerialNbr5">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrType6">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Denom6">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="8"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrAmt6">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="SerialNbr6">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="EndSerialNbr6">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrType7">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Denom7">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="8"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrAmt7">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="SerialNbr7">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="EndSerialNbr7">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrType8">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Denom8">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="8"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrAmt8">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="SerialNbr8">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="EndSerialNbr8">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    	
+	    		<element name="InstrType9">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Denom9">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="8"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrAmt9">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="SerialNbr9">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="EndSerialNbr9">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    
+	    		<element name="InstrType10">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Denom10">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="8"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="InstrAmt10">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="SerialNbr10">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="EndSerialNbr10">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="11"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	  
+	    		<element name="DPOPID">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="7"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    	</sequence>    
+    	</complexType>
+    </element>
+    
+    <element name="CTRDocument">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CTRDocument;XSDElementDeclaration=1$MRObject"/>
+      </appinfo>
+    </annotation>
+        <complexType>
+	    	<sequence>
+	    		<group ref="tns:TellerInformation_Group"/>
+				<element name="MultPerson">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="MultTran">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="MultTranCond">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+				<element name="Customer1Name" type="tns:CustomerName_Type"/>
+	    		<element name="Cust1SSN">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="9"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust1NoTINChk">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cust1OccBus">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust1DOB">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="10"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust1OccBusDesc">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust1Addr">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="20"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust1City">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="20"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust1State">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="2"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust1Zip">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="5"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust1Cntry">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="2"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Customer1IDType" type="tns:CustIDType_Type"/>
+	    		<element name="Cust1IDIssueBy">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust1IDNbr">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="20"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+
+				<element name="Customer2Name" type="tns:CustomerName_Type"/>
+	    		<element name="Cust2SSN">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="9"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust2NoTINChk">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cust2OccBus">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust2DOB">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="10"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust2OccBusDesc">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust2Addr">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="20"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust2City">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="20"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust2State">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="2"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust2Zip">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="5"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust2Cntry">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="2"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Customer2IDType" type="tns:CustIDType_Type"/>
+	    		<element name="Cust2IDIssueBy">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust2IDNbr">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="20"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>
+	    		
+				<element name="Customer3Name" type="tns:CustomerName_Type"/>
+	    		<element name="Cust3SSN">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="9"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust3NoTINChk">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cust3OccBus">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust3DOB">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="10"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust3OccBusDesc">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust3Addr">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="20"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust3City">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="20"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust3State">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="2"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust3Zip">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="5"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust3Cntry">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="2"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Customer3IDType" type="tns:CustIDType_Type"/>
+	    		<element name="Cust3IDIssueBy">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="25"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	    		
+	    		<element name="Cust3IDNbr">
+				    <complexType>
+				    	<simpleContent>
+				    		<restriction base="tns:BaseData_Type">
+				    			<maxLength value="20"/>
+				    		</restriction>
+				    	</simpleContent>
+				    </complexType>    		
+	    		</element>	
+	    		<element name="ArmoredCar">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="MailDepShip">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="NightDepATM">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="CondOwnBehalf">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd1LastName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd1FirstName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    
+	    		<element name="Cnd1MiddleInitial">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd1SSN">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="9"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd1DOB">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd1Addr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd1City">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd1State">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="2"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd1Zip">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="5"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd1Cntry">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="2"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd1IDTypeDL">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd1IDTypePP">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd1IDTypeAR">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd1IDTypeOther">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd1IDTypeDesc">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd1IDIssuedBy">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="25"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd1IDNbr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		
+	    		<element name="Cnd2LastName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd2FirstName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    
+	    		<element name="Cnd2MiddleInitial">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd2SSN">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="9"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd2DOB">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd2Addr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd2City">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd2State">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="2"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd2Zip">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="5"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd2Cntry">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="2"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd2IDTypeDL">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd2IDTypePP">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd2IDTypeAR">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd2IDTypeOther">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd2IDTypeDesc">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd2IDIssuedBy">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="25"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd2IDNbr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		
+	    		<element name="Cnd3LastName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd3FirstName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    
+	    		<element name="Cnd3MiddleInitial">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd3SSN">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="9"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd3DOB">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd3Addr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd3City">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd3State">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="2"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd3Zip">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="5"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd3Cntry">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="2"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd3IDTypeDL">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd3IDTypePP">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="Cnd3IDTypeAR">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd3IDTypeOther">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd3IDTypeDesc">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd3IDIssuedBy">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="25"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="Cnd3IDNbr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranCashIn">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>				    		
+	    		<element name="TranCashOut">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranDate">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="TranFrgnCntry">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranCntryName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranWireTransfer">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranFrgnCashIn">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranFrgnCashOut">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="13"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranNegInstPurch">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranNegInstCashed">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranCurrExch">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranDepWith">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranAcctsAffected">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranAcctNbr1">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranAcctNbr2">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranAcctNbr3">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranOtherChecked">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranOther1">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranOther2">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="TranOther3">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="FinInstName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="30"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="FinBSACd">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="1"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="FinAddr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="32"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="FinEIN">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="9"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    
+	    		<element name="FinCity">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="FinState">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="2"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="FinZip">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="5"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="FinMICRNbr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="9"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="FinApprTitle">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="FinSigDate">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="10"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="FinPrepName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="40"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>
+	    		<element name="FinContactName">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="20"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+	    		<element name="FinTelNbr">
+	    			<simpleType>
+	    				<restriction base="string">
+	    					<maxLength value="12"/>
+	    				</restriction>
+	    			</simpleType>		    		
+	    		</element>	    		
+			</sequence>
+		</complexType>    	
+    </element>
+
+    <complexType name="CustomerName_Type">
+    	<sequence>
+			<element name="CustOrgLastName">
+  					<simpleType>
+  						<restriction base="string">
+  							<maxLength value="40"/>
+  						</restriction>
+  					</simpleType>
+  				</element>
+  				<element name="CustFirstName">
+  					<simpleType>
+  						<restriction base="string">
+  							<maxLength value="20"/>
+  						</restriction>
+  					</simpleType>
+  				</element>
+  				<element name="CustMiddleInitial">
+  					<simpleType>
+  						<restriction base="string">
+  							<maxLength value="1"/>
+  						</restriction>
+  					</simpleType>
+  				</element>
+  				<element name="CustDBA">
+  					<simpleType>
+  						<restriction base="string">
+  							<maxLength value="30"/>
+  						</restriction>
+  					</simpleType>
+  				</element>
+    	</sequence>
+    	<attribute name="modified" type="boolean"/>
+    </complexType>
+    <complexType name="CustIDType_Type">
+    	<sequence>
+				<element name="CustIDTypeDL">
+  					<simpleType>
+  						<restriction base="string">
+  							<maxLength value="1"/>
+  						</restriction>
+  					</simpleType>
+  				</element>
+  				<element name="CustIDTypePP">
+  					<simpleType>
+  						<restriction base="string">
+  							<maxLength value="1"/>
+  						</restriction>
+  					</simpleType>
+  				</element>
+  				<element name="CustIDTypeAR">
+  					<simpleType>
+  						<restriction base="string">
+  							<maxLength value="1"/>
+  						</restriction>
+  					</simpleType>
+  				</element>
+  				<element name="CustIDTypeOther">
+  					<simpleType>
+  						<restriction base="string">
+  							<maxLength value="1"/>
+  						</restriction>
+  					</simpleType>
+  				</element>
+  				<element name="CustIDTypeDesc">
+  					<simpleType>
+  						<restriction base="string">
+  							<maxLength value="10"/>
+  						</restriction>
+  					</simpleType>
+  				</element>  				
+    	</sequence>
+    	<attribute name="modified" type="boolean"/>    
+    </complexType>
+</schema>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="BalanceTransactions" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="BalanceTransactionsBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="BalanceTransactions_in">
+    <wsdl:part element="tns:BalanceTransactionsRequest" name="BalanceTransactionsRequest"/>
+  </wsdl:message>
+  <wsdl:message name="BalanceTransactions_out">
+    <wsdl:part element="tns:BalanceTransactionsResponse" name="BalanceTransactionsResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="BalanceTransactionsPortType">
+    <wsdl:operation name="BalanceTransactions">
+      <wsdl:input message="tns:BalanceTransactions_in" name="BalanceTransactions_Input"/>
+      <wsdl:output message="tns:BalanceTransactions_out" name="BalanceTransactions_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BalanceTransactionsBinding" type="tns:BalanceTransactionsPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="BalanceTransactions">
+      <soap:operation/>
+      <wsdl:input name="BalanceTransactions_Input">
+        <soap:body parts="BalanceTransactionsRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="BalanceTransactions_Output">
+        <soap:body parts="BalanceTransactionsResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BalanceTransactionsService">
+    <wsdl:port binding="tns:BalanceTransactionsBinding" name="BalanceTransactionsProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/BalanceTransactions"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

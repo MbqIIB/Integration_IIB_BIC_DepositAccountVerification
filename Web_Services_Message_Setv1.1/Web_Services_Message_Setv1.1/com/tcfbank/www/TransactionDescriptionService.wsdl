@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TransactionDescription" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="TransactionDescriptionBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="TransactionDescription_in">
+    <wsdl:part element="tns:TransactionDescriptionRequest" name="TransactionDescriptionRequest"/>
+  </wsdl:message>
+  <wsdl:message name="TransactionDescription_out">
+    <wsdl:part element="tns:TransactionDescriptionResponse" name="TransactionDescriptionResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="TransactionDescriptionPortType">
+    <wsdl:operation name="TransactionDescription">
+      <wsdl:input message="tns:TransactionDescription_in" name="TransactionDescription_Input"/>
+      <wsdl:output message="tns:TransactionDescription_out" name="TransactionDescription_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TransactionDescriptionBinding" type="tns:TransactionDescriptionPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="TransactionDescription">
+      <soap:operation/>
+      <wsdl:input name="TransactionDescription_Input">
+        <soap:body parts="TransactionDescriptionRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TransactionDescription_Output">
+        <soap:body parts="TransactionDescriptionResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TransactionDescriptionService">
+    <wsdl:port binding="tns:TransactionDescriptionBinding" name="TransactionDescriptionProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/TransactionDescription"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

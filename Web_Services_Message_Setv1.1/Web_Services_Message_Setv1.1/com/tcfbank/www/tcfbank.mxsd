@@ -1,0 +1,4303 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+	TCF Enterprise Schema
+	Version:	1.0
+	Date: 		01/06/2009 
+ --><schema elementFormDefault="qualified" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:extensionBindingPrefixes="xjc" jaxb:version="1.0" targetNamespace="http://www.tcfbank.com" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.tcfbank.com" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc">
+
+	<!--
+		Begin Type definitions 
+	 -->
+
+	<!--
+		Begin Request/Response/Output Type definitions 
+	 -->
+    <complexType abstract="true" name="Request_Type">
+		<annotation>
+			<documentation>Base type for request messages.</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:EnterpriseHeader"/>
+		</sequence>
+	</complexType>
+
+	<complexType abstract="true" name="Response_Type">
+		<annotation>
+			<documentation>Base type for response messages.</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:Status"/>
+			<element ref="tns:EnterpriseHeader"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="CallerAuthenticationRequest_Type">
+		<annotation>
+			<documentation>Request for call authentication.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:IdentificationNumber"/>
+					<element ref="tns:SecretCode"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:TinLastFour">
+					</element>
+				</sequence>
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CallerAuthenticationResponse_Type">
+		<annotation>
+			<documentation>Response for call authentication.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:IdentificationNumber"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:TinLastFour">
+					</element>
+					<element maxOccurs="1" minOccurs="0" ref="tns:CallerAuthenticationOutput"/>
+				</sequence>
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CallerAuthenticationOutput_Type">
+		<annotation>
+			<documentation>Output for call authentication.</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:AuthenticationType"/>
+			<element ref="tns:CustomerNumber"/>
+			<element ref="tns:TaxIdentificationNumber"/>
+			<element ref="tns:AggregateBalance"/>
+			<element maxOccurs="6" minOccurs="0" ref="tns:CardActionGroup"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:VIPStatus"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:OnlineBankingCombinedStatus"/>
+			<element maxOccurs="unbounded" minOccurs="1" ref="tns:Identifier">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="BalanceInquiryRequest_Type">
+		<annotation>
+			<documentation>Request for account balance information.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="BalanceInquiryResponse_Type">
+		<annotation>
+			<documentation>Response for account balance information.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:BalanceInquiryOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="BalanceInquiryOutput_Type">
+		<annotation>
+			<documentation>
+				Output for account balance information.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CurrentBalance"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CreditLineBalance">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:AvailableBalance"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CollectedBalance"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="OfficialBankCheckRequest_Type">
+		<annotation>
+			<documentation>Request for official bank check.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:SerialNumber"/>
+					<element ref="tns:CheckAmount"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:OfficialBankCheckAccountNumber"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="OfficialBankCheckResponse_Type">
+		<annotation>
+			<documentation>Response for official bank check.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:SerialNumber"/>
+					<element ref="tns:CheckAmount"/>
+
+                    <element maxOccurs="1" minOccurs="0" ref="tns:OfficialBankCheckAccountNumber"/>
+                    <element maxOccurs="1" minOccurs="0" ref="tns:OfficialBankCheckOutput">
+					</element>
+
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="MerchantVerificationRequest_Type">
+		<annotation>
+			<documentation>Request for merchant verification.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountNumber"/>
+					<element ref="tns:SerialNumber"/>
+					<element ref="tns:CheckAmount"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="MerchantVerificationResponse_Type">
+		<annotation>
+			<documentation>Response for merchant verification.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountNumber"/>
+					<element ref="tns:SerialNumber"/>
+					<element ref="tns:CheckAmount"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="CardActivationRequest_Type">
+		<annotation>
+			<documentation>Request for card activation.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:CardNumber"/>
+					<element ref="tns:SecretCode"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CardActivationResponse_Type">
+		<annotation>
+			<documentation>Response for card activation.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:CardNumber"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CheckPaidInformationRequest_Type">
+		<annotation>
+			<documentation>Request for check details.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:SerialNumber"/>
+				</sequence>
+
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CheckPaidInformationResponse_Type">
+		<annotation>
+			<documentation>Response for check details.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:SerialNumber"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:CheckPaidInformationOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CheckPaidInformationOutput_Type">
+		<annotation>
+			<documentation>Output for check details.</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:CheckAmount"/>
+			<element ref="tns:PostedDate"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="SecretCodeChangeRequest_Type">
+		<annotation>
+			<documentation>Request for secret code change.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:CardNumber"/>
+					<element ref="tns:SecretCode"/>
+					<element ref="tns:NewSecretCode"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="SecretCodeChangeResponse_Type">
+		<annotation>
+			<documentation>Response for secret code change.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:CardNumber"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="StatementOrderRequest_Type">
+		<annotation>
+			<documentation>Request for statement order.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="StatementOrderResponse_Type">
+		<annotation>
+			<documentation>Response for statement order.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="FundsTransferRequest_Type">
+		<annotation>
+			<documentation>Request for funds transfer.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:CustomerNumber"/>
+					<element ref="tns:TransferSource"/>
+					<element ref="tns:TransferTarget"/>
+					<element ref="tns:TransferAmount"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="FundsTransferResponse_Type">
+		<annotation>
+			<documentation>Response for funds transfer.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:CustomerNumber"/>
+					<element ref="tns:TransferSource"/>
+					<element ref="tns:TransferTarget"/>
+					<element ref="tns:TransferAmount"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:FundsTransferOutput">
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="FundsTransferOutput_Type">
+		<annotation>
+			<documentation>Output for funds transfer.</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:Relationship"/>
+			<element ref="tns:TransferAmountRemaining"/>
+			<element ref="tns:TransferDailyLimit"/>
+			<element ref="tns:TransferTransactionLimit"/>
+			<sequence maxOccurs="1" minOccurs="0">
+				<element ref="tns:TransferReferenceNumber"/>
+                <element ref="tns:TransferSourceBalance"/>
+				<element maxOccurs="1" minOccurs="0" ref="tns:TransferTargetBalance">
+				</element>
+                <element ref="tns:TransferEffectiveDate"/>
+            </sequence>
+        </sequence>
+	</complexType>
+
+	<complexType name="SystemAvailabilityRequest_Type">
+		<annotation>
+			<documentation>Request for system availability.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="SystemAvailabilityResponse_Type">
+		<annotation>
+			<documentation>Response for system availability.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" ref="tns:SystemAvailabilityOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="SystemAvailabilityOutput_Type">
+		<annotation>
+			<documentation>Output for system availability.</documentation>
+		</annotation>
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="1" ref="tns:ServiceAvailability"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="Information1099Request_Type">
+		<annotation>
+			<documentation>Request for 1099 information.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:CustomerNumber"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Information1099Response_Type">
+		<annotation>
+			<documentation>Response for 1099 information.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:CustomerNumber"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:Information1099Output"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Information1099Output_Type">
+		<annotation>
+			<documentation>Output for 1099 information.</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:Year"/>
+			<element ref="tns:InterestAmount"/>
+			<element ref="tns:PenaltyAmount"/>
+			<element ref="tns:WithheldAmount"/>
+			<element maxOccurs="unbounded" minOccurs="1" ref="tns:Account1099">
+			</element>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="Order1099Request_Type">
+		<annotation>
+			<documentation>Request for 1099 order.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:CustomerNumber"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Order1099Response_Type">
+		<annotation>
+			<documentation>Response for 1099 order.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:CustomerNumber"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="BalanceTransactionsRequest_Type">
+		<annotation>
+			<documentation>Request for balance transactions.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:IncludedPendingTransactions"/>
+					<element ref="tns:IncludedPostedTransactions"/>
+					<element ref="tns:TransactionCountRequested"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="BalanceTransactionsResponse_Type">
+		<annotation>
+			<documentation>Response for balance transactions.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:IncludedPendingTransactions"/>
+					<element ref="tns:IncludedPostedTransactions"/>
+                    <element ref="tns:TransactionCountRequested"/>
+                    <element maxOccurs="1" minOccurs="0" ref="tns:BalanceTransactionsOutput">
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="BalanceTransactionsOutput_Type">
+		<annotation>
+			<documentation>Output for balance transactions.</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:PendingTransactionCount"/>
+			<element maxOccurs="unbounded" minOccurs="0" ref="tns:Transaction"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="FlagsUpdateRequest_Type">
+		<annotation>
+			<documentation>Request for flags update.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:Flag"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="FlagsUpdateResponse_Type">
+		<annotation>
+			<documentation>Response for flags update.</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:Flag"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AccountBalanceLookupRequest_Type">
+		<annotation>
+			<documentation>
+				Request for account balance and properties
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AccountBalanceLookupResponse_Type">
+		<annotation>
+			<documentation>
+				Response for account balance and properties
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:AccountBalanceLookupOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AccountBalanceLookupOutput_Type">
+		<annotation>
+			<documentation>
+				Output for account balance and properties
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:SubApplication"/>
+			<element ref="tns:AccountType"/>
+			<element ref="tns:BranchNumber"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:AccountRetentionStatus">
+			</element>
+			<element maxOccurs="5" minOccurs="0" ref="tns:HardDollarMoneyHold">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CautionFlag">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:StatementDisposition">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CloseToPostingStatus">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:DormantStatus">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CollectionLetter">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:ClosedPendingReason">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:OverdraftOptInStatus">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:AccountInformation">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CreditAccountInformation"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:RestrictiveProcessingStatus">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="SecretCodeAuthenticationRequest_Type">
+		<annotation>
+			<documentation>
+				Request for secret code authentication
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:IdentificationNumber"/>
+					<element ref="tns:SecretCode"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="SecretCodeAuthenticationResponse_Type">
+		<annotation>
+			<documentation>
+				Response for secret code authentication
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:IdentificationNumber"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:SecretCodeAuthenticationOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="SecretCodeAuthenticationOutput_Type">
+		<annotation>
+			<documentation>
+				Output for secret code authentication
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:AuthenticationType"/>
+			<element ref="tns:CardNumber"/>
+			<element maxOccurs="2" minOccurs="1" ref="tns:AccountIdentifier"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="CustomerRelationshipRequest_Type">
+		<annotation>
+			<documentation>
+				Request for customer relationship
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:Identifier"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:TinLastFour"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CustomerRelationshipResponse_Type">
+		<annotation>
+			<documentation>
+				Response for customer relationship
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:Identifier"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:TinLastFour">
+					</element>
+					<element maxOccurs="1" minOccurs="0" ref="tns:CustomerRelationshipOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CustomerRelationshipOutput_Type">
+		<annotation>
+			<documentation>
+				Output for customer relationship
+			</documentation>
+		</annotation>
+		<group ref="tns:CustomerRelationship_Group"/>
+	</complexType>
+
+	<complexType name="FeesRequest_Type">
+		<annotation>
+			<documentation>
+				Request for fees
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:FeeName"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="FeesResponse_Type">
+		<annotation>
+			<documentation>
+				Response for fees
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:FeeName"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:FeesOutput">
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="FeesOutput_Type">
+		<annotation>
+			<documentation>
+				Output for fees
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:FeeAmount"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="ATMSystemAvailabilityRequest_Type">
+		<annotation>
+			<documentation>Request for availability of ATM services.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ATMSystemAvailabilityResponse_Type">
+		<annotation>
+			<documentation>Response for availability of ATM services.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" ref="tns:ATMSystemAvailabilityOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ATMSystemAvailabilityOutput_Type">
+		<annotation>
+			<documentation>Output for availability of ATM services.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:ATMPendingTransactionsStatus"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="CISSystemAvailabilityRequest_Type">
+		<annotation>
+			<documentation>Request for availability of CIS services.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CISSystemAvailabilityResponse_Type">
+		<annotation>
+			<documentation>Response for availability of CIS services.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" ref="tns:CISSystemAvailabilityOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CISSystemAvailabilityOutput_Type">
+		<annotation>
+			<documentation>Output for availability of CIS services.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:SecretCodeAuthenticationStatus"/>
+			<element ref="tns:CardActivationStatus"/>
+			<element ref="tns:SecretCodeChangeStatus"/>
+			<element ref="tns:CardInformationStatus"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="TellerSystemAvailabilityRequest_Type">
+		<annotation>
+			<documentation>
+				Request for availability of Teller services
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="TellerSystemAvailabilityResponse_Type">
+		<annotation>
+			<documentation>
+				Response for availability of Teller services
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" ref="tns:TellerSystemAvailabilityOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="TellerSystemAvailabilityOutput_Type">
+		<annotation>
+			<documentation>
+				Output for availability of Teller services
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:BalanceInquiryStatus"/>
+			<element ref="tns:FundsTransferStatus"/>
+			<element ref="tns:TellerPendingTransactionsStatus"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="DepositsSystemAvailabilityRequest_Type">
+		<annotation>
+			<documentation>
+				Request for availability of Deposits services
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="DepositsSystemAvailabilityResponse_Type">
+		<annotation>
+			<documentation>
+				Response for availability of Deposits services
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" ref="tns:DepositsSystemAvailabilityOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="DepositsSystemAvailabilityOutput_Type">
+		<annotation>
+			<documentation>
+				Output for availability of Deposits services
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:CustomerRelationshipStatus"/>
+			<element ref="tns:AccountPropertiesStatus"/>
+			<element ref="tns:Order1099Status"/>
+			<element ref="tns:Information1099Status"/>
+			<element ref="tns:ACHPendingTransactionsStatus"/>
+			<element ref="tns:DepositsPostedTransactionsStatus">
+			</element>
+			<element ref="tns:CheckPaidInformationStatus"/>
+			<element ref="tns:FeesStatus"/>
+			<element ref="tns:StatementOrderStatus"/>
+			<element ref="tns:FlagsUpdateStatus"/>
+			<element ref="tns:MerchantVerificationStatus"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="PaymentsSystemAvailabilityRequest_Type">
+		<annotation>
+			<documentation>
+				Request for availability of Payments services
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="PaymentsSystemAvailabilityResponse_Type">
+		<annotation>
+			<documentation>
+				Response for availability of Payments services
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:PaymentsSystemAvailabilityOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="PaymentsSystemAvailabilityOutput_Type">
+		<annotation>
+			<documentation>
+				Output for availability of Payments services
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:OfficialBankCheckStatus"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="AccountPropertiesRequest_Type">
+		<annotation>
+			<documentation>Request for account properties</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AccountPropertiesResponse_Type">
+		<annotation>
+			<documentation>Response for account properties
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:AccountPropertiesOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+
+
+	<complexType name="ATMPendingTransactionsRequest_Type">
+		<annotation>
+			<documentation>
+				Request for ATM pending transactions. NOTE: No
+				balancing
+				is done on these transactions.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:TransactionRequestedType"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ATMPendingTransactionsResponse_Type">
+		<annotation>
+			<documentation>
+				Response for ATM pending transactions. NOTE: No
+				balancing
+				is done on these transactions.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:TransactionRequestedType"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:ATMPendingTransactionsOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ATMPendingTransactionsOutput_Type">
+		<annotation>
+			<documentation>
+				Output for ATM pending transactions. NOTE: No
+				balancing
+				is done on these transactions.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="0" ref="tns:Transaction"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="TellerPendingTransactionsRequest_Type">
+		<annotation>
+			<documentation>
+				Request for Teller pending transactions. NOTE: No
+				balancing
+				is done on these transactions.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="TellerPendingTransactionsResponse_Type">
+		<annotation>
+			<documentation>
+				Response for Teller pending transactions. NOTE: No
+				balancing
+				is done on these transactions.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:TellerPendingTransactionsOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="TellerPendingTransactionsOutput_Type">
+		<annotation>
+			<documentation>
+				Output for Teller pending transactions. NOTE: No
+				balancing
+				is done on these transactions.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="0" ref="tns:Transaction"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="ACHPendingTransactionsRequest_Type">
+		<annotation>
+			<documentation>
+				Request for ACH pending transactions. NOTE: No
+				balancing
+				is done on these transacrtions.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ACHPendingTransactionsResponse_Type">
+		<annotation>
+			<documentation>
+				Response for ACH pending transactions. NOTE: No
+				balancing is done on these transacrtions.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:ACHPendingTransactionsOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ACHPendingTransactionsOutput_Type">
+		<annotation>
+			<documentation>
+				Output for ACH pending transactions. NOTE: No
+				balancing is done on these transacrtions.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="0" ref="tns:Transaction"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="DepositsPostedTransactionsRequest_Type">
+		<annotation>
+			<documentation>
+				Request for Deposits posted transactions.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:IncludedPostedTransactions"/>
+					<element ref="tns:TransactionCountRequested"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="DepositsPostedTransactionsResponse_Type">
+		<annotation>
+			<documentation>
+				Response for Deposits posted transactions.
+			</documentation>
+		</annotation>
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element ref="tns:IncludedPostedTransactions"/>
+                    <element ref="tns:TransactionCountRequested"/>
+                    <element maxOccurs="1" minOccurs="0" ref="tns:DepositsPostedTransactionsOutput">
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="DepositsPostedTransactionsOutput_Type">
+		<annotation>
+			<documentation>
+				Output for Deposits posted transactions.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="0" ref="tns:Transaction"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="OnlineBankingSystemAvailabilityRequest_Type">
+		<complexContent>
+			<extension base="tns:Request_Type"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="OnlineBankingSystemAvailabilityResponse_Type">
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" ref="tns:OnlineBankingSystemAvailabilityOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="OnlineBankingSystemAvailabilityOutput_Type">
+		<sequence>
+			<element ref="tns:OnlineBankingPropertiesStatus"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="AccountRelationshipRequest_Type">
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:RelatedAccountSource"/>
+					<element ref="tns:RelatedAccountTarget"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="AccountRelationshipResponse_Type">
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:RelatedAccountSource"/>
+					<element ref="tns:RelatedAccountTarget"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:AccountRelationshipOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="OnlineBankingPropertiesRequest_Type">
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:TaxIdentificationNumber"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="OnlineBankingPropertiesResponse_Type">
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:TaxIdentificationNumber"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:OnlineBankingPropertiesOutput">
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="OnlineBankingPropertiesOutput_Type">
+		<sequence>
+			<element ref="tns:OnlineBankingEnrollmentStatus"/>
+			<element ref="tns:BillpayEnrollmentStatus"/>
+			<element ref="tns:OnlineStatementEnrollmentStatus"/>
+			<element ref="tns:OnlineBankingCombinedStatus"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="CardInformationRequest_Type">
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:CardNumber"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CardInformationResponse_Type">
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:CardNumber"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:CardInformationOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CardInformationOutput_Type">
+		<sequence>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardPrimaryDDA">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardPrimaryDDAAppl">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardPrimaryOther">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardPrimaryOtherAppl">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardBankNumber"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:ExpirationDate">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:LastMaintainenceDate">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:ProductCode">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardStatus"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardStatusValue">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardOrigination">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:MoreAccounts">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:IssueOffice">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardOpenDate">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardIssueDate">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardStatusChangedDate">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardToVendorDate">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardVendorMailedDate">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:TiedCardNumber">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:NameOnCard"/>
+			<element maxOccurs="9" minOccurs="0" ref="tns:MemberStatus">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:PreviousCardStatus">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardExceptionErrors">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:PreviousCVV">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:PreviousCVV2">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardReplacementStatus">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardSourceCode">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:Track2Length">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CVV"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CVV2"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:MassOrigination">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardCompromisedFlag">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="TransactionDescriptionRequest_Type">
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:BankNumber"/>
+					<element ref="tns:Application"/>
+					<element ref="tns:TransactionCode"/>
+					<element ref="tns:TransactionDescription"/>
+					<element ref="tns:TransactionDescription2"/>
+					<element ref="tns:TransactionDescription3"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="TransactionDescriptionResponse_Type">
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:BankNumber"/>
+					<element ref="tns:Application"/>
+					<element ref="tns:TransactionCode"/>
+					<element ref="tns:TransactionDescription"/>
+					<element ref="tns:TransactionDescription2"/>
+					<element ref="tns:TransactionDescription3"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:TransactionDescriptionOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="TransactionDescriptionOutput_Type">
+		<sequence>
+			<element maxOccurs="1" minOccurs="0" ref="tns:MICM326Description"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:MICM326AlternativeDescription"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:D_Description"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:E_Description"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:ChannelSpecificDescription1"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:ChannelSpecificDescription2"/>
+			<element ref="tns:CreditDebit"/>
+		</sequence>
+	</complexType>
+
+
+
+
+	<!--
+		End Request/Response/Output Type definitions 
+	 -->
+
+	<simpleType name="AccountNumber_Type">
+		<restriction base="string">
+			<length value="10"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="SecretCode_Type">
+		<restriction base="string">
+			<minLength value="4"/>
+			<maxLength value="8"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="StatusDisposition_Type">
+		<restriction base="string">
+            <enumeration value="0"/>
+            <enumeration value="1"/>
+            <enumeration value="2"/>
+        </restriction>
+	</simpleType>
+
+	<simpleType name="StatusCode_Type">
+		<restriction base="string">
+			<length value="4"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="StatusDescription_Type">
+		<restriction base="string">
+		</restriction>
+	</simpleType>
+
+	<complexType name="StatusDetail_Type">
+		<sequence>
+			<element ref="tns:StatusCode"/>
+			<element ref="tns:StatusSubCode"/>
+			<element ref="tns:StatusDescription"/>
+			<element ref="tns:StatusSource"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="Status_Type">
+		<sequence>
+			<element ref="tns:StatusDisposition"/>
+			<element ref="tns:StatusCode"/>
+			<element maxOccurs="unbounded" minOccurs="1" ref="tns:StatusDetail">
+			</element>
+			<element ref="tns:Repeatable"/>
+		</sequence>
+	</complexType>
+
+	<simpleType name="Application_Type">
+		<restriction base="string">
+			<enumeration value="DDA"/>
+			<enumeration value="SAV"/>
+			<enumeration value="TDA"/>
+			<enumeration value="ODP"/>
+			<enumeration value="CRD"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="BankNumber_Type">
+		<restriction base="string">
+			<length value="3"/>
+			<enumeration value="083"/>
+			<enumeration value="087"/>
+			<enumeration value="089"/>
+			<enumeration value="091"/>
+			<enumeration value="092"/>
+			<enumeration value="099"/>
+		</restriction>
+	</simpleType>
+
+	<complexType name="EnterpriseHeader_Type">
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="1" ref="tns:Identity"/>
+			<element ref="tns:Version"/>
+			<element ref="tns:Channel"/>
+			<element ref="tns:MessageDateTime"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="Identity_Type">
+		<sequence>
+			<element ref="tns:Username"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:Password"/>
+			<element ref="tns:IdentitySource"/>
+		</sequence>
+	</complexType>
+
+
+	<simpleType name="Channel_Type">
+		<restriction base="string">
+			<maxLength value="3"/>
+		</restriction>
+	</simpleType>
+
+
+	<simpleType name="Username_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="Password_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="IndentificationNumber_Type">
+		<restriction base="string">
+			<minLength value="10"/>
+			<maxLength value="19"/>
+		</restriction>
+	</simpleType>
+
+	<complexType name="Version_Type">
+		<sequence>
+			<element ref="tns:MessageVersion"/>
+			<element ref="tns:MessageRevision"/>
+		</sequence>
+	</complexType>
+
+	<simpleType name="MessageVersion_Type">
+		<restriction base="string">
+			<maxLength value="2"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="MessageRevision_Type">
+		<restriction base="string">
+			<maxLength value="3"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="BalanceAmount_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<complexType name="Balance_Type">
+		<annotation>
+			<documentation>General balance definition.</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:BalanceAmount"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:BalanceDateTime"/>
+		</sequence>
+	</complexType>
+
+	<simpleType name="SerialNumber_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="13"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CheckAmount_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<complexType name="ODPDetail_Type">
+		<sequence>
+			<element ref="tns:LastPayment"/>
+			<element ref="tns:NextPayment"/>
+		</sequence>
+	</complexType>
+
+	<simpleType name="IdentitySource_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="CardNumber_Type">
+		<restriction base="string">
+			<minLength value="10"/>
+			<maxLength value="19"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="TinLastFour_Type">
+		<restriction base="string">
+			<length value="4"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="PaymentAmount_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="TransferAmount_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="TaxIdentificationNumber_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="InterestAmount_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="Year_Type">
+		<restriction base="string">
+			<length value="4"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="PenaltyAmount_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="WithheldAmount_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="TransactionAmount_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="TransactionDescription_Type">
+		<restriction base="string">
+			<maxLength value="36"/>
+		</restriction>
+	</simpleType>
+
+
+	<simpleType name="CustomerNumber_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="BalanceInquiryStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CheckPaidInformationStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="MerchantVerificationStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="OfficialBankCheckStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CallerAuthenticationStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="FlagsUpdateStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="StatusSubCode_Type">
+		<restriction base="string">
+			<length value="4"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="StatusSource_Type">
+		<restriction base="string">
+			<maxLength value="8"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="AuthenticationType_Type">
+		<restriction base="string">
+			<enumeration value="A"/>
+			<enumeration value="C"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="MultipleOwners_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="VIPStatus_Type">
+		<restriction base="string">
+			<enumeration value="B"/>
+			<enumeration value="R"/>
+			<enumeration value="S"/>
+			<enumeration value="E"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardLastFour_Type">
+		<restriction base="string">
+			<length value="4"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardMajorStatus_Type">
+		<restriction base="string">
+			<enumeration value="A"/>
+			<enumeration value="R"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardMinorStatus_Type">
+		<restriction base="string">
+			<enumeration value="C"/>
+			<enumeration value="M"/>
+			<enumeration value="O"/>
+			<enumeration value="P"/>
+			<enumeration value="R"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="SecretCodeAuthenticationStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CustomerRelationshipStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="AccountBalanceLookupStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="AccountPropertiesStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="SecretCodeChangeStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+
+	<simpleType name="Information1099Status_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="Order1099Status_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="FundsTransferStatus_Type">
+		<restriction base="string">
+			<enumeration value="A"/>
+			<enumeration value="P"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="ATMPendingTransactionsStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="TellerPendingTransactionsStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="ACHPendingTransactionsStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="DepositsPostedTransactionsStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="FeesStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="StatementOrderStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardActivationStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="TransferReferenceNumber_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="Realtionship_Type">
+		<restriction base="string">
+			<enumeration value="C"/>
+			<enumeration value="T"/>
+			<enumeration value="N"/>
+			<enumeration value="M"/>
+		</restriction>
+	</simpleType>
+
+
+	<simpleType name="BalanceTransactionsStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="IncludedPendingTransactions_Type">
+		<restriction base="boolean"/>
+	</simpleType>
+
+	<simpleType name="IncludedPostedTransactions_Type">
+		<restriction base="string">
+			<enumeration value="Credit"/>
+			<enumeration value="Debit"/>
+			<enumeration value="All"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="OnlineBankingEnrollmentStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="BillpayEnrollmentStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="OnlineStatementEnrollmentStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="AccountTypeName_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="AccountTypeValue_Type">
+		<restriction base="string">
+			<length value="3"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="BranchNumber_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="5"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="RestrictiveProcessingStatus_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="AccountRetentionStatus_Type">
+		<restriction base="string">
+			<enumeration value="X"/>
+			<enumeration value="S"/>
+			<enumeration value="M"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="HardDollarMoneyHoldAmount_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="HardDollarMoneyHoldCode_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="OnlineBankingCombinedStatus_Type">
+		<restriction base="string">
+			<enumeration value="OLB_NBPES"/>
+			<enumeration value="OLB_ESNBP"/>
+			<enumeration value="OLB_BPNES"/>
+			<enumeration value="OLB_BPES"/>
+			<enumeration value="N_OLB"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CautionFlag_Type">
+		<restriction base="string">
+			<enumeration value="C"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="StatementDisposition_Type">
+		<restriction base="string">
+        </restriction>
+	</simpleType>
+
+	<simpleType name="CloseToPostingStatus_Type">
+		<restriction base="string">
+			<enumeration value="A"/>
+			<enumeration value="D"/>
+			<enumeration value="C"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="DormantStatus_Type">
+		<restriction base="string">
+			<enumeration value="D"/>
+			<enumeration value="I"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CustomerClosedPendingReasonStatus_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="LossPreventionClosedPendingReasonStatus_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="CollectionLetterStatus_Type">
+		<restriction base="string">
+			<enumeration value="0"/>
+			<enumeration value="1"/>
+			<enumeration value="2"/>
+			<enumeration value="3"/>
+			<enumeration value="4"/>
+			<enumeration value="5"/>
+			<enumeration value="6"/>
+			<enumeration value="7"/>
+			<enumeration value="C"/>
+		</restriction>
+	</simpleType>
+
+
+	<simpleType name="OverdraftProtectionBlockedCode_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+		</restriction>
+	</simpleType>
+
+
+	<simpleType name="PendingTransactionCount_Type">
+		<restriction base="int"/>
+	</simpleType>
+
+	<simpleType name="TransactionCode_Type">
+		<restriction base="string">
+			<length value="4"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="PendingPosted_Type">
+		<restriction base="string">
+			<enumeration value="Pending"/>
+			<enumeration value="Posted"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="TransactionCountRequested_Type">
+		<restriction base="int"/>
+	</simpleType>
+
+	<simpleType name="TransferAmountRemaining_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="TransferDailyLimit_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="TransferTransactionLimit_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="Flag_Type">
+		<restriction base="string">
+			<maxLength value="30"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="SubApplication_Type">
+		<restriction base="string">
+			<enumeration value="COM"/>
+			<enumeration value="PCP"/>
+			<enumeration value="CHK"/>
+			<enumeration value="SAV"/>
+			<enumeration value="TDA"/>
+			<enumeration value="ODP"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="FeeName_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="FeeAmount_Type">
+		<restriction base="double"/>
+	</simpleType>
+
+	<simpleType name="ServiceName_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="ServiceStatus_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="OnlineBankingPropertiesStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+
+	<simpleType name="ClosedPendingReason_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="TransactionDescription2_Type">
+		<restriction base="string">
+			<maxLength value="36"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="Application1099_Type">
+		<restriction base="string">
+			<enumeration value="DDA"/>
+			<enumeration value="SAV"/>
+			<enumeration value="TDA"/>
+			<enumeration value="BND"/>
+			<enumeration value="CPN"/>
+		</restriction>
+	</simpleType>
+
+	<complexType name="Payment_Type">
+		<sequence>
+			<element ref="tns:PaymentAmount"/>
+			<element ref="tns:PaymentDate"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="TransferSource_Type">
+		<sequence>
+			<element ref="tns:AccountIdentifier"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="TransferTarget_Type">
+		<sequence>
+			<element ref="tns:AccountNumber"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="Account1099_Type">
+		<annotation>
+			<documentation>1099INT information for a specific account
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:Account1099Identifier"/>
+			<element ref="tns:InterestAmount"/>
+			<element ref="tns:PenaltyAmount"/>
+			<element ref="tns:WithheldAmount"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="Transaction_Type">
+		<sequence>
+			<element ref="tns:TransactionCode"/>
+			<element ref="tns:TransactionAmount"/>
+			<element ref="tns:TransactionDate"/>
+			<element ref="tns:TransactionTime"/>
+			<element ref="tns:TransactionDescription"/>
+			<element ref="tns:TransactionDescription2"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:SerialNumber">
+			</element>
+			<element ref="tns:PendingPosted"/>
+			<element ref="tns:CreditDebit"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="AccountIdentifier_Type">
+		<annotation>
+			<documentation>Data required to unuiqely describe an account.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:AccountNumber"/>
+			<element ref="tns:BankNumber"/>
+			<element ref="tns:Application"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="Identifier_Type">
+		<annotation>
+			<documentation>Data required to uniquely describe an account or
+				card.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="tns:IdentificationNumber"/>
+			<element ref="tns:BankNumber"/>
+			<element ref="tns:Application"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="CardActionGroup_Type">
+		<annotation>
+			<documentation>Card status information</documentation>
+		</annotation>
+		<sequence>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardNumber"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardMajorStatus"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardMinorStatus"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardStatusDate"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CardOldLastFour"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="CommercialInformation_Type">
+		<sequence>
+			<element ref="tns:AvailableBalance"/>
+			<element ref="tns:CollectedBalance"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="AccountPropertiesOutput_Type">
+		<sequence>
+			<element ref="tns:SubApplication"/>
+			<element ref="tns:AccountType"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:OpenDate"/>
+			<element ref="tns:BranchNumber"/>
+			<choice maxOccurs="1" minOccurs="0">
+				<element ref="tns:CertificateInformation"/>
+				<sequence>
+					<choice>
+						<sequence>
+							<element ref="tns:OverdraftProtectionInformation">
+							</element>
+						</sequence>
+						<sequence>
+							<element ref="tns:CreditLineBalance"/>
+						</sequence>
+					</choice>
+					<element maxOccurs="1" minOccurs="0" ref="tns:NextPayment"/>
+				</sequence>
+			</choice>
+			<element maxOccurs="1" minOccurs="0" ref="tns:LedgerBalance">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:VIPStatus"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:RestrictiveProcessingStatus">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:AccountRetentionStatus">
+			</element>
+			<element maxOccurs="5" minOccurs="0" ref="tns:HardDollarMoneyHold">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CautionFlag">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:StatementDisposition">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CloseToPostingStatus">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:DormantStatus">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CollectionLetter">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:ClosedPendingReason">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:OverdraftOptInStatus">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="AccountType_Type">
+		<sequence>
+			<element ref="tns:AccountTypeValue"/>
+			<element ref="tns:AccountTypeName"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="HardDollarMoneyHold_Type">
+		<sequence>
+			<element ref="tns:HardDollarMoneyHoldAmount"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:HardDollarMoneyHoldCode"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="CollectionLetter_Type">
+		<sequence>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CollectionLetterStatus"/>
+			<element ref="tns:CollectionLetterDate"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="OverdraftProtectionInformation_Type">
+		<sequence>
+			<element ref="tns:AvailableCreditLineBalance"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:LastPayment"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:OverdraftProtectionBlockedCode">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="CertificateInformation_Type">
+		<sequence>
+			<element maxOccurs="1" minOccurs="0" ref="tns:MaturityDate"/>
+		</sequence>
+	</complexType>
+
+
+
+
+
+	<complexType name="RelatedAccountSource_Type">
+		<sequence>
+			<element ref="tns:CustomerNumber"/>
+			<element ref="tns:AccountIdentifier"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="RelatedAccountTarget_Type">
+		<sequence>
+			<element ref="tns:AccountIdentifier"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="AccountRelationshipOutput_Type">
+		<sequence>
+			<element ref="tns:Relationship"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="Fee_Type">
+		<sequence>
+			<element ref="tns:FeeName"/>
+			<element ref="tns:FeeAmount"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="ServiceAvailability_Type">
+		<sequence>
+			<element ref="tns:ServiceName"/>
+			<element ref="tns:ServiceStatus"/>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="Account1099Identifier_Type">
+		<sequence>
+			<element ref="tns:AccountNumber"/>
+			<element ref="tns:BankNumber"/>
+			<element ref="tns:Application1099"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="AccountInformation_Type">
+		<sequence>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CurrentBalance"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:LedgerBalance"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:AvailableBalance">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CollectedBalance">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:CertificateInformation">
+			</element>
+			<element maxOccurs="1" minOccurs="0" ref="tns:OpenDate"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:VIPStatus"/>
+		</sequence>
+	</complexType>
+
+	<complexType name="CreditAccountInformation_Type">
+		<sequence>
+			<element ref="tns:CreditLineBalance"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:NextPayment"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:OverdraftProtectionInformation"/>
+		</sequence>
+	</complexType>
+
+	<group name="CustomerRelationship_Group">
+		<sequence>
+			<element ref="tns:CustomerNumber"/>
+			<element ref="tns:TaxIdentificationNumber"/>
+			<element ref="tns:AggregateBalance"/>
+			<element maxOccurs="6" minOccurs="0" ref="tns:CardActionGroup"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:VIPStatus"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:OnlineBankingCombinedStatus"/>
+			<element maxOccurs="unbounded" minOccurs="1" ref="tns:CustomerNumberRelationshipIdentifier"/>
+		</sequence>
+	</group>
+
+
+	<simpleType name="CardInformationStatus_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="ChannelSpecificDescription1_Type">
+		<restriction base="string">
+			<maxLength value="40"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="ChannelSpecificDescription2_Type">
+		<restriction base="string">
+			<maxLength value="40"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardBankNumber_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="3"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardPrimaryDDA_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="10"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardPrimaryDDAAppl_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="3"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardPrimaryOther_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="10"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardPrimaryOtherAppl_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="3"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CreditDebit_Type">
+		<restriction base="string">
+			<enumeration value="C"/>
+			<enumeration value="D"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardStatus_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="1"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardStatusValue_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="1"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardCompromisedFlag_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="MassOrigination_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="Track2Length_Type">
+		<restriction base="int">
+			<minInclusive value="0"/>
+			<maxInclusive value="50"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardSourceCode_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="1"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardReplacementStatus_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="1"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="TransactionDescription3_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<simpleType name="MICM326Description_Type">
+		<restriction base="string">
+			<maxLength value="40"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="MICM326AlternativeDescription_Type">
+		<restriction base="string">
+			<maxLength value="40"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="D_Description_Type">
+		<restriction base="string">
+			<maxLength value="40"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="E_Description_Type">
+		<restriction base="string">
+			<maxLength value="40"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="ProductCode_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="2"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardOrigination_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="1"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="MoreAccounts_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="1"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="IssueOffice_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="3"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="NameOnCard_Type">
+		<restriction base="string">
+			<maxLength value="26"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="MemberStatus_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="1"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CardExceptionErrors_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="2"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CVV_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="3"/>
+		</restriction>
+	</simpleType>
+
+	<simpleType name="CVV2_Type">
+		<restriction base="string">
+			<minLength value="0"/>
+			<maxLength value="3"/>
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="TransactionRequestedType_Type">
+		<restriction base="string">
+			<enumeration value="BALANCE"/>
+			<enumeration value="ALL"/>
+		</restriction>	
+	</simpleType>
+
+
+	<!--
+		End Type definitions 
+	 -->
+
+
+	<!--
+		Begin Element definitions 
+	 -->
+
+	<element name="AccountNumber" type="tns:AccountNumber_Type"/>
+
+	<element name="CallerAuthenticationRequest" type="tns:CallerAuthenticationRequest_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CallerAuthenticationRequest;XSDElementDeclaration=1$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+
+	<element name="CallerAuthenticationResponse" type="tns:CallerAuthenticationResponse_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CallerAuthenticationResponse;XSDElementDeclaration=2$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+
+	<element name="Status" type="tns:Status_Type"/>
+
+	<element name="StatusCode" type="tns:StatusCode_Type"/>
+
+	<element name="StatusDescription" type="tns:StatusDescription_Type">
+	</element>
+
+	<element name="StatusDisposition" type="tns:StatusDisposition_Type"/>
+
+	<element name="StatusDetail" type="tns:StatusDetail_Type">
+	</element>
+
+	<element name="Application" type="tns:Application_Type">
+	</element>
+
+	<element name="BankNumber" type="tns:BankNumber_Type">
+	</element>
+
+	<element name="Username" type="tns:Username_Type"/>
+
+	<element name="Password" type="tns:Password_Type"/>
+
+	<element name="Identity" type="tns:Identity_Type"/>
+
+	<element name="Channel" type="tns:Channel_Type">
+	</element>
+
+	<element name="Version" type="tns:Version_Type"/>
+
+
+
+	<element name="IdentificationNumber" type="tns:IndentificationNumber_Type"/>
+
+	<element name="MessageVersion" type="tns:MessageVersion_Type"/>
+
+	<element name="MessageRevision" type="tns:MessageRevision_Type"/>
+
+
+
+
+	<element name="BalanceAmount" type="tns:BalanceAmount_Type">
+	</element>
+
+	<element name="MessageDateTime" type="dateTime"/>
+
+
+
+
+
+	<element name="EnterpriseHeader" type="tns:EnterpriseHeader_Type"/>
+
+
+
+	<element name="SerialNumber" type="tns:SerialNumber_Type"/>
+
+
+
+	<element name="CheckAmount" type="tns:CheckAmount_Type"/>
+
+	<element name="BalanceInquiryRequest" type="tns:BalanceInquiryRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/BalanceInquiryRequest;XSDElementDeclaration=23$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="BalanceInquiryResponse" type="tns:BalanceInquiryResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/BalanceInquiryResponse;XSDElementDeclaration=24$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+
+
+
+	<element name="OfficialBankCheckRequest" type="tns:OfficialBankCheckRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/OfficialBankCheckRequest;XSDElementDeclaration=25$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="OfficialBankCheckResponse" type="tns:OfficialBankCheckResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/OfficialBankCheckResponse;XSDElementDeclaration=26$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="IdentitySource" type="tns:IdentitySource_Type"/>
+
+
+	<element name="SecretCode" type="tns:SecretCode_Type"/>
+
+	<element name="MerchantVerificationRequest" type="tns:MerchantVerificationRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MerchantVerificationRequest;XSDElementDeclaration=29$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="MerchantVerificationResponse" type="tns:MerchantVerificationResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MerchantVerificationResponse;XSDElementDeclaration=30$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+
+
+
+
+	<element name="CardNumber" type="tns:CardNumber_Type"/>
+
+	<element name="CardActivationRequest" type="tns:CardActivationRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CardActivationRequest;XSDElementDeclaration=32$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="CardActivationResponse" type="tns:CardActivationResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CardActivationResponse;XSDElementDeclaration=33$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+
+	<element name="CheckPaidInformationRequest" type="tns:CheckPaidInformationRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CheckPaidInformationRequest;XSDElementDeclaration=34$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="CheckPaidInformationResponse" type="tns:CheckPaidInformationResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CheckPaidInformationResponse;XSDElementDeclaration=35$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="TinLastFour" type="tns:TinLastFour_Type"/>
+
+	<element name="NewSecretCode" type="tns:SecretCode_Type"/>
+
+	<element name="SecretCodeChangeRequest" type="tns:SecretCodeChangeRequest_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/SecretCodeChangeRequest;XSDElementDeclaration=38$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+
+	<element name="SecretCodeChangeResponse" type="tns:SecretCodeChangeResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/SecretCodeChangeResponse;XSDElementDeclaration=39$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+
+
+
+
+	<element name="SystemAvailabilityRequest" type="tns:SystemAvailabilityRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/SystemAvailabilityRequest;XSDElementDeclaration=40$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="SystemAvailabilityResponse" type="tns:SystemAvailabilityResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/SystemAvailabilityResponse;XSDElementDeclaration=41$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+
+
+
+
+
+	<element name="ODPDetail" type="tns:ODPDetail_Type"/>
+
+
+	<element name="PaymentAmount" type="tns:PaymentAmount_Type"/>
+
+	<element name="PaymentDate" type="date"/>
+
+
+	<element name="LastPayment" type="tns:Payment_Type"/>
+
+	<element name="NextPayment" type="tns:Payment_Type"/>
+
+
+
+
+
+
+	<element name="TransferAmount" type="tns:TransferAmount_Type"/>
+
+
+	<element name="TransferSource" type="tns:TransferSource_Type"/>
+
+	<element name="TransferTarget" type="tns:TransferTarget_Type"/>
+
+
+
+
+	<element name="InterestAmount" type="tns:InterestAmount_Type"/>
+
+
+	<element name="Account1099" type="tns:Account1099_Type"/>
+
+
+	<element name="Year" type="tns:Year_Type"/>
+
+
+	<element name="TransferEffectiveDate" type="date">
+	</element>
+
+
+	<element name="PenaltyAmount" type="tns:PenaltyAmount_Type"/>
+
+	<element name="WithheldAmount" type="tns:WithheldAmount_Type"/>
+
+
+
+
+
+
+
+
+	<element name="BalanceTransactionsRequest" type="tns:BalanceTransactionsRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/BalanceTransactionsRequest;XSDElementDeclaration=56$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="BalanceTransactionsResponse" type="tns:BalanceTransactionsResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/BalanceTransactionsResponse;XSDElementDeclaration=57$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="Transaction" type="tns:Transaction_Type"/>
+
+
+
+
+
+
+
+
+	<element name="TransactionAmount" type="tns:TransactionAmount_Type">
+	</element>
+
+
+	<element name="ProcessingDate" type="date"/>
+
+	<element name="TransactionDescription" type="tns:TransactionDescription_Type">
+	</element>
+
+
+
+
+	<element name="EffectiveDate" type="date"/>
+
+
+
+
+	<element name="AccountIdentifier" type="tns:AccountIdentifier_Type">
+	</element>
+
+
+
+
+
+
+
+
+
+
+	<element name="FlagsUpdateRequest" type="tns:FlagsUpdateRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/FlagsUpdateRequest;XSDElementDeclaration=64$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="FlagsUpdateResponse" type="tns:FlagsUpdateResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/FlagsUpdateResponse;XSDElementDeclaration=65$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="CustomerNumber" type="tns:CustomerNumber_Type">
+	</element>
+
+
+	<element name="BalanceInquiryStatus" type="tns:BalanceInquiryStatus_Type">
+	</element>
+
+
+
+	<element name="CheckPaidInformationStatus" type="tns:CheckPaidInformationStatus_Type">
+	</element>
+
+
+	<element name="MerchantVerificationStatus" type="tns:MerchantVerificationStatus_Type">
+	</element>
+
+
+	<element name="OfficialBankCheckStatus" type="tns:OfficialBankCheckStatus_Type">
+	</element>
+
+
+	<element name="CallerAuthenticationStatus" type="tns:CallerAuthenticationStatus_Type">
+	</element>
+
+
+
+
+	<element name="FlagsUpdateStatus" type="tns:FlagsUpdateStatus_Type">
+	</element>
+
+
+	<element name="StatusSubCode" type="tns:StatusSubCode_Type"/>
+
+
+	<element name="StatusSource" type="tns:StatusSource_Type"/>
+
+
+	<element name="AuthenticationType" type="tns:AuthenticationType_Type">
+	</element>
+
+
+
+	<element name="MultipleOwners" type="tns:MultipleOwners_Type"/>
+
+
+
+
+
+
+
+
+	<element name="SecretCodeAuthenticationRequest" type="tns:SecretCodeAuthenticationRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/SecretCodeAuthenticationRequest;XSDElementDeclaration=77$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="SecretCodeAuthenticationResponse" type="tns:SecretCodeAuthenticationResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/SecretCodeAuthenticationResponse;XSDElementDeclaration=78$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="VIPStatus" type="tns:VIPStatus_Type"/>
+
+
+	<element name="CardActionGroup" type="tns:CardActionGroup_Type"/>
+
+	<element name="CardOldLastFour" type="tns:CardLastFour_Type"/>
+
+	<element name="CardMajorStatus" type="tns:CardMajorStatus_Type"/>
+
+	<element name="CardMinorStatus" type="tns:CardMinorStatus_Type"/>
+
+	<element name="CardStatusDate" type="date"/>
+
+
+
+
+	<element name="Order1099Request" type="tns:Order1099Request_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/Order1099Request;XSDElementDeclaration=85$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+
+	<element name="Order1099Response" type="tns:Order1099Response_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/Order1099Response;XSDElementDeclaration=86$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="FeesRequest" type="tns:FeesRequest_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/FeesRequest;XSDElementDeclaration=87$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+
+	<element name="FeesResponse" type="tns:FeesResponse_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/FeesResponse;XSDElementDeclaration=88$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+
+	<element name="StatementOrderRequest" type="tns:StatementOrderRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/StatementOrderRequest;XSDElementDeclaration=89$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="StatementOrderResponse" type="tns:StatementOrderResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/StatementOrderResponse;XSDElementDeclaration=90$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="Information1099Request" type="tns:Information1099Request_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/Information1099Request;XSDElementDeclaration=91$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="Information1099Response" type="tns:Information1099Response_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/Information1099Response;XSDElementDeclaration=92$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="FundsTransferRequest" type="tns:FundsTransferRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/FundsTransferRequest;XSDElementDeclaration=93$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="FundsTransferResponse" type="tns:FundsTransferResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/FundsTransferResponse;XSDElementDeclaration=94$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="SecretCodeAuthenticationStatus" type="tns:SecretCodeAuthenticationStatus_Type">
+	</element>
+
+
+
+	<element name="CustomerRelationshipStatus" type="tns:CustomerRelationshipStatus_Type">
+	</element>
+
+	<element name="CustomerRelationshipRequest" type="tns:CustomerRelationshipRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CustomerRelationshipRequest;XSDElementDeclaration=97$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="CustomerRelationshipResponse" type="tns:CustomerRelationshipResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CustomerRelationshipResponse;XSDElementDeclaration=98$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="ATMSystemAvailabilityRequest" type="tns:ATMSystemAvailabilityRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ATMSystemAvailabilityRequest;XSDElementDeclaration=99$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="ATMSystemAvailabilityResponse" type="tns:ATMSystemAvailabilityResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ATMSystemAvailabilityResponse;XSDElementDeclaration=100$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="CISSystemAvailabilityRequest" type="tns:CISSystemAvailabilityRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CISSystemAvailabilityRequest;XSDElementDeclaration=101$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="CISSystemAvailabilityResponse" type="tns:CISSystemAvailabilityResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CISSystemAvailabilityResponse;XSDElementDeclaration=102$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="TellerSystemAvailabilityRequest" type="tns:TellerSystemAvailabilityRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TellerSystemAvailabilityRequest;XSDElementDeclaration=103$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="TellerSystemAvailabilityResponse" type="tns:TellerSystemAvailabilityResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TellerSystemAvailabilityResponse;XSDElementDeclaration=104$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="DepositsSystemAvailabilityRequest" type="tns:DepositsSystemAvailabilityRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DepositsSystemAvailabilityRequest;XSDElementDeclaration=105$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="DepositsSystemAvailabilityResponse" type="tns:DepositsSystemAvailabilityResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DepositsSystemAvailabilityResponse;XSDElementDeclaration=106$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="PaymentsSystemAvailabilityRequest" type="tns:PaymentsSystemAvailabilityRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/PaymentsSystemAvailabilityRequest;XSDElementDeclaration=107$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="PaymentsSystemAvailabilityResponse" type="tns:PaymentsSystemAvailabilityResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/PaymentsSystemAvailabilityResponse;XSDElementDeclaration=108$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+
+
+	<element name="AccountBalanceLookupStatus" type="tns:AccountBalanceLookupStatus_Type">
+	</element>
+
+	<element name="AccountBalanceLookupRequest" type="tns:AccountBalanceLookupRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AccountBalanceLookupRequest;XSDElementDeclaration=110$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="AccountBalanceLookupResponse" type="tns:AccountBalanceLookupResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AccountBalanceLookupResponse;XSDElementDeclaration=111$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+
+	<element name="AccountPropertiesRequest" type="tns:AccountPropertiesRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AccountPropertiesRequest;XSDElementDeclaration=112$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="AccountPropertiesResponse" type="tns:AccountPropertiesResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AccountPropertiesResponse;XSDElementDeclaration=113$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="AccountPropertiesStatus" type="tns:AccountPropertiesStatus_Type">
+	</element>
+
+
+	<element name="Information1099Status" type="tns:Information1099Status_Type">
+	</element>
+
+
+	<element name="Order1099Status" type="tns:Order1099Status_Type"/>
+
+
+	<element name="FundsTransferStatus" type="tns:FundsTransferStatus_Type">
+	</element>
+
+
+
+	<element name="ATMPendingTransactionsRequest" type="tns:ATMPendingTransactionsRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ATMPendingTransactionsRequest;XSDElementDeclaration=118$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="ATMPendingTransactionsResponse" type="tns:ATMPendingTransactionsResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ATMPendingTransactionsResponse;XSDElementDeclaration=119$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="ATMPendingTransactionsStatus" type="tns:ATMPendingTransactionsStatus_Type">
+	</element>
+
+
+
+	<element name="TellerPendingTransactionsStatus" type="tns:TellerPendingTransactionsStatus_Type">
+	</element>
+
+	<element name="TellerPendingTransactionsRequest" type="tns:TellerPendingTransactionsRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TellerPendingTransactionsRequest;XSDElementDeclaration=122$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="TellerPendingTransactionsResponse" type="tns:TellerPendingTransactionsResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TellerPendingTransactionsResponse;XSDElementDeclaration=123$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+
+	<element name="ACHPendingTransactionsStatus" type="tns:ACHPendingTransactionsStatus_Type">
+	</element>
+
+	<element name="ACHPendingTransactionsRequest" type="tns:ACHPendingTransactionsRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ACHPendingTransactionsRequest;XSDElementDeclaration=125$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="ACHPendingTransactionsResponse" type="tns:ACHPendingTransactionsResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/ACHPendingTransactionsResponse;XSDElementDeclaration=126$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+
+	<element name="DepositsPostedTransactionsStatus" type="tns:DepositsPostedTransactionsStatus_Type">
+	</element>
+
+	<element name="DepositsPostedTransactionsRequest" type="tns:DepositsPostedTransactionsRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DepositsPostedTransactionsRequest;XSDElementDeclaration=128$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="DepositsPostedTransactionsResponse" type="tns:DepositsPostedTransactionsResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/DepositsPostedTransactionsResponse;XSDElementDeclaration=129$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="FeesStatus" type="tns:FeesStatus_Type"/>
+
+
+	<element name="StatementOrderStatus" type="tns:StatementOrderStatus_Type">
+	</element>
+
+	<element name="SecretCodeChangeStatus" type="tns:SecretCodeChangeStatus_Type">
+	</element>
+
+
+
+
+	<element name="Information1099Output" type="tns:Information1099Output_Type">
+	</element>
+
+	<element name="TaxIdentificationNumber" type="tns:TaxIdentificationNumber_Type">
+	</element>
+
+
+
+
+
+
+	<element name="SecretCodeAuthenticationOutput" type="tns:SecretCodeAuthenticationOutput_Type">
+	</element>
+
+
+
+	<element name="CustomerRelationshipOutput" type="tns:CustomerRelationshipOutput_Type">
+	</element>
+
+
+
+	<element name="CallerAuthenticationOutput" type="tns:CallerAuthenticationOutput_Type">
+	</element>
+
+
+	<element name="SystemAvailabilityOutput" type="tns:SystemAvailabilityOutput_Type">
+	</element>
+
+
+
+	<element name="ATMSystemAvailabilityOutput" type="tns:ATMSystemAvailabilityOutput_Type">
+	</element>
+
+	<element name="CISSystemAvailabilityOutput" type="tns:CISSystemAvailabilityOutput_Type">
+	</element>
+
+
+	<element name="TellerSystemAvailabilityOutput" type="tns:TellerSystemAvailabilityOutput_Type">
+	</element>
+
+
+	<element name="DepositsSystemAvailabilityOutput" type="tns:DepositsSystemAvailabilityOutput_Type">
+	</element>
+
+
+
+	<element name="PaymentsSystemAvailabilityOutput" type="tns:PaymentsSystemAvailabilityOutput_Type">
+	</element>
+
+
+
+
+	<element name="CardActivationStatus" type="tns:CardActivationStatus_Type">
+	</element>
+
+
+	<element name="CheckPaidInformationOutput" type="tns:CheckPaidInformationOutput_Type">
+	</element>
+
+
+	<element name="PostedDate" type="date"/>
+
+
+	<element name="FeesOutput" type="tns:FeesOutput_Type"/>
+
+
+	<element name="TransferReferenceNumber" type="tns:TransferReferenceNumber_Type">
+	</element>
+
+
+	<element name="FundsTransferOutput" type="tns:FundsTransferOutput_Type">
+	</element>
+
+
+	<element name="BalanceDateTime" type="dateTime"/>
+
+
+	<element name="Relationship" type="tns:Realtionship_Type">
+	</element>
+
+	<element name="TransferSourceBalance" type="tns:Balance_Type">
+	</element>
+
+	<element name="TransferTargetBalance" type="tns:Balance_Type">
+	</element>
+
+
+
+	<element name="BalanceInquiryOutput" type="tns:BalanceInquiryOutput_Type">
+	</element>
+
+
+	<element name="CurrentBalance" type="tns:Balance_Type"/>
+
+
+	<element name="CommercialInformation" type="tns:CommercialInformation_Type">
+	</element>
+
+	<element name="AvailableBalance" nillable="true" type="tns:Balance_Type"/>
+
+	<element name="CollectedBalance" nillable="true" type="tns:Balance_Type"/>
+
+
+	<element name="BalanceTransactionsOutput" type="tns:BalanceTransactionsOutput_Type">
+	</element>
+
+
+	<element name="ACHPendingTransactionsOutput" type="tns:ACHPendingTransactionsOutput_Type">
+	</element>
+
+
+	<element name="ATMPendingTransactionsOutput" type="tns:ATMPendingTransactionsOutput_Type">
+	</element>
+
+
+
+	<element name="DepositsPostedTransactionsOutput" type="tns:DepositsPostedTransactionsOutput_Type">
+	</element>
+
+
+
+	<element name="TellerPendingTransactionsOutput" type="tns:TellerPendingTransactionsOutput_Type">
+	</element>
+
+
+
+
+	<element name="BalanceTransactionsStatus" type="tns:BalanceTransactionsStatus_Type">
+	</element>
+
+
+
+
+
+
+	<element name="IncludedPendingTransactions" type="tns:IncludedPendingTransactions_Type">
+	</element>
+
+	<element name="IncludedPostedTransactions" type="tns:IncludedPostedTransactions_Type">
+	</element>
+
+
+
+
+	<element name="AccountBalanceLookupOutput" type="tns:AccountBalanceLookupOutput_Type">
+	</element>
+
+
+	<element name="AccountPropertiesOutput" type="tns:AccountPropertiesOutput_Type"/>
+
+
+	<element name="AggregateBalance" type="tns:Balance_Type"/>
+
+	<element name="OnlineBankingEnrollmentStatus" type="tns:OnlineBankingEnrollmentStatus_Type">
+	</element>
+
+
+	<element name="BillpayEnrollmentStatus" type="tns:BillpayEnrollmentStatus_Type">
+	</element>
+
+
+	<element name="OnlineStatementEnrollmentStatus" type="tns:OnlineStatementEnrollmentStatus_Type">
+	</element>
+
+
+
+	<element name="AccountTypeName" type="tns:AccountTypeName_Type"/>
+
+	<element name="AccountTypeValue" type="tns:AccountTypeValue_Type"/>
+
+	<element name="AccountType" type="tns:AccountType_Type"/>
+
+	<element name="LedgerBalance" type="tns:Balance_Type"/>
+
+
+	<element name="BranchNumber" type="tns:BranchNumber_Type"/>
+
+
+	<element name="OpenDate" type="date"/>
+
+
+	<element name="RestrictiveProcessingStatus" type="tns:RestrictiveProcessingStatus_Type">
+	</element>
+
+
+	<element name="AccountRetentionStatus" type="tns:AccountRetentionStatus_Type">
+	</element>
+
+
+	<element name="HardDollarMoneyHold" type="tns:HardDollarMoneyHold_Type">
+	</element>
+
+
+	<element name="HardDollarMoneyHoldAmount" type="tns:HardDollarMoneyHoldAmount_Type">
+	</element>
+
+
+	<element name="HardDollarMoneyHoldCode" type="tns:HardDollarMoneyHoldCode_Type">
+	</element>
+
+
+	<element name="OnlineBankingCombinedStatus" type="tns:OnlineBankingCombinedStatus_Type">
+	</element>
+
+
+
+	<element name="CautionFlag" type="tns:CautionFlag_Type"/>
+
+
+	<element name="StatementDisposition" type="tns:StatementDisposition_Type">
+	</element>
+
+
+	<element name="CloseToPostingStatus" type="tns:CloseToPostingStatus_Type">
+	</element>
+
+
+	<element name="DormantStatus" type="tns:DormantStatus_Type"/>
+
+
+	<element name="CustomerClosedPendingReasonStatus" type="tns:CustomerClosedPendingReasonStatus_Type">
+	</element>
+
+
+	<element name="LossPreventionClosedPendingReasonStatus" type="tns:LossPreventionClosedPendingReasonStatus_Type">
+	</element>
+
+
+	<element name="CollectionLetter" type="tns:CollectionLetter_Type"/>
+
+
+	<element name="CollectionLetterDate" type="date">
+	</element>
+
+
+	<element name="CollectionLetterStatus" type="tns:CollectionLetterStatus_Type">
+	</element>
+
+
+
+
+
+
+	<element name="OverdraftProtectionBlockedCode" type="tns:OverdraftProtectionBlockedCode_Type">
+	</element>
+
+
+
+
+	<element name="CertificateInformation" type="tns:CertificateInformation_Type">
+	</element>
+
+	<element name="MaturityDate" type="date"/>
+
+
+	<element name="PendingTransactionCount" type="tns:PendingTransactionCount_Type"/>
+
+
+	<element name="InitiatedDate" type="date"/>
+
+
+	<element name="TransactionCode" type="tns:TransactionCode_Type">
+	</element>
+
+
+
+
+	<element name="PendingPosted" type="tns:PendingPosted_Type"/>
+
+	<element name="OverdraftProtectionInformation" type="tns:OverdraftProtectionInformation_Type">
+	</element>
+
+
+	<element name="TransactionCountRequested" type="tns:TransactionCountRequested_Type">
+	</element>
+
+
+	<element name="TransferAmountRemaining" type="tns:TransferAmountRemaining_Type">
+	</element>
+
+
+	<element name="TransferDailyLimit" type="tns:TransferDailyLimit_Type">
+	</element>
+
+	<element name="TransferTransactionLimit" type="tns:TransferTransactionLimit_Type">
+	</element>
+
+
+	<element name="RelatedAccountSource" type="tns:RelatedAccountSource_Type">
+	</element>
+
+
+	<element name="RelatedAccountTarget" type="tns:RelatedAccountTarget_Type">
+	</element>
+
+
+	<element name="AccountRelationshipOutput" type="tns:AccountRelationshipOutput_Type">
+	</element>
+
+	<element name="AccountRelationshipRequest" type="tns:AccountRelationshipRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AccountRelationshipRequest;XSDElementDeclaration=209$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="AccountRelationshipResponse" type="tns:AccountRelationshipResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AccountRelationshipResponse;XSDElementDeclaration=210$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+
+
+
+
+
+
+	<element name="Flag" type="tns:Flag_Type"/>
+
+
+	<element name="SubApplication" type="tns:SubApplication_Type"/>
+
+
+	<element name="FeeName" type="tns:FeeName_Type"/>
+
+	<element name="FeeAmount" type="tns:FeeAmount_Type"/>
+
+
+
+
+	<element name="ServiceName" type="tns:ServiceName_Type"/>
+
+	<element name="ServiceStatus" type="tns:ServiceStatus_Type"/>
+
+
+	<element name="ServiceAvailability" type="tns:ServiceAvailability_Type">
+	</element>
+
+
+	<element name="OnlineBankingPropertiesRequest" type="tns:OnlineBankingPropertiesRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/OnlineBankingPropertiesRequest;XSDElementDeclaration=218$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="OnlineBankingPropertiesResponse" type="tns:OnlineBankingPropertiesResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/OnlineBankingPropertiesResponse;XSDElementDeclaration=219$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="OnlineBankingPropertiesOutput" type="tns:OnlineBankingPropertiesOutput_Type">
+	</element>
+
+
+	<element name="OnlineBankingSystemAvailabilityRequest" type="tns:OnlineBankingSystemAvailabilityRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/OnlineBankingSystemAvailabilityRequest;XSDElementDeclaration=221$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="OnlineBankingSystemAvailabilityResponse" type="tns:OnlineBankingSystemAvailabilityResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/OnlineBankingSystemAvailabilityResponse;XSDElementDeclaration=222$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="OnlineBankingSystemAvailabilityOutput" type="tns:OnlineBankingSystemAvailabilityOutput_Type">
+	</element>
+
+	<element name="OnlineBankingPropertiesStatus" type="tns:OnlineBankingPropertiesStatus_Type">
+	</element>
+
+
+	<element name="ClosedPendingReason" type="tns:ClosedPendingReason_Type">
+	</element>
+
+	<element name="TransactionDescription2" type="tns:TransactionDescription2_Type">
+	</element>
+
+
+	<element name="Application1099" type="tns:Application1099_Type"/>
+
+
+	<element name="Account1099Identifier" type="tns:Account1099Identifier_Type">
+	</element>
+
+	<element name="TransactionDate" type="date"/>
+
+
+
+	<element name="CreditLineBalance" type="tns:Balance_Type"/>
+
+	<element name="AvailableCreditLineBalance" type="tns:Balance_Type">
+	</element>
+
+	<element name="AccountInformation" type="tns:AccountInformation_Type">
+	</element>
+
+	<element name="CreditAccountInformation" type="tns:CreditAccountInformation_Type">
+	</element>
+
+	<element name="TransactionTime" type="time"/>
+
+	<element default="true" name="Repeatable" type="boolean"/>
+
+
+
+	<element name="CardInformationOutput" type="tns:CardInformationOutput_Type">
+	</element>
+
+	<element name="CardInformationRequest" type="tns:CardInformationRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CardInformationRequest;XSDElementDeclaration=237$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="CardInformationResponse" type="tns:CardInformationResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CardInformationResponse;XSDElementDeclaration=238$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+	<element name="TransactionDescription3" type="tns:TransactionDescription3_Type">
+	</element>
+
+
+	<element name="TransactionDescriptionRequest" type="tns:TransactionDescriptionRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TransactionDescriptionRequest;XSDElementDeclaration=240$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="TransactionDescriptionResponse" type="tns:TransactionDescriptionResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TransactionDescriptionResponse;XSDElementDeclaration=241$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="TransactionDescriptionOutput" type="tns:TransactionDescriptionOutput_Type">
+	</element>
+
+
+	<element name="MICM326Description" type="tns:MICM326Description_Type">
+	</element>
+
+	<element name="MICM326AlternativeDescription" type="tns:MICM326AlternativeDescription_Type">
+	</element>
+
+	<element name="D_Description" type="tns:D_Description_Type"/>
+
+	<element name="E_Description" type="tns:E_Description_Type"/>
+
+	<element name="ExpirationDate" type="string"/>
+
+	<element name="LastMaintainenceDate" type="string"/>
+
+
+	<element name="ProductCode" type="tns:ProductCode_Type"/>
+
+
+	<element name="CardOrigination" type="tns:CardOrigination_Type"/>
+
+
+	<element name="MoreAccounts" type="tns:MoreAccounts_Type"/>
+
+
+	<element name="IssueOffice" type="tns:IssueOffice_Type"/>
+
+	<element name="CardOpenDate" type="string"/>
+
+	<element name="CardIssueDate" type="string"/>
+
+	<element name="CardToVendorDate" type="string"/>
+
+	<element name="CardVendorMailedDate" type="string"/>
+
+	<element name="TiedCardNumber" type="tns:CardNumber_Type"/>
+
+
+	<element name="NameOnCard" type="tns:NameOnCard_Type"/>
+
+
+	<element name="MemberStatus" type="tns:MemberStatus_Type"/>
+
+	<element name="PreviousCardStatus" type="tns:CardStatus_Type">
+	</element>
+
+
+	<element name="CardExceptionErrors" type="tns:CardExceptionErrors_Type">
+	</element>
+
+
+	<element name="CVV" type="tns:CVV_Type"/>
+
+	<element name="CVV2" type="tns:CVV2_Type"/>
+
+	<element name="PreviousCVV" type="tns:CVV_Type"/>
+
+	<element name="PreviousCVV2" type="tns:CVV2_Type"/>
+
+
+	<element name="CardReplacementStatus" type="tns:CardReplacementStatus_Type">
+	</element>
+
+
+
+	<element name="CardSourceCode" type="tns:CardSourceCode_Type"/>
+
+
+
+	<element name="Track2Length" type="tns:Track2Length_Type"/>
+
+
+	<element name="MassOrigination" type="tns:MassOrigination_Type"/>
+
+
+
+	<element name="CardCompromisedFlag" type="tns:CardCompromisedFlag_Type">
+	</element>
+
+	<element name="CardStatus" type="tns:CardStatus_Type"/>
+
+	<element name="CardStatusValue" type="tns:CardStatusValue_Type"/>
+
+	<element name="CardStatusChangedDate" type="string"/>
+
+	<element name="Identifier" type="tns:Identifier_Type"/>
+
+
+
+	<element name="CreditDebit" type="tns:CreditDebit_Type"/>
+
+
+
+	<element name="CardPrimaryDDA" type="tns:CardPrimaryDDA_Type"/>
+
+	<element name="CardPrimaryDDAAppl" type="tns:CardPrimaryDDAAppl_Type">
+	</element>
+
+	<element name="CardPrimaryOther" type="tns:CardPrimaryOther_Type"/>
+
+	<element name="CardPrimaryOtherAppl" type="tns:CardPrimaryOtherAppl_Type">
+	</element>
+
+
+
+	<element name="CardBankNumber" type="tns:CardBankNumber_Type"/>
+
+
+
+	<element name="ChannelSpecificDescription1" type="tns:ChannelSpecificDescription1_Type">
+	</element>
+
+	<element name="ChannelSpecificDescription2" type="tns:ChannelSpecificDescription2_Type">
+	</element>
+
+
+	<element name="CardInformationStatus" type="tns:CardInformationStatus_Type">
+	</element>
+	
+	<element name="TransactionRequestedType" type="tns:TransactionRequestedType_Type"/>
+
+	<element name="ActionDate" type="date"/>
+
+	<element name="IssueDate" type="date"/>
+
+	<element name="StopDate" type="date"/>
+
+	<complexType name="OfficialBankCheckOutput_Type">
+		<sequence>
+			<element maxOccurs="1" minOccurs="0" ref="tns:ActionDate"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:IssueDate"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:StopDate"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:OfficialBankCheckPayee"/>
+		</sequence>
+	</complexType>
+
+	<element name="OfficialBankCheckOutput" type="tns:OfficialBankCheckOutput_Type">
+	</element>
+
+	<simpleType name="TellerNumber_Type">
+		<restriction base="string">
+
+			<length value="5"/>
+		</restriction>
+	</simpleType>
+
+	<element name="TellerNumber" type="tns:TellerNumber_Type"/>
+
+    <element name="DateOfBirth" type="date"/>
+
+	<simpleType name="Gender_Type">
+		<restriction base="string">
+			<enumeration value="Male"/>
+			<enumeration value="Female"/>
+		</restriction>
+	</simpleType>
+	
+	<element name="Gender" type="tns:Gender_Type"/>
+
+	<simpleType name="ZipCode_Type">
+		<restriction base="string">
+			<minLength value="5"/>
+			<maxLength value="10"/>
+		</restriction>
+	</simpleType>
+
+	<element name="ZipCode" type="tns:ZipCode_Type"/>
+
+	<simpleType name="City_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+	<element name="City" type="tns:City_Type"/>
+
+	<simpleType name="State_Type">
+		<restriction base="string"/>
+	</simpleType>
+
+    <element name="State" type="tns:State_Type"/>
+
+    <simpleType name="AddressLine_Type">
+    	<restriction base="string"/>
+    </simpleType>
+
+    <element name="AddressLine" type="tns:AddressLine_Type"/>
+
+    <simpleType name="FullName_Type">
+    	<restriction base="string"/>
+    </simpleType>
+
+    <element name="FullName" type="tns:FullName_Type"/>
+
+    <simpleType name="PhoneNumber_Type">
+    	<restriction base="string">
+    		<maxLength value="10"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="HomePhoneNumber" type="tns:PhoneNumber_Type"/>
+
+    <element name="WorkPhoneNumber" type="tns:PhoneNumber_Type"/>
+
+    <simpleType name="EmployerName_Type">
+    	<restriction base="string"/>
+    </simpleType>
+
+    <element name="EmployerName" type="tns:EmployerName_Type"/>
+
+    <simpleType name="Occupation_Type">
+    	<restriction base="string"/>
+    </simpleType>
+
+    <element name="Occupation" type="tns:Occupation_Type"/>
+
+    <element name="IsUSCitizen" type="boolean"/>
+
+    <element name="IsAddressInUSA" type="boolean"/>
+
+    <element name="IDIssuedDate" type="date"/>
+
+    <element name="IDExpirationDate" type="date"/>
+
+    <simpleType name="IDNumber_Type">
+    	<restriction base="string"/>
+    </simpleType>
+
+    <element name="IDNumber" type="tns:IDNumber_Type"/>
+
+    <simpleType name="IDType_Type">
+    	<restriction base="string"/>
+    </simpleType>
+
+    <element name="IDType" type="tns:IDType_Type"/>
+
+    <simpleType name="IDIssuedLocation_Type">
+    	<restriction base="string"/>
+    </simpleType>
+
+    <element name="IDIssuedLocation" type="tns:IDIssuedLocation_Type"/>
+
+    <simpleType name="EmailAddress_Type">
+    	<restriction base="string"/>
+    </simpleType>
+
+    <element name="EmailAddress" type="tns:EmailAddress_Type"/>
+
+    <simpleType name="OpenClosedStatus_Type">
+    	<restriction base="string">
+    		<enumeration value="Open"/>
+    		<enumeration value="Closed"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="OpenClosedStatus" type="tns:OpenClosedStatus_Type"/>
+    
+    <element name="RCIFRelationship" type="tns:RCIFRelationship_Type"/>
+    <element name="CardProperties" type="tns:CardProperties_Type"/>
+
+	<simpleType name="RCIFRelationship_Type">
+		<restriction base="string">
+			<maxLength value="3"/>
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="CardProperties_Type">
+		<restriction base="string">
+			<enumeration value="Y"/>
+			<enumeration value="N"/>
+		</restriction>
+	</simpleType>
+	
+    <complexType name="CustomerNumberRelationshipIdentifier_Type">
+    	<sequence>
+    		<element ref="tns:Identifier"/>
+    		<element ref="tns:RCIFRelationship"/>
+    		<element ref="tns:CardProperties"/>
+    	</sequence>
+    </complexType>
+    
+    <element name="CustomerNumberRelationshipIdentifier" type="tns:CustomerNumberRelationshipIdentifier_Type"/>	  
+    
+    <simpleType name="OverdraftOptInStatus_Type">
+    	<restriction base="string">
+    		<enumeration value="Y"/>
+			<enumeration value="N"/>
+			<enumeration value="I"/>
+			<enumeration value="O"/>
+			<enumeration value="X"/>
+			<enumeration value="D"/>
+    	</restriction>
+    </simpleType>      
+
+    <simpleType name="ACHOptInStatus_Type">
+    	<restriction base="string">
+    		<enumeration value="Y"/>
+			<enumeration value="N"/>
+			<enumeration value="I"/>
+			<enumeration value="O"/>
+			<enumeration value="X"/>
+			<enumeration value="D"/>
+    	</restriction>
+    </simpleType>      
+
+    <element name="OverdraftOptInDate" type="date"/>
+
+    <element name="ACHOptInDate" type="date"/>
+
+    <element name="LastMessageInterceptDate" type="date"/>
+    
+    <element name="OverdraftOptInStatus" type="tns:OverdraftOptInStatus_Type"/>
+
+    <complexType name="OverdraftOptInCurrentInformation_Type">
+    	<sequence>
+    		<element ref="tns:OverdraftOptInStatus"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:OverdraftOptInDate"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:Channel"/>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="OverdraftOptInPendingInformation_Type">
+    	<sequence>
+    		<element ref="tns:OverdraftOptInStatus"/>
+    		<element ref="tns:OverdraftOptInDate"/>
+    		<element ref="tns:Channel"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:TellerNumber"/>
+    	</sequence>
+    </complexType>    
+
+    <element name="OverdraftOptInCurrentInformation" type="tns:OverdraftOptInCurrentInformation_Type">
+    </element>
+    
+    <element name="OverdraftOptInPendingInformation" type="tns:OverdraftOptInPendingInformation_Type">
+    </element>
+    
+    <group name="OverdraftOptInInformation_Group">
+    	<sequence>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:OverdraftOptInCurrentInformation"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:OverdraftOptInPendingInformation">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastMessageInterceptDate"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:ProductDescription"/>    	
+    	</sequence>
+    </group>    
+
+    <element name="ACHOptInStatus" type="tns:ACHOptInStatus_Type"/>
+
+    <complexType name="ACHOptInCurrentInformation_Type">
+    	<sequence>
+    		<element ref="tns:ACHOptInStatus"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:ACHOptInDate"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:Channel"/>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="ACHOptInPendingInformation_Type">
+    	<sequence>
+    		<element ref="tns:ACHOptInStatus"/>
+    		<element ref="tns:ACHOptInDate"/>
+    		<element ref="tns:Channel"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:TellerNumber"/>
+    	</sequence>
+    </complexType>    
+
+    <element name="ACHOptInCurrentInformation" type="tns:ACHOptInCurrentInformation_Type">
+    </element>
+    
+    <element name="ACHOptInPendingInformation" type="tns:ACHOptInPendingInformation_Type">
+    </element>
+    
+    <group name="ACHOptInInformation_Group">
+    	<sequence>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:ACHOptInCurrentInformation"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:ACHOptInPendingInformation">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastMessageInterceptDate"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:ProductDescription"/>    	
+    	</sequence>
+    </group>    
+
+    <simpleType name="ProductDescription_Type">
+    	<restriction base="string">
+    		<maxLength value="40"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="ProductDescription" type="tns:ProductDescription_Type">
+    </element>
+
+    <complexType name="DepositsMaxHistory_Type">
+    	<sequence>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:DepositsMaxHistoryDate"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:TerminalID"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:TellerNumber"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:DepositsMaxHistoryFieldName"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:DepositsMaxHistoryFieldFromValue"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:DepositsMaxHistoryFieldToValue"/>
+    	</sequence>
+    </complexType>
+    
+    <element name="DepositsMaxHistoryDate" type="date"/>
+
+    <simpleType name="TerminalID_Type">
+    	<restriction base="string">
+    		<maxLength value="8"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="TerminalID" type="tns:TerminalID_Type"/>
+
+    <simpleType name="DepositsMaxHistoryFieldName_Type">
+    	<restriction base="string">
+    		<maxLength value="15"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="DepositsMaxHistoryFieldName" type="tns:DepositsMaxHistoryFieldName_Type">
+    </element>
+
+    <simpleType name="DepositsMaxHistoryFieldValue_Type">
+    	<restriction base="string">
+    		<maxLength value="40"/>
+    	</restriction>
+    </simpleType>
+
+
+    <element name="DepositsMaxHistoryFieldFromValue" type="tns:DepositsMaxHistoryFieldValue_Type">
+    </element>
+    
+    <element name="DepositsMaxHistoryFieldToValue" type="tns:DepositsMaxHistoryFieldValue_Type">
+    </element>
+
+    <simpleType name="DepositsMaxHistoryMatch_Type">
+    	<restriction base="string">
+    		<enumeration value="EQ"/>
+    		<enumeration value="CO"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="DepositsMaxHistoryMatch" type="tns:DepositsMaxHistoryMatch_Type"/>
+
+    <element name="DepositsMaxHistory" type="tns:DepositsMaxHistory_Type">
+    </element>
+
+    <simpleType name="DepositsMaxHistoryResultCount_Type">
+    	<restriction base="int"/>
+    </simpleType>
+
+    <element name="DepositsMaxHistoryResultCount" type="tns:DepositsMaxHistoryResultCount_Type"/>
+
+    <simpleType name="OfficialBankCheckAccountNumber_Type">
+    	<restriction base="string">
+    		<length value="13"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="OfficialBankCheckAccountNumber" type="tns:OfficialBankCheckAccountNumber_Type">
+    </element>
+
+    <simpleType name="OfficialBankCheckAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="OfficialBankCheckAmount" type="tns:OfficialBankCheckAmount_Type"/>
+
+    <simpleType name="OfficialBankCheckSerialNumber_Type">
+    	<restriction base="string">
+    		<length value="13"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="OfficialBankCheckSerialNumber" type="tns:OfficialBankCheckSerialNumber_Type">
+    </element>
+
+    <simpleType name="OfficialBankCheckPayee_Type">
+    	<restriction base="string">
+    		<maxLength value="80"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="OfficialBankCheckPayee" type="tns:OfficialBankCheckPayee_Type">
+    </element>
+
+    <simpleType name="OfficialBankCheckIDNumber_Type">
+    	<restriction base="string">
+    		<maxLength value="5"/>
+    		<minLength value="4"/>
+    	</restriction>
+    </simpleType>
+
+    <simpleType name="OfficialBankCheckIDType_Type">
+    	<restriction base="string">
+    		<enumeration value="T"/>
+    		<enumeration value="S"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="OfficialBankCheckIDNumber" type="tns:OfficialBankCheckIDNumber_Type">
+    </element>
+    
+    <element name="OfficialBankCheckIDType" type="tns:OfficialBankCheckIDType_Type">
+    </element>
+
+    <complexType name="OfficialBankCheckRequestIdentity_Type">
+    	<sequence>
+    		<element ref="tns:BankNumber"/>
+    		<element ref="tns:BranchNumber"/>
+    		<element ref="tns:OfficialBankCheckIDNumber"/>
+    		<element ref="tns:OfficialBankCheckIDType"/>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="OfficialBankCheckKeyIdentity_Type">
+    	<sequence>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:BankNumber"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:BranchNumber"/>
+    		<element ref="tns:OfficialBankCheckIDNumber"/>
+    		<element ref="tns:OfficialBankCheckIDType"/>
+    	</sequence>
+    </complexType>    
+
+    <element name="OfficialBankCheckRequestIdentity" type="tns:OfficialBankCheckRequestIdentity_Type">
+    </element>
+
+    <element name="OfficialBankCheckKeyIdentity" type="tns:OfficialBankCheckKeyIdentity_Type">
+    </element>
+
+    <element name="CheckDate" type="date"/>
+    <element name="TellerAccountVerificationRequestFunction" type="tns:TellerAccountVerificationRequestFunction_Type"/>
+    <simpleType name="TellerAccountVerificationRequestFunction_Type">
+    <list itemType="string"/>
+  </simpleType>
+    <simpleType name="TellerAccountVerificationResponseWhereFound_Type">
+    <list itemType="string"/>
+  </simpleType>
+    <element name="TellerAccountVerificationResponseWhereFound" type="tns:TellerAccountVerificationResponseWhereFound_Type"/>
+</schema>

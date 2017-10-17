@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Information1099" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="Information1099Binding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="Information1099_in">
+    <wsdl:part element="tns:Information1099Request" name="Information1099Request"/>
+  </wsdl:message>
+  <wsdl:message name="Information1099_out">
+    <wsdl:part element="tns:Information1099Response" name="Information1099Response"/>
+  </wsdl:message>
+  <wsdl:portType name="Information1099PortType">
+    <wsdl:operation name="Information1099">
+      <wsdl:input message="tns:Information1099_in" name="Information1099_Input"/>
+      <wsdl:output message="tns:Information1099_out" name="Information1099_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Information1099Binding" type="tns:Information1099PortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Information1099">
+      <soap:operation/>
+      <wsdl:input name="Information1099_Input">
+        <soap:body parts="Information1099Request" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="Information1099_Output">
+        <soap:body parts="Information1099Response" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Information1099Service">
+    <wsdl:port binding="tns:Information1099Binding" name="Information1099Provider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/Information1099"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

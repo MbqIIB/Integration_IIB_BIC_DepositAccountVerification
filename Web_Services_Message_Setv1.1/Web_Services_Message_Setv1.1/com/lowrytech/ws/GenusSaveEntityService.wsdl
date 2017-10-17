@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.lowrytech.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Genus_saveEntity" targetNamespace="http://ws.lowrytech.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="GenusSaveEntityBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://ws.lowrytech.com" targetNamespace="http://ws.lowrytech.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="GenusSaveEntity.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="saveEntity_in">
+    <wsdl:part element="tns:saveEntity" name="saveEntity"/>
+  </wsdl:message>
+  <wsdl:message name="saveEntity_out">
+    <wsdl:part element="tns:messages" name="messages"/>
+  </wsdl:message>
+  <wsdl:portType name="GenusSaveEntityPortType">
+    <wsdl:operation name="SaveEntity">
+      <wsdl:input message="tns:saveEntity_in" name="saveEntity_Input"/>
+      <wsdl:output message="tns:saveEntity_out" name="saveEntity_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GenusSaveEntityBinding" type="tns:GenusSaveEntityPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="SaveEntity">
+      <soap:operation/>
+      <wsdl:input name="saveEntity_Input">
+        <soap:body parts="saveEntity" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="saveEntity_Output">
+        <soap:body parts="messages" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GenusSaveEntityService">
+    <wsdl:port binding="tns:GenusSaveEntityBinding" name="GenusSaveEntityProvider">
+      <soap:address location="http://mn-webdev.tcfbank.com/Lowry_SDK_WebService/WSServlet/search/lpc_test_configuration_id/saveEntity"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

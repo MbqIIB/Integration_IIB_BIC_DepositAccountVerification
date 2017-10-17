@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:tns="http://www.tcfbank.com" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" elementFormDefault="qualified" jaxb:extensionBindingPrefixes="xjc" jaxb:version="1.0" targetNamespace="http://www.tcfbank.com">
+	
+    <include schemaLocation="tcfbank.mxsd"/>
+	
+	<complexType name="CustomerNumberRelationshipRequest_Type">
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:CustomerNumber"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CustomerNumberRelationshipResponse_Type">
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:CustomerNumber"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:CustomerNumberRelationshipOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CustomerNumberRelationshipOutput_Type">
+		<group ref="tns:CustomerRelationship_Group"/>
+	</complexType>
+	
+	<element name="CustomerNumberRelationshipOutput" type="tns:CustomerNumberRelationshipOutput_Type">
+	</element>
+
+	<element name="CustomerNumberRelationshipRequest" type="tns:CustomerNumberRelationshipRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CustomerNumberRelationshipRequest;XSDElementDeclaration=1$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="CustomerNumberRelationshipResponse" type="tns:CustomerNumberRelationshipResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CustomerNumberRelationshipResponse;XSDElementDeclaration=2$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>	
+</schema>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CISSystemAvailability" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="CISSystemAvailabilityBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="CISSystemAvailability_in">
+    <wsdl:part element="tns:CISSystemAvailabilityRequest" name="CISSystemAvailabilityRequest"/>
+  </wsdl:message>
+  <wsdl:message name="CISSystemAvailability_out">
+    <wsdl:part element="tns:CISSystemAvailabilityResponse" name="CISSystemAvailabilityResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="CISSystemAvailabilityPortType">
+    <wsdl:operation name="CISSystemAvailability">
+      <wsdl:input message="tns:CISSystemAvailability_in" name="CISSystemAvailability_Input"/>
+      <wsdl:output message="tns:CISSystemAvailability_out" name="CISSystemAvailability_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CISSystemAvailabilityBinding" type="tns:CISSystemAvailabilityPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CISSystemAvailability">
+      <soap:operation/>
+      <wsdl:input name="CISSystemAvailability_Input">
+        <soap:body parts="CISSystemAvailabilityRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CISSystemAvailability_Output">
+        <soap:body parts="CISSystemAvailabilityResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CISSystemAvailabilityService">
+    <wsdl:port binding="tns:CISSystemAvailabilityBinding" name="CISSystemAvailabilityProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/CISSystemAvailability"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

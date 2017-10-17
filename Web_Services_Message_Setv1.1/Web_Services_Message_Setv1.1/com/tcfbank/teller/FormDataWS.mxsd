@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema elementFormDefault="qualified" targetNamespace="http://teller.tcfbank.com" xmlns:tns="http://teller.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="AddFormData">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AddFormData;XSDElementDeclaration$MRObject" schemaObject="/0/AddFormData;XSDElementDeclaration">
+          <xmlMsgRep messageSetDefaultRep="XML1" outputPolicyForXsiTypeAttribute="Never"/>
+        </MRMessage>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" name="bankNumTeller" nillable="true" type="xsd:string"/>
+        <xsd:element minOccurs="0" name="branchNumTeller" nillable="true" type="xsd:string"/>
+        <xsd:element minOccurs="0" name="tellerNum" nillable="true" type="xsd:string"/>
+        <xsd:element minOccurs="0" name="formType" nillable="true" type="xsd:string"/>
+        <xsd:element minOccurs="0" name="messageData" nillable="true" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AddFormDataResponse">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AddFormDataResponse;XSDElementDeclaration=1$MRObject" schemaObject="/0/AddFormDataResponse;XSDElementDeclaration=1">
+          <xmlMsgRep messageSetDefaultRep="XML1" outputPolicyForXsiTypeAttribute="Never"/>
+        </MRMessage>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element minOccurs="0" name="AddFormDataResult" nillable="true" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

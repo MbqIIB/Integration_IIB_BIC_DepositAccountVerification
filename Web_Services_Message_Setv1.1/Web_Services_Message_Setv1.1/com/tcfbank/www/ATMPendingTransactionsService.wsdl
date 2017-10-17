@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ATMPendingTransactions" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="ATMPendingTransactionsBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ATMPendingTransactions_in">
+    <wsdl:part element="tns:ATMPendingTransactionsRequest" name="ATMPendingTransactionsRequest"/>
+  </wsdl:message>
+  <wsdl:message name="ATMPendingTransactions_out">
+    <wsdl:part element="tns:ATMPendingTransactionsResponse" name="ATMPendingTransactionsResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="ATMPendingTransactionsPortType">
+    <wsdl:operation name="ATMPendingTransactions">
+      <wsdl:input message="tns:ATMPendingTransactions_in" name="ATMPendingTransactions_Input"/>
+      <wsdl:output message="tns:ATMPendingTransactions_out" name="ATMPendingTransactions_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ATMPendingTransactionsBinding" type="tns:ATMPendingTransactionsPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="ATMPendingTransactions">
+      <soap:operation/>
+      <wsdl:input name="ATMPendingTransactions_Input">
+        <soap:body parts="ATMPendingTransactionsRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ATMPendingTransactions_Output">
+        <soap:body parts="ATMPendingTransactionsResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ATMPendingTransactionsService">
+    <wsdl:port binding="tns:ATMPendingTransactionsBinding" name="ATMPendingTransactionsProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/ATMPendingTransactions"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

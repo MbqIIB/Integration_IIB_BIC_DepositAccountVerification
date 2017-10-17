@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PaymentsSystemAvailability" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="PaymentsSystemAvailabilityBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="PaymentsSystemAvailability_in">
+    <wsdl:part element="tns:PaymentsSystemAvailabilityRequest" name="PaymentsSystemAvailabilityRequest"/>
+  </wsdl:message>
+  <wsdl:message name="PaymentsSystemAvailability_out">
+    <wsdl:part element="tns:PaymentsSystemAvailabilityResponse" name="PaymentsSystemAvailabilityResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="PaymentsSystemAvailabilityPortType">
+    <wsdl:operation name="PaymentsSystemAvailability">
+      <wsdl:input message="tns:PaymentsSystemAvailability_in" name="PaymentsSystemAvailability_Input"/>
+      <wsdl:output message="tns:PaymentsSystemAvailability_out" name="PaymentsSystemAvailability_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PaymentsSystemAvailabilityBinding" type="tns:PaymentsSystemAvailabilityPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="PaymentsSystemAvailability">
+      <soap:operation/>
+      <wsdl:input name="PaymentsSystemAvailability_Input">
+        <soap:body parts="PaymentsSystemAvailabilityRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="PaymentsSystemAvailability_Output">
+        <soap:body parts="PaymentsSystemAvailabilityResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PaymentsSystemAvailabilityService">
+    <wsdl:port binding="tns:PaymentsSystemAvailabilityBinding" name="PaymentsSystemAvailabilityProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/PaymentsSystemAvailability"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="FundsTransfer" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="FundsTransferBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="FundsTransfer_in">
+    <wsdl:part element="tns:FundsTransferRequest" name="FundsTransferRequest"/>
+  </wsdl:message>
+  <wsdl:message name="FundsTransfer_out">
+    <wsdl:part element="tns:FundsTransferResponse" name="FundsTransferResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="FundsTransferPortType">
+    <wsdl:operation name="FundsTransfer">
+      <wsdl:input message="tns:FundsTransfer_in" name="FundsTransfer_Input"/>
+      <wsdl:output message="tns:FundsTransfer_out" name="FundsTransfer_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FundsTransferBinding" type="tns:FundsTransferPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="FundsTransfer">
+      <soap:operation/>
+      <wsdl:input name="FundsTransfer_Input">
+        <soap:body parts="FundsTransferRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="FundsTransfer_Output">
+        <soap:body parts="FundsTransferResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FundsTransferService">
+    <wsdl:port binding="tns:FundsTransferBinding" name="FundsTransferProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/FundsTransfer"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

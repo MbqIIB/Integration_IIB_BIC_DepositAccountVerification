@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ATMSystemAvailability" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="ATMSystemAvailabilityBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ATMSystemAvailability_in">
+    <wsdl:part element="tns:ATMSystemAvailabilityRequest" name="ATMSystemAvailabilityRequest"/>
+  </wsdl:message>
+  <wsdl:message name="ATMSystemAvailability_out">
+    <wsdl:part element="tns:ATMSystemAvailabilityResponse" name="ATMSystemAvailabilityResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="ATMSystemAvailabilityPortType">
+    <wsdl:operation name="ATMSystemAvailability">
+      <wsdl:input message="tns:ATMSystemAvailability_in" name="ATMSystemAvailability_Input"/>
+      <wsdl:output message="tns:ATMSystemAvailability_out" name="ATMSystemAvailability_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ATMSystemAvailabilityBinding" type="tns:ATMSystemAvailabilityPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="ATMSystemAvailability">
+      <soap:operation/>
+      <wsdl:input name="ATMSystemAvailability_Input">
+        <soap:body parts="ATMSystemAvailabilityRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ATMSystemAvailability_Output">
+        <soap:body parts="ATMSystemAvailabilityResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ATMSystemAvailabilityService">
+    <wsdl:port binding="tns:ATMSystemAvailabilityBinding" name="ATMSystemAvailabilityProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/ATMSystemAvailability"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

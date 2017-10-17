@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="DepositAccountVerification" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="DepositAccountVerificationBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="retail.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="DepositAccountVerification_in">
+    <wsdl:part element="tns:DepositAccountVerificationRequest" name="DepositAccountVerificationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="DepositAccountVerification_out">
+    <wsdl:part element="tns:DepositAccountVerificationResponse" name="DepositAccountVerificationResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="DepositAccountVerificationPortType">
+    <wsdl:operation name="DepositAccountVerification">
+      <wsdl:input message="tns:DepositAccountVerification_in" name="DepositAccountVerification_Input"/>
+      <wsdl:output message="tns:DepositAccountVerification_out" name="DepositAccountVerification_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DepositAccountVerificationBinding" type="tns:DepositAccountVerificationPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="DepositAccountVerification">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="DepositAccountVerification_Input">
+        <soap:body parts="DepositAccountVerificationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="DepositAccountVerification_Output">
+        <soap:body parts="DepositAccountVerificationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DepositAccountVerificationService">
+    <wsdl:port binding="tns:DepositAccountVerificationBinding" name="DepositAccountVerificationProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/DepositAccountVerification"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

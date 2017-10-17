@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="AccountBalanceLookup" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="AccountBalanceLookupBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="AccountBalanceLookup_in">
+    <wsdl:part element="tns:AccountBalanceLookupRequest" name="AccountBalanceLookupRequest"/>
+  </wsdl:message>
+  <wsdl:message name="AccountBalanceLookup_out">
+    <wsdl:part element="tns:AccountBalanceLookupResponse" name="AccountBalanceLookupResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="AccountBalanceLookupPortType">
+    <wsdl:operation name="AccountBalanceLookup">
+      <wsdl:input message="tns:AccountBalanceLookup_in" name="AccountBalanceLookup_Input"/>
+      <wsdl:output message="tns:AccountBalanceLookup_out" name="AccountBalanceLookup_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AccountBalanceLookupBinding" type="tns:AccountBalanceLookupPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="AccountBalanceLookup">
+      <soap:operation/>
+      <wsdl:input name="AccountBalanceLookup_Input">
+        <soap:body parts="AccountBalanceLookupRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="AccountBalanceLookup_Output">
+        <soap:body parts="AccountBalanceLookupResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AccountBalanceLookupService">
+    <wsdl:port binding="tns:AccountBalanceLookupBinding" name="AccountBalanceLookupProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/AccountBalanceLookup"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

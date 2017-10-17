@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Order1099" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="Order1099Binding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="Order1099_in">
+    <wsdl:part element="tns:Order1099Request" name="Order1099Request"/>
+  </wsdl:message>
+  <wsdl:message name="Order1099_out">
+    <wsdl:part element="tns:Order1099Response" name="Order1099Response"/>
+  </wsdl:message>
+  <wsdl:portType name="Order1099PortType">
+    <wsdl:operation name="Order1099">
+      <wsdl:input message="tns:Order1099_in" name="Order1099_Input"/>
+      <wsdl:output message="tns:Order1099_out" name="Order1099_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Order1099Binding" type="tns:Order1099PortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Order1099">
+      <soap:operation/>
+      <wsdl:input name="Order1099_Input">
+        <soap:body parts="Order1099Request" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="Order1099_Output">
+        <soap:body parts="Order1099Response" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Order1099Service">
+    <wsdl:port binding="tns:Order1099Binding" name="Order1099Provider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/Order1099"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

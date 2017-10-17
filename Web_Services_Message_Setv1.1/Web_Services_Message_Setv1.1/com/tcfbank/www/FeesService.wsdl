@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Fees" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="FeesBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="Fees_in">
+    <wsdl:part element="tns:FeesRequest" name="FeesRequest"/>
+  </wsdl:message>
+  <wsdl:message name="Fees_out">
+    <wsdl:part element="tns:FeesResponse" name="FeesResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="FeesPortType">
+    <wsdl:operation name="Fees">
+      <wsdl:input message="tns:Fees_in" name="Fees_Input"/>
+      <wsdl:output message="tns:Fees_out" name="Fees_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FeesBinding" type="tns:FeesPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Fees">
+      <soap:operation/>
+      <wsdl:input name="Fees_Input">
+        <soap:body parts="FeesRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="Fees_Output">
+        <soap:body parts="FeesResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FeesService">
+    <wsdl:port binding="tns:FeesBinding" name="FeesProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/Fees"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

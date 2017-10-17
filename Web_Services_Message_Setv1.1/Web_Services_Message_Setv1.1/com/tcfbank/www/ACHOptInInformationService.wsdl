@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ACHOptInInformation" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="ACHOptInInformationBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="retail.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ACHOptInInformation_in">
+    <wsdl:part element="tns:ACHOptInInformationRequest" name="ACHOptInInformationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="ACHOptInInformation_out">
+    <wsdl:part element="tns:ACHOptInInformationResponse" name="ACHOptInInformationResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="ACHOptInInformationPortType">
+    <wsdl:operation name="ACHOptInInformation">
+      <wsdl:input message="tns:ACHOptInInformation_in" name="ACHOptInInformation_Input"/>
+      <wsdl:output message="tns:ACHOptInInformation_out" name="ACHOptInInformation_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ACHOptInInformationBinding" type="tns:ACHOptInInformationPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="ACHOptInInformation">
+      <soap:operation/>
+      <wsdl:input name="ACHOptInInformation_Input">
+        <soap:body parts="ACHOptInInformationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ACHOptInInformation_Output">
+        <soap:body parts="ACHOptInInformationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ACHOptInInformationService">
+    <wsdl:port binding="tns:ACHOptInInformationBinding" name="ACHOptInInformationProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/ACHOptInInformation"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

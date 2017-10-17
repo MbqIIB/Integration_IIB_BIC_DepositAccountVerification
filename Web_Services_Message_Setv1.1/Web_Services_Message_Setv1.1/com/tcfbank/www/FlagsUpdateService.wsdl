@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="FlagsUpdate" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="FlagsUpdateBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="FlagsUpdate_in">
+    <wsdl:part element="tns:FlagsUpdateRequest" name="FlagsUpdateRequest"/>
+  </wsdl:message>
+  <wsdl:message name="FlagsUpdate_out">
+    <wsdl:part element="tns:FlagsUpdateResponse" name="FlagsUpdateResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="FlagsUpdatePortType">
+    <wsdl:operation name="FlagsUpdate">
+      <wsdl:input message="tns:FlagsUpdate_in" name="FlagsUpdate_Input"/>
+      <wsdl:output message="tns:FlagsUpdate_out" name="FlagsUpdate_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FlagsUpdateBinding" type="tns:FlagsUpdatePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="FlagsUpdate">
+      <soap:operation/>
+      <wsdl:input name="FlagsUpdate_Input">
+        <soap:body parts="FlagsUpdateRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="FlagsUpdate_Output">
+        <soap:body parts="FlagsUpdateResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FlagsUpdateService">
+    <wsdl:port binding="tns:FlagsUpdateBinding" name="FlagsUpdateProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/FlagsUpdate"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

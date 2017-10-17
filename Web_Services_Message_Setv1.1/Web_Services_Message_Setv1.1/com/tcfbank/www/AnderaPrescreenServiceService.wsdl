@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions name="AnderaPrescreenService" targetNamespace="http://www.tcfbank.com" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="AnderaPrescreenBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.tcfbank.com" xmlns:mrm="http://www.tcfbank.com">
+      <xsd:include schemaLocation="tcfwk.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="AnderaPrescreen_in">
+    <wsdl:part element="tns:AnderaPrescreenRequest" name="AnderaPrescreenRequest"/>
+  </wsdl:message>
+  <wsdl:message name="AnderaPrescreen_out">
+    <wsdl:part element="tns:AnderaPrescreenResponse" name="AnderaPrescreenResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="AnderaPrescreenPortType">
+    <wsdl:operation name="AnderaPrescreen">
+      <wsdl:input message="tns:AnderaPrescreen_in" name="AnderaPrescreen_Input"/>
+      <wsdl:output message="tns:AnderaPrescreen_out" name="AnderaPrescreen_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AnderaPrescreenBinding" type="tns:AnderaPrescreenPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="AnderaPrescreen">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="AnderaPrescreen_Input">
+        <soap:body parts="AnderaPrescreenRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="AnderaPrescreen_Output">
+        <soap:body parts="AnderaPrescreenResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AnderaPrescreenService">
+    <wsdl:port binding="tns:AnderaPrescreenBinding" name="AnderaPrescreenProvider">
+      <soap:address location="https://nyx.tcfbank.com:7900/mb/claws/AnderaPrescreen"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

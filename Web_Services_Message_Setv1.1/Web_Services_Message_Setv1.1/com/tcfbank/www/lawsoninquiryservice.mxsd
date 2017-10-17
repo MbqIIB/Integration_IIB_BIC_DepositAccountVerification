@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:tns="http://www.tcfbank.com" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" elementFormDefault="qualified" jaxb:extensionBindingPrefixes="xjc" jaxb:version="1.0" targetNamespace="http://www.tcfbank.com">
+	
+    <include schemaLocation="tcfbank.mxsd"/>
+	
+    <simpleType name="LawsonId_Type">
+    	<restriction base="string">
+    		<maxLength value="6"/>
+    	</restriction>
+    </simpleType>
+    
+    <simpleType name="LawsonRuleName_Type">
+    	<restriction base="string">
+    		<maxLength value="40"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="LawsonId" type="tns:LawsonId_Type"/>
+    	
+    <element name="LawsonRuleName" type="tns:LawsonRuleName_Type"/>
+
+    <complexType name="LawsonInquiryRequest_Type">
+    	<complexContent>
+    		<extension base="tns:Request_Type">
+    			<sequence>
+                    <element ref="tns:LawsonId"/>
+                    <element ref="tns:LawsonRuleName"/>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="LawsonInquiryResponse_Type">
+    	<complexContent>
+    		<extension base="tns:Response_Type"/>
+    	</complexContent>
+    </complexType>    
+    
+    <element name="LawsonInquiryRequest" type="tns:LawsonInquiryRequest_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/LawsonInquiryRequest;XSDElementDeclaration=2$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+    <element name="LawsonInquiryResponse" type="tns:LawsonInquiryResponse_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/LawsonInquiryResponse;XSDElementDeclaration=3$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+</schema>

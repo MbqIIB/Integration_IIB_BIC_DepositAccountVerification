@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ctrmil="http://www.tcfbank.com/ctrmil/" xmlns:tns="http://www.tcfbank.com" elementFormDefault="qualified" targetNamespace="http://www.tcfbank.com">
+    <include schemaLocation="tcfbank.mxsd"/>
+    <import namespace="http://www.tcfbank.com/ctrmil/" schemaLocation="ctrmil/ctrmil.mxsd"/>
+
+	<complexType name="CTRDocumentRequest_Type">
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="ctrmil:CTRDocument"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="CTRDocumentResponse_Type">
+		<complexContent>
+			<extension base="tns:Response_Type"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="MILDocumentRequest_Type">
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="ctrmil:MILDocument"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="MILDocumentResponse_Type">
+		<complexContent>
+			<extension base="tns:Response_Type"/>
+		</complexContent>
+	</complexType>
+
+	<element name="CTRDocumentRequest" type="tns:CTRDocumentRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CTRDocumentRequest;XSDElementDeclaration$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="CTRDocumentResponse" type="tns:CTRDocumentResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CTRDocumentResponse;XSDElementDeclaration=1$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="MILDocumentRequest" type="tns:MILDocumentRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MILDocumentRequest;XSDElementDeclaration=2$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="MILDocumentResponse" type="tns:MILDocumentResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/MILDocumentResponse;XSDElementDeclaration=3$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+</schema>

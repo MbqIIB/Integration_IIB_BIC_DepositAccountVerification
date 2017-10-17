@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CardInformation" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="CardInformationBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="CardInformation_in">
+    <wsdl:part element="tns:CardInformationRequest" name="CardInformationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="CardInformation_out">
+    <wsdl:part element="tns:CardInformationResponse" name="CardInformationResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="CardInformationPortType">
+    <wsdl:operation name="CardInformation">
+      <wsdl:input message="tns:CardInformation_in" name="CardInformation_Input"/>
+      <wsdl:output message="tns:CardInformation_out" name="CardInformation_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CardInformationBinding" type="tns:CardInformationPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CardInformation">
+      <soap:operation/>
+      <wsdl:input name="CardInformation_Input">
+        <soap:body parts="CardInformationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CardInformation_Output">
+        <soap:body parts="CardInformationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CardInformationService">
+    <wsdl:port binding="tns:CardInformationBinding" name="CardInformationProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/CardInformation"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

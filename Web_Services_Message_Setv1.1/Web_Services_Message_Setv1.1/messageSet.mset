@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<msgCoreModel:MRMessageSet xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:MSGModel="http://www.ibm.com/msgmodel/2003/MSGModel" xmlns:msgCoreModel="http://www.ibm.com/msgmodel/2003/MSGCoreModel" name="Web_Services_Message_Setv1.1" parserDomain="SOAP" msetVersionNo="1.1" currentMessageSetId="//@MRMessageSetID.0">
+  <MRMessageSetRep xsi:type="MSGModel:MRXMLMessageSetRep" name="XML1" timeZoneID="0" allowLenientDateTimes="false" suppressDOCTYPE="true" doctypeSystemID="www.mrmnames.net/AK2EJRK002001" doctypePublicID="AK2EJRK002001" rootTagName=""/>
+  <MRMessageSetID repositoryId="168416221" messageSetId="1"/>
+  <otherSupportedDomains parserDomain="XMLNSC"/>
+</msgCoreModel:MRMessageSet>

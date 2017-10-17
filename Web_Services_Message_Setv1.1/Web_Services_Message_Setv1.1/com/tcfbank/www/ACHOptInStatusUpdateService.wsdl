@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ACHOptInStatusUpdate" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="ACHOptInStatusUpdateBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="retail.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ACHOptInStatusUpdate_in">
+    <wsdl:part element="tns:ACHOptInStatusUpdateRequest" name="ACHOptInStatusUpdateRequest"/>
+  </wsdl:message>
+  <wsdl:message name="ACHOptInStatusUpdate_out">
+    <wsdl:part element="tns:ACHOptInStatusUpdateResponse" name="ACHOptInStatusUpdateResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="ACHOptInStatusUpdatePortType">
+    <wsdl:operation name="ACHOptInStatusUpdate">
+      <wsdl:input message="tns:ACHOptInStatusUpdate_in" name="ACHOptInStatusUpdate_Input"/>
+      <wsdl:output message="tns:ACHOptInStatusUpdate_out" name="ACHOptInStatusUpdate_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ACHOptInStatusUpdateBinding" type="tns:ACHOptInStatusUpdatePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="ACHOptInStatusUpdate">
+      <soap:operation/>
+      <wsdl:input name="ACHOptInStatusUpdate_Input">
+        <soap:body parts="ACHOptInStatusUpdateRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ACHOptInStatusUpdate_Output">
+        <soap:body parts="ACHOptInStatusUpdateResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ACHOptInStatusUpdateService">
+    <wsdl:port binding="tns:ACHOptInStatusUpdateBinding" name="ACHOptInStatusUpdateProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/ACHOptInStatusUpdate"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

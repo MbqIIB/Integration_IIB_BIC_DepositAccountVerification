@@ -1,0 +1,25 @@
+
+
+Exporting WSDL definition: \Web_Services_Message_Setv1.1\Web_Services_Message_Setv1.1\com\tcfbank\www\AccountBalanceLookupService.wsdl
+
+Removing WSDL annotations from: AccountBalanceLookupService.wsdl
+Updated XSD directive schema location from tcfbank.mxsd to tcfbank.xsd
+Starting XSD generation
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/www/tcfbank.mxsd"
+
+Saving File : "h:\mte\tcfbank.xsd" 
+
+XSD generation finished
+Generating XML Schema file <missing argument> from Message Definition file <missing argument>
+
+
+Export completed.
+
+

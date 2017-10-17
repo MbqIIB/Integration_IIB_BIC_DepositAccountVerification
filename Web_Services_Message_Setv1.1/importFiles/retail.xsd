@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?><schema elementFormDefault="unqualified" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" jaxb:extensionBindingPrefixes="xjc" jaxb:version="1.0" targetNamespace="http://www.tcfbank.com" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cif="http://www.tcfbank.com/cif/" xmlns:tns="http://www.tcfbank.com" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc">
+
+    <include schemaLocation="tcfbank.xsd"/>
+    <import namespace="http://www.tcfbank.com/cif/" schemaLocation="cif/CIFChange.xsd"/>
+
+	<complexType name="CIFDataRequest_Type">
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="cif:CIFChangeRequest"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="CIFDataResponse_Type">
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:CIFDataOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="CIFDataOutput_Type">
+		<sequence>
+			<element minOccurs="0" ref="cif:CIFChangeResponse"/>
+		</sequence>
+	</complexType>
+	
+    <element name="CIFDataOutput" type="tns:CIFDataOutput_Type">
+  </element>
+    <element name="CIFDataRequest" type="tns:CIFDataRequest_Type">
+    </element>
+    <element name="CIFDataResponse" type="tns:CIFDataResponse_Type">
+    </element>
+
+    <complexType name="DepositAccountVerificationRequest_Type">
+    	<complexContent>
+    		<extension base="tns:Request_Type">
+    			<sequence>
+    				<element ref="tns:AccountNumber"/>
+    				<element maxOccurs="1" minOccurs="0" ref="tns:BankNumber">
+    				</element>
+
+    				<element maxOccurs="1" minOccurs="0" ref="tns:Application"/>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    
+    <complexType name="DepositAccountVerificationResponse_Type">
+    	<complexContent>
+    		<extension base="tns:Response_Type">
+    			<sequence>
+    				<element ref="tns:AccountNumber"/>
+    				<element maxOccurs="1" minOccurs="0" ref="tns:BankNumber">
+    				</element>
+                    <element maxOccurs="1" minOccurs="0" ref="tns:Application"/>
+                    <element maxOccurs="1" minOccurs="0" ref="tns:DepositAccountVerificationOutput">
+    				</element>
+
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    
+    <complexType name="DepositAccountVerificationOutput_Type">
+    	<sequence>
+    		<element maxOccurs="unbounded" minOccurs="1" ref="tns:DepositAccountVerificationInformation"/>
+    	</sequence>
+    </complexType>
+
+    <complexType name="DepositAccountVerificationInformation_Type">
+    	<sequence>
+    		<element ref="tns:BankNumber"/>
+    		<element ref="tns:Application"/>
+
+            <element ref="tns:OpenClosedStatus"/>
+            <element ref="tns:AccountTypeValue"/>
+    		<element ref="tns:BranchNumber"/>
+
+    	</sequence>
+    </complexType>
+    
+
+    <element name="DepositAccountVerificationRequest" type="tns:DepositAccountVerificationRequest_Type">
+    </element>
+
+    <element name="DepositAccountVerificationResponse" type="tns:DepositAccountVerificationResponse_Type">
+    </element>
+
+    <element name="DepositAccountVerificationOutput" type="tns:DepositAccountVerificationOutput_Type">
+  </element>
+
+    <element name="DepositAccountVerificationInformation" type="tns:DepositAccountVerificationInformation_Type">
+  </element>
+
+    <complexType name="OverdraftOptInStatusUpdateRequest_Type">
+    	<complexContent>
+    		<extension base="tns:Request_Type">
+    			<sequence>
+                    <element ref="tns:AccountIdentifier"/>
+                    <element minOccurs="1" ref="tns:TellerNumber"/>
+                    <element ref="tns:OverdraftOptInStatus"/>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="OverdraftOptInStatusUpdateResponse_Type">
+    	<complexContent>
+    		<extension base="tns:Response_Type">
+    			<sequence>
+                    <element ref="tns:AccountIdentifier"/>
+                    <element minOccurs="0" ref="tns:TellerNumber"/>
+                    <element minOccurs="1" ref="tns:OverdraftOptInStatus"/>
+
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    
+    <element name="OverdraftOptInStatusUpdateRequest" type="tns:OverdraftOptInStatusUpdateRequest_Type">
+    </element>
+
+    <element name="OverdraftOptInStatusUpdateResponse" type="tns:OverdraftOptInStatusUpdateResponse_Type">
+    </element>    
+    
+    <complexType name="OverdraftOptInInformationRequest_Type">
+    	<complexContent>
+    		<extension base="tns:Request_Type">
+    			<sequence>
+    				<element ref="tns:AccountIdentifier"/>
+    			</sequence>
+    		</extension>
+    	</complexContent>    
+    </complexType>
+    
+    <complexType name="OverdraftOptInInformationResponse_Type">
+    	<complexContent>
+    		<extension base="tns:Response_Type">
+    			<sequence>
+    				<element ref="tns:AccountIdentifier"/>
+    				<element maxOccurs="1" minOccurs="0" ref="tns:OverdraftOptInInformationOutput"/>
+    			</sequence>
+    		</extension>
+    	</complexContent>    
+    </complexType>   
+    
+    <complexType name="OverdraftOptInInformationOutput_Type">
+    	<sequence>
+    		<group ref="tns:OverdraftOptInInformation_Group"/>    		
+    	</sequence>
+    </complexType>
+    
+    <element name="OverdraftOptInInformationRequest" type="tns:OverdraftOptInInformationRequest_Type">
+    </element>
+    
+    <element name="OverdraftOptInInformationResponse" type="tns:OverdraftOptInInformationResponse_Type">
+    </element>
+    
+    <element name="OverdraftOptInInformationOutput" type="tns:OverdraftOptInInformationOutput_Type">
+    </element>
+    <complexType name="ACHOptInStatusUpdateRequest_Type">
+    	<complexContent>
+    		<extension base="tns:Request_Type">
+    			<sequence>
+                    <element ref="tns:AccountIdentifier"/>
+                    <element minOccurs="1" ref="tns:TellerNumber"/>
+                    <element ref="tns:ACHOptInStatus"/>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="ACHOptInStatusUpdateResponse_Type">
+    	<complexContent>
+    		<extension base="tns:Response_Type">
+    			<sequence>
+                    <element ref="tns:AccountIdentifier"/>
+                    <element minOccurs="0" ref="tns:TellerNumber"/>
+                    <element minOccurs="1" ref="tns:ACHOptInStatus"/>
+
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    
+    <element name="ACHOptInStatusUpdateRequest" type="tns:ACHOptInStatusUpdateRequest_Type">
+    </element>
+
+    <element name="ACHOptInStatusUpdateResponse" type="tns:ACHOptInStatusUpdateResponse_Type">
+    </element>    
+    
+    <complexType name="ACHOptInInformationRequest_Type">
+    	<complexContent>
+    		<extension base="tns:Request_Type">
+    			<sequence>
+    				<element ref="tns:AccountIdentifier"/>
+    			</sequence>
+    		</extension>
+    	</complexContent>    
+    </complexType>
+    
+    <complexType name="ACHOptInInformationResponse_Type">
+    	<complexContent>
+    		<extension base="tns:Response_Type">
+    			<sequence>
+    				<element ref="tns:AccountIdentifier"/>
+    				<element maxOccurs="1" minOccurs="0" ref="tns:ACHOptInInformationOutput"/>
+    			</sequence>
+    		</extension>
+    	</complexContent>    
+    </complexType>   
+    
+    <complexType name="ACHOptInInformationOutput_Type">
+    	<sequence>
+    		<group ref="tns:ACHOptInInformation_Group"/>    		
+    	</sequence>
+    </complexType>
+    
+    <element name="ACHOptInInformationRequest" type="tns:ACHOptInInformationRequest_Type">
+    </element>
+    
+    <element name="ACHOptInInformationResponse" type="tns:ACHOptInInformationResponse_Type">
+    </element>
+    
+    <element name="ACHOptInInformationOutput" type="tns:ACHOptInInformationOutput_Type">
+    </element>
+    
+    <complexType name="OnlineBankingOverdraftOptInInformationOutput_Type">
+    	<sequence>
+    		<element maxOccurs="unbounded" minOccurs="1" ref="tns:OnlineBankingOverdraftOptInInformation"/>
+    	</sequence>
+    </complexType>    
+    
+    <complexType name="OnlineBankingOverdraftOptInInformation_Type">
+    	<sequence>
+    		<element ref="tns:AccountIdentifier"/>
+    		<group ref="tns:OverdraftOptInInformation_Group"/>
+			<element ref="tns:ACHOptInInformation" maxOccurs="1" minOccurs="0" />
+    	</sequence>    
+    </complexType>    
+    
+    <element name="OnlineBankingOverdraftOptInInformation" type="tns:OnlineBankingOverdraftOptInInformation_Type">
+    </element>     
+    
+    <element name="OnlineBankingOverdraftOptInInformationOutput" type="tns:OnlineBankingOverdraftOptInInformationOutput_Type">
+    </element>
+
+    <complexType name="OnlineBankingOverdraftOptInInformationRequest_Type">
+    	<complexContent>
+    		<extension base="tns:Request_Type">
+    			<sequence>
+    				<element ref="tns:TaxIdentificationNumber"/>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="OnlineBankingOverdraftOptInInformationResponse_Type">
+    	<complexContent>
+    		<extension base="tns:Response_Type">
+    			<sequence>
+    				<element ref="tns:TaxIdentificationNumber"/>
+    				<element maxOccurs="1" minOccurs="0" ref="tns:OnlineBankingOverdraftOptInInformationOutput"/>
+    			</sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <element name="OnlineBankingOverdraftOptInInformationResponse" type="tns:OnlineBankingOverdraftOptInInformationResponse_Type">
+    </element>
+    
+    <element name="OnlineBankingOverdraftOptInInformationRequest" type="tns:OnlineBankingOverdraftOptInInformationRequest_Type">
+    </element>
+
+
+    <complexType name="DepositsMaxHistoryLookupRequest_Type">
+    	<complexContent>
+    		<extension base="tns:Request_Type">
+    			<sequence>
+    				<element ref="tns:AccountIdentifier"/>
+                    <element minOccurs="0" ref="tns:DepositsMaxHistoryMatch"/>
+                    <element minOccurs="0" ref="tns:DepositsMaxHistoryFieldName"/>
+                </sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+    <complexType name="DepositsMaxHistoryLookupResponse_Type">
+    	<complexContent>
+    		<extension base="tns:Response_Type">
+    			<sequence>
+    				<element ref="tns:AccountIdentifier"/>
+                    <element minOccurs="0" ref="tns:DepositsMaxHistoryMatch"/>
+                    <element minOccurs="0" ref="tns:DepositsMaxHistoryFieldName"/>
+                    <element minOccurs="0" ref="tns:DepositsMaxHistoryLookupOutput"/>
+                </sequence>
+    		</extension>
+    	</complexContent>
+    </complexType>
+
+    <complexType name="DepositsMaxHistoryLookupOutput_Type">
+    	<sequence>
+            <element minOccurs="0" ref="tns:DepositsMaxHistoryResultCount"/>
+            <element maxOccurs="unbounded" minOccurs="0" ref="tns:DepositsMaxHistory">
+    		</element>
+
+    	</sequence>
+    </complexType>
+
+    <element name="DepositsMaxHistoryLookupRequest" type="tns:DepositsMaxHistoryLookupRequest_Type">
+    </element>
+
+    <element name="DepositsMaxHistoryLookupResponse" type="tns:DepositsMaxHistoryLookupResponse_Type">
+    </element>
+
+    <element name="DepositsMaxHistoryLookupOutput" type="tns:DepositsMaxHistoryLookupOutput_Type">
+    </element>
+    <element name="OverdraftOptInStatusUpdateRequest_Type" type="tns:OverdraftOptInStatusUpdateRequest_Type">
+  </element>
+    <element name="OverdraftOptInStatusUpdateResponse_Type" type="tns:OverdraftOptInStatusUpdateResponse_Type">
+  </element>
+    <element name="OverdraftOptInInformationRequest_Type" type="tns:OverdraftOptInInformationRequest_Type">
+  </element>
+    <element name="OverdraftOptInInformationResponse_Type" type="tns:OverdraftOptInInformationResponse_Type">
+  </element>
+    <element name="OverdraftOptInInformationOutput_Type" type="tns:OverdraftOptInInformationOutput_Type">
+  </element>
+    <element name="ACHOptInStatusUpdateRequest_Type" type="tns:ACHOptInStatusUpdateRequest_Type">
+  </element>
+    <element name="ACHOptInStatusUpdateResponse_Type" type="tns:ACHOptInStatusUpdateResponse_Type">
+  </element>
+    <element name="ACHOptInInformationRequest_Type" type="tns:ACHOptInInformationRequest_Type">
+  </element>
+    <element name="ACHOptInInformationResponse_Type" type="tns:ACHOptInInformationResponse_Type">
+  </element>
+    <element name="ACHOptInInformationOutput_Type" type="tns:ACHOptInInformationOutput_Type">
+  </element>
+    <element name="OnlineBankingOverdraftOptInInformationOutput_Type" type="tns:OnlineBankingOverdraftOptInInformationOutput_Type">
+  </element>
+    <element name="OnlineBankingOverdraftOptInInformation_Type" type="tns:OnlineBankingOverdraftOptInInformation_Type">
+  </element>
+    <element name="OnlineBankingOverdraftOptInInformationRequest_Type" type="tns:OnlineBankingOverdraftOptInInformationRequest_Type">
+  </element>
+    <element name="OnlineBankingOverdraftOptInInformationResponse_Type" type="tns:OnlineBankingOverdraftOptInInformationResponse_Type">
+  </element>
+    <element name="DepositsMaxHistoryLookupRequest_Type" type="tns:DepositsMaxHistoryLookupRequest_Type">
+  </element>
+    <element name="DepositsMaxHistoryLookupResponse_Type" type="tns:DepositsMaxHistoryLookupResponse_Type">
+  </element>
+    <element name="DepositsMaxHistoryLookupOutput_Type" type="tns:DepositsMaxHistoryLookupOutput_Type">
+  </element>
+    <complexType name="TellerAccountVerificationRequest_Type">
+    <complexContent>
+      <extension base="tns:Request_Type">
+        <sequence>
+                    <element ref="tns:AccountNumber"/>
+          <element maxOccurs="1" minOccurs="0" ref="tns:BankNumber"/>
+          <element maxOccurs="1" minOccurs="0" ref="tns:Application"/>
+                </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+    <complexType name="TellerAccountVerificationResponse_Type">
+    <complexContent>
+      <extension base="tns:Response_Type">
+        <sequence>
+          <element ref="tns:AccountNumber"/>
+          <element maxOccurs="1" minOccurs="0" ref="tns:BankNumber"/>
+          <element maxOccurs="1" minOccurs="0" ref="tns:Application"/>
+          <element minOccurs="0" ref="tns:TellerAccountVerificationOutput"/>
+        </sequence>
+      </extension>
+    </complexContent>
+  </complexType>
+    <complexType name="TellerAccountVerificationOutput_Type">
+    <sequence>
+      <element minOccurs="0" ref="tns:TellerAccountVerificationResponseWhereFound"/>
+      <element maxOccurs="10" minOccurs="0" ref="tns:TellerAccountVerificationInformation"/>
+    </sequence>
+  </complexType>
+    <element name="TellerAccountVerificationRequest" type="tns:TellerAccountVerificationRequest_Type">
+  </element>
+    <element name="TellerAccountVerificationResponse" type="tns:TellerAccountVerificationResponse_Type">
+  </element>
+    <complexType name="TellerAccountVerificationInformation_Type">
+    <sequence>
+      <element ref="tns:BankNumber"/>
+            <element ref="tns:Application"/>
+            <element ref="tns:OpenClosedStatus"/>
+      <element ref="tns:AccountTypeValue"/>
+      <element ref="tns:BranchNumber"/>
+    </sequence>
+  </complexType>
+    <element name="TellerAccountVerificationOutput" type="tns:TellerAccountVerificationOutput_Type"/>
+    <element name="TellerAccountVerificationInformation" type="tns:TellerAccountVerificationInformation_Type"/>	
+	<complexType name="ACHOptInInformation_Type">
+		<sequence>
+			<element maxOccurs="1" minOccurs="0" ref="tns:ACHOptInCurrentInformation"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:ACHOptInPendingInformation"/>
+			<element maxOccurs="1" minOccurs="0" ref="tns:LastMessageInterceptDate"/>
+		</sequence>
+	</complexType>
+	<element name="ACHOptInInformation" type="tns:ACHOptInInformation_Type"/>	
+</schema>

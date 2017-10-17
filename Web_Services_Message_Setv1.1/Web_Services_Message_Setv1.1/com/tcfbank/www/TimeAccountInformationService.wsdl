@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TimeAccountInformation" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="TimeAccountInformationBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tdaservice.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="TimeAccountInformation_in">
+    <wsdl:part element="tns:TimeAccountInformationRequest" name="TimeAccountInformationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="TimeAccountInformation_out">
+    <wsdl:part element="tns:TimeAccountInformationResponse" name="TimeAccountInformationResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="TimeAccountInformationPortType">
+    <wsdl:operation name="TimeAccountInformation">
+      <wsdl:input message="tns:TimeAccountInformation_in" name="TimeAccountInformation_Input"/>
+      <wsdl:output message="tns:TimeAccountInformation_out" name="TimeAccountInformation_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TimeAccountInformationBinding" type="tns:TimeAccountInformationPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="TimeAccountInformation">
+      <soap:operation/>
+      <wsdl:input name="TimeAccountInformation_Input">
+        <soap:body parts="TimeAccountInformationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TimeAccountInformation_Output">
+        <soap:body parts="TimeAccountInformationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TimeAccountInformationService">
+    <wsdl:port binding="tns:TimeAccountInformationBinding" name="TimeAccountInformationProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/TimeAccountInformation"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

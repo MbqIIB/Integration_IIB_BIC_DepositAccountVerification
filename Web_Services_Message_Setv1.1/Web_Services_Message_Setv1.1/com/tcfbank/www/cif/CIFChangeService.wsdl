@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com/cif/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CIFChange" targetNamespace="http://www.tcfbank.com/cif/">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="CIFWebServiceSOAP" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com/cif/" targetNamespace="http://www.tcfbank.com/cif/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="CIFChange.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="CIFChange_in">
+    <wsdl:part element="tns:CIFChangeRequest" name="CIFChangeRequest"/>
+  </wsdl:message>
+  <wsdl:message name="CIFChange_out">
+    <wsdl:part element="tns:CIFChangeResponse" name="CIFChangeResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="CIFWebService">
+    <wsdl:operation name="CIFChange">
+      <wsdl:input message="tns:CIFChange_in" name="CIFChange_Input"/>
+      <wsdl:output message="tns:CIFChange_out" name="CIFChange_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CIFWebServiceSOAP" type="tns:CIFWebService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CIFChange">
+      <soap:operation soapAction="http://www.tcfbank.com/cif/CIFChange"/>
+      <wsdl:input name="CIFChange_Input">
+        <soap:body parts="CIFChangeRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CIFChange_Output">
+        <soap:body parts="CIFChangeResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CIFWebService">
+    <wsdl:port binding="tns:CIFWebServiceSOAP" name="CIFWebServiceSOAP">
+      <soap:address location="http://mn-webdev.tcfbank.com/cif/CIFWebService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

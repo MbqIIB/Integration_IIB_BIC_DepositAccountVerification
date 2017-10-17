@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TellerAccountVerification" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="TellerAccountVerificationBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="retail.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="TellerAccountVerification_in">
+    <wsdl:part element="tns:TellerAccountVerificationRequest" name="TellerAccountVerificationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="TellerAccountVerification_out">
+    <wsdl:part element="tns:TellerAccountVerificationResponse" name="TellerAccountVerificationResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="TellerAccountVerificationPortType">
+    <wsdl:operation name="TellerAccountVerification">
+      <wsdl:input message="tns:TellerAccountVerification_in" name="TellerAccountVerification_Input"/>
+      <wsdl:output message="tns:TellerAccountVerification_out" name="TellerAccountVerification_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TellerAccountVerificationBinding" type="tns:TellerAccountVerificationPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="TellerAccountVerification">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="TellerAccountVerification_Input">
+        <soap:body parts="TellerAccountVerificationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TellerAccountVerification_Output">
+        <soap:body parts="TellerAccountVerificationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TellerAccountVerificationService">
+    <wsdl:port binding="tns:TellerAccountVerificationBinding" name="TellerAccountVerificationProvider">
+      <soap:address location="https://hera.tcfbank.com:7910/mb/ssl/TellerAccountVerification"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

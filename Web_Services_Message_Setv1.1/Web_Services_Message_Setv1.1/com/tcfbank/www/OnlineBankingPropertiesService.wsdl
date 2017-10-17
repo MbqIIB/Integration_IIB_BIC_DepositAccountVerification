@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="OnlineBankingProperties" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="OnlineBankingPropertiesBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="OnlineBankingProperties_in">
+    <wsdl:part element="tns:OnlineBankingPropertiesRequest" name="OnlineBankingPropertiesRequest"/>
+  </wsdl:message>
+  <wsdl:message name="OnlineBankingProperties_out">
+    <wsdl:part element="tns:OnlineBankingPropertiesResponse" name="OnlineBankingPropertiesResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="OnlineBankingPropertiesPortType">
+    <wsdl:operation name="OnlineBankingProperties">
+      <wsdl:input message="tns:OnlineBankingProperties_in" name="OnlineBankingProperties_Input"/>
+      <wsdl:output message="tns:OnlineBankingProperties_out" name="OnlineBankingProperties_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OnlineBankingPropertiesBinding" type="tns:OnlineBankingPropertiesPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="OnlineBankingProperties">
+      <soap:operation/>
+      <wsdl:input name="OnlineBankingProperties_Input">
+        <soap:body parts="OnlineBankingPropertiesRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="OnlineBankingProperties_Output">
+        <soap:body parts="OnlineBankingPropertiesResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OnlineBankingPropertiesService">
+    <wsdl:port binding="tns:OnlineBankingPropertiesBinding" name="OnlineBankingPropertiesProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/OnlineBankingProperties"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

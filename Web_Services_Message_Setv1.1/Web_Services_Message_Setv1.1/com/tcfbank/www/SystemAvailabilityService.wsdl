@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SystemAvailability" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="SystemAvailabilityBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="SystemAvailability_in">
+    <wsdl:part element="tns:SystemAvailabilityRequest" name="SystemAvailabilityRequest"/>
+  </wsdl:message>
+  <wsdl:message name="SystemAvailability_out">
+    <wsdl:part element="tns:SystemAvailabilityResponse" name="SystemAvailabilityResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="SystemAvailabilityPortType">
+    <wsdl:operation name="SystemAvailability">
+      <wsdl:input message="tns:SystemAvailability_in" name="SystemAvailability_Input"/>
+      <wsdl:output message="tns:SystemAvailability_out" name="SystemAvailability_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SystemAvailabilityBinding" type="tns:SystemAvailabilityPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="SystemAvailability">
+      <soap:operation/>
+      <wsdl:input name="SystemAvailability_Input">
+        <soap:body parts="SystemAvailabilityRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="SystemAvailability_Output">
+        <soap:body parts="SystemAvailabilityResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SystemAvailabilityService">
+    <wsdl:port binding="tns:SystemAvailabilityBinding" name="SystemAvailabilityProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/SystemAvailability"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

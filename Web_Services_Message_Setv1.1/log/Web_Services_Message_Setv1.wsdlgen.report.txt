@@ -1,0 +1,48 @@
+Summary of selections: WSDL files generation
+
+The selected message set:
+/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1
+
+The generated WSDL files will go into:
+H:\Web Services
+
+The version of WSDL to be generated: 1.1
+The version of SOAP to be generated: 1.1
+
+The selected style for WSDL generation: document
+The WSDL Namespace: http://tempuri.org/
+
+The following operations will be created:
+
+The following bindings are selected:
+SOAP over http.
+
+The following WSDL files will be generated:
+H:\Web Services\Web_Services_Message_Setv1.1Service.wsdl
+
+
+Generating XML Schema files from Message Definition files
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+Creating new WSDL Service file 'H:\Web Services\Web_Services_Message_Setv1.1Service.wsdl'
+Setting wsdl definition name for 'Web_Services_Message_Setv1.1Service.wsdl': Web_Services_Message_Setv1.1
+Setting wsdl definition targetNamespace for 'Web_Services_Message_Setv1.1Service.wsdl': http://tempuri.org/
+Adding namespace: xmlns for 'Web_Services_Message_Setv1.1Service.wsdl':soap=http://schemas.xmlsoap.org/wsdl/soap/
+Adding namespace: xmlns for 'Web_Services_Message_Setv1.1Service.wsdl':xsd=http://www.w3.org/2001/XMLSchema
+Adding namespace: xmlns for 'Web_Services_Message_Setv1.1Service.wsdl':wsdl=http://schemas.xmlsoap.org/wsdl/
+Creating new WSDL Interface file 'H:\Web Services\Web_Services_Message_Setv1.1Service.wsdl'
+Creating portType for WSDL Interface: Web_Services_Message_Setv1.1PortType
+Creating SOAP over HTTP binding 'Web_Services_Message_Setv1.1SOAP_HTTP_Binding'
+Creating SOAP over HTTP service 'Web_Services_Message_Setv1.1SOAP_HTTP_Service'
+Creating port 'Web_Services_Message_Setv1.1SOAP_HTTP_Port' for service 'Web_Services_Message_Setv1.1SOAP_HTTP_Service'
+
+Elapsed time processing this WSDL definition: 1.304610628367E9 seconds
+Number of warnings for this WSDL definition: 0
+
+
+Number of files processed: 1
+
+

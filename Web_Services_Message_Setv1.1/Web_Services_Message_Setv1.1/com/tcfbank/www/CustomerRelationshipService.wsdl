@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CustomerRelationship" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="CustomerRelationshipBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="CustomerRelationship_in">
+    <wsdl:part element="tns:CustomerRelationshipRequest" name="CustomerRelationshipRequest"/>
+  </wsdl:message>
+  <wsdl:message name="CustomerRelationship_out">
+    <wsdl:part element="tns:CustomerRelationshipResponse" name="CustomerRelationshipResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="CustomerRelationshipPortType">
+    <wsdl:operation name="CustomerRelationship">
+      <wsdl:input message="tns:CustomerRelationship_in" name="CustomerRelationship_Input"/>
+      <wsdl:output message="tns:CustomerRelationship_out" name="CustomerRelationship_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CustomerRelationshipBinding" type="tns:CustomerRelationshipPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CustomerRelationship">
+      <soap:operation/>
+      <wsdl:input name="CustomerRelationship_Input">
+        <soap:body parts="CustomerRelationshipRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CustomerRelationship_Output">
+        <soap:body parts="CustomerRelationshipResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CustomerRelationshipService">
+    <wsdl:port binding="tns:CustomerRelationshipBinding" name="CustomerRelationshipProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/CustomerRelationship"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

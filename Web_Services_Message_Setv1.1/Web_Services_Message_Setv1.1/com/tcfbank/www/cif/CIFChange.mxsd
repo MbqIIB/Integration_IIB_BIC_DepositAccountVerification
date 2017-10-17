@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tcf="http://www.tcfbank.com" xmlns:tns="http://www.tcfbank.com/cif/" elementFormDefault="qualified" targetNamespace="http://www.tcfbank.com/cif/">
+    <import namespace="http://www.tcfbank.com" schemaLocation="../tcfbank.mxsd"/>
+    <xsd:element name="CIFChangeRequest">
+        <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CIFChangeRequest;XSDElementDeclaration$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+        <xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="tcf:BankNumber"/>
+				<xsd:element ref="tcf:BranchNumber"/>
+				<xsd:element ref="tcf:TellerNumber"/>
+				<xsd:element ref="tcf:AccountNumber"/>
+				<xsd:element minOccurs="0" name="SpecificInstructions" type="string"/>
+				<xsd:element name="CurrentInformation" type="tns:CurrentInformation"/>
+				<xsd:element minOccurs="0" name="AdditionalCustomer1" type="tns:AdditionalCustomer"/>
+				<xsd:element minOccurs="0" name="AdditionalCustomer2" type="tns:AdditionalCustomer"/>
+				<xsd:element name="ChangedInfo" type="tns:ChangedInfo"/>
+				<xsd:element minOccurs="0" name="AlternateAddress" type="tns:Address"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="CIFChangeResponse">
+        <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/CIFChangeResponse;XSDElementDeclaration=1$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+        <xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="tcf:StatusDisposition"/>
+				<xsd:element ref="tcf:StatusDescription"/>
+				<xsd:element name="CaseNumber" type="int"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="CurrentInformation">
+		<xsd:sequence>
+			<xsd:element ref="tcf:FullName"/>
+			<xsd:element minOccurs="0" ref="tcf:DateOfBirth"/>
+			<xsd:element minOccurs="0" ref="tcf:TaxIdentificationNumber"/>
+			<xsd:element minOccurs="0" ref="tcf:IDNumber"/>
+			<xsd:element minOccurs="0" name="CurrentAddress" type="tns:CurrentAddress">
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="CurrentAddress">
+		<xsd:sequence>
+			<xsd:element maxOccurs="2" minOccurs="0" ref="tcf:AddressLine"/>
+			<xsd:element minOccurs="0" ref="tcf:City"/>
+			<xsd:element minOccurs="0" ref="tcf:State"/>
+			<xsd:element minOccurs="0" ref="tcf:ZipCode"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="Address">
+		<xsd:sequence>
+			<xsd:element maxOccurs="2" minOccurs="0" ref="tcf:AddressLine"/>
+			<xsd:element minOccurs="0" ref="tcf:City"/>
+			<xsd:element minOccurs="0" ref="tcf:State"/>
+			<xsd:element minOccurs="0" ref="tcf:ZipCode"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="AdditionalCustomer">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" ref="tcf:FullName"/>
+			<xsd:element minOccurs="0" ref="tcf:TaxIdentificationNumber"/>
+			<xsd:element minOccurs="0" ref="tcf:DateOfBirth"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ChangedInfo">
+		<xsd:sequence>
+
+			<xsd:element minOccurs="0" ref="tcf:DateOfBirth"/>
+			<xsd:element minOccurs="0" ref="tcf:IDNumber"/>
+			<xsd:element minOccurs="0" ref="tcf:IDType"/>
+			<xsd:element minOccurs="0" ref="tcf:IDIssuedLocation"/>
+			<xsd:element minOccurs="0" ref="tcf:IDIssuedDate"/>
+			<xsd:element minOccurs="0" ref="tcf:IDExpirationDate"/>
+			<xsd:element minOccurs="0" name="ChangedAddress" type="tns:Address">
+			</xsd:element>
+			<xsd:element minOccurs="0" ref="tcf:EmailAddress"/>
+			<xsd:element minOccurs="0" ref="tcf:HomePhoneNumber"/>
+			<xsd:element minOccurs="0" ref="tcf:WorkPhoneNumber"/>
+			<xsd:element minOccurs="0" ref="tcf:Gender"/>
+			<xsd:element minOccurs="0" ref="tcf:EmployerName"/>
+			<xsd:element minOccurs="0" ref="tcf:Occupation"/>
+			<xsd:element minOccurs="0" ref="tcf:IsUSCitizen"/>
+			<xsd:element minOccurs="0" ref="tcf:IsAddressInUSA"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>

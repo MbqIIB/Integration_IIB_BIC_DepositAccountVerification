@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CheckPaidInformation" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="CheckPaidInformationBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="CheckPaidInformation_in">
+    <wsdl:part element="tns:CheckPaidInformationRequest" name="CheckPaidInformationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="CheckPaidInformation_out">
+    <wsdl:part element="tns:CheckPaidInformationResponse" name="CheckPaidInformationResponse"/>
+  </wsdl:message>
+
+  <wsdl:portType name="CheckPaidInformationPortType">
+    <wsdl:operation name="CheckPaidInformation">
+      <wsdl:input message="tns:CheckPaidInformation_in" name="CheckPaidInformation_Input"/>
+      <wsdl:output message="tns:CheckPaidInformation_out" name="CheckPaidInformation_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CheckPaidInformationBinding" type="tns:CheckPaidInformationPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CheckPaidInformation">
+      <soap:operation/>
+      <wsdl:input name="CheckPaidInformation_Input">
+        <soap:body parts="CheckPaidInformationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CheckPaidInformation_Output">
+        <soap:body parts="CheckPaidInformationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CheckPaidInformationService">
+    <wsdl:port binding="tns:CheckPaidInformationBinding" name="CheckPaidInformationProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/CheckPaidInformation"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,173 @@
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/lowrytech/ws/GenusSaveEntity.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/lowrytech/ws/GenusSaveEntity.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/teller/formdata/TellerFormData.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/teller/formdata/TellerFormData.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/www/cif/CIFChange.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/cif/CIFChange.xsd" 
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/tcfbank.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/www/ctrmil/ctrmil.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/ctrmil/ctrmil.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/www/ctrmilservice.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/ctrmilservice.xsd" 
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/tcfbank.xsd" 
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/ctrmil/ctrmil.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/www/custnumrelservice.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/custnumrelservice.xsd" 
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/tcfbank.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/www/lawsoninquiryservice.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/lawsoninquiryservice.xsd" 
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/tcfbank.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/www/mutual.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/mutual.xsd" 
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/tcfbank.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/www/retail.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/retail.xsd" 
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/tcfbank.xsd" 
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/cif/CIFChange.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/www/tcfbank.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/tcfbank.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/com/tcfbank/www/tdaservice.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/tdaservice.xsd" 
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/com/tcfbank/www/tcfbank.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/org/xmlsoap/schemas/soap/envelope/soapenv11.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/org/xmlsoap/schemas/soap/envelope/soapenv11.xsd" 
+
+Generating schema for no XML Wire format
+Generating schema using the strict option
+All complex types and groups with a Content validation of "Open" or "Open defined" will be generated as if they had Content validation "Closed"
+All complex types and groups with a Composition of "Ordered set" or "Unordered set" will be generated with a Composition of "Sequence"
+All complex types and groups with a Composition of "Message" will be generated with a Composition of "Choice"
+
+
+Processing File : "/Web_Services_Message_Setv1.1/Web_Services_Message_Setv1.1/soap.mxsd"
+
+Saving Files To Temporary Folder : "/Web_Services_Message_Setv1.1/.batch_generation_schemas/soap.xsd" 
+
+Adding Files From Folder :"\Web_Services_Message_Setv1.1\.batch_generation_schemas" 
+             To Archive :"h:\xsd\Web_Services_Message_Setv1.1.zip"
+Deleting Temporary Folder : "\Web_Services_Message_Setv1.1\.batch_generation_schemas" 
+
+
+Elapsed time processing this schema: 4.328 seconds
+Number of warnings for this schema: 0
+
+
+Number of files processed: 13
+
+

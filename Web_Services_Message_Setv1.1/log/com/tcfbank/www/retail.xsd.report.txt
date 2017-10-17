@@ -1,0 +1,13 @@
+
+
+Importing file: h:\retail.xsd
+
+Changing schema location for import statement "cif/CIFChange.mxsd".
+
+Elapsed time processing this message definition file: 25.327 seconds
+Number of warnings for this message definition file: 0
+
+
+Number of files processed: 1
+
+

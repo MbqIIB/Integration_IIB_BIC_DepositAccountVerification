@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="OfficialBankCheck" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="OfficialBankCheckBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="OfficialBankCheck_in">
+    <wsdl:part element="tns:OfficialBankCheckRequest" name="OfficialBankCheckRequest"/>
+  </wsdl:message>
+  <wsdl:message name="OfficialBankCheck_out">
+    <wsdl:part element="tns:OfficialBankCheckResponse" name="OfficialBankCheckResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="OfficialBankCheckPortType">
+    <wsdl:operation name="OfficialBankCheck">
+      <wsdl:input message="tns:OfficialBankCheck_in" name="OfficialBankCheck_Input"/>
+      <wsdl:output message="tns:OfficialBankCheck_out" name="OfficialBankCheck_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OfficialBankCheckBinding" type="tns:OfficialBankCheckPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="OfficialBankCheck">
+      <soap:operation/>
+      <wsdl:input name="OfficialBankCheck_Input">
+        <soap:body parts="OfficialBankCheckRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="OfficialBankCheck_Output">
+        <soap:body parts="OfficialBankCheckResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OfficialBankCheckService">
+    <wsdl:port binding="tns:OfficialBankCheckBinding" name="OfficialBankCheckProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/OfficialBankCheck"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

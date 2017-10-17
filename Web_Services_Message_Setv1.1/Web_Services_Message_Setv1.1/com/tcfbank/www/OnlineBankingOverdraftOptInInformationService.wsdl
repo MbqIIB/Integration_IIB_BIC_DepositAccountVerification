@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="OnlineBankingOverdraftOptInInformation" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="OnlineBankingOverdraftOptInInformationBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="retail.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="OnlineBankingOverdraftOptInInformation_in">
+    <wsdl:part element="tns:OnlineBankingOverdraftOptInInformationRequest" name="OnlineBankingOverdraftOptInInformationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="OnlineBankingOverdraftOptInInformation_out">
+    <wsdl:part element="tns:OnlineBankingOverdraftOptInInformationResponse" name="OnlineBankingOverdraftOptInInformationResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="OnlineBankingOverdraftOptInInformationPortType">
+    <wsdl:operation name="OnlineBankingOverdraftOptInInformation">
+      <wsdl:input message="tns:OnlineBankingOverdraftOptInInformation_in" name="OnlineBankingOverdraftOptInInformation_Input"/>
+      <wsdl:output message="tns:OnlineBankingOverdraftOptInInformation_out" name="OnlineBankingOverdraftOptInInformation_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OnlineBankingOverdraftOptInInformationBinding" type="tns:OnlineBankingOverdraftOptInInformationPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="OnlineBankingOverdraftOptInInformation">
+      <soap:operation/>
+      <wsdl:input name="OnlineBankingOverdraftOptInInformation_Input">
+        <soap:body parts="OnlineBankingOverdraftOptInInformationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="OnlineBankingOverdraftOptInInformation_Output">
+        <soap:body parts="OnlineBankingOverdraftOptInInformationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OnlineBankingOverdraftOptInInformationService">
+    <wsdl:port binding="tns:OnlineBankingOverdraftOptInInformationBinding" name="OnlineBankingOverdraftOptInInformationProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/OnlineBankingOverdraftOptInInformation"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TellerSystemAvailability" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="TellerSystemAvailabilityBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="TellerSystemAvailability_in">
+    <wsdl:part element="tns:TellerSystemAvailabilityRequest" name="TellerSystemAvailabilityRequest"/>
+  </wsdl:message>
+  <wsdl:message name="TellerSystemAvailability_out">
+    <wsdl:part element="tns:TellerSystemAvailabilityResponse" name="TellerSystemAvailabilityResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="TellerSystemAvailabilityPortType">
+    <wsdl:operation name="TellerSystemAvailability">
+      <wsdl:input message="tns:TellerSystemAvailability_in" name="TellerSystemAvailability_Input"/>
+      <wsdl:output message="tns:TellerSystemAvailability_out" name="TellerSystemAvailability_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TellerSystemAvailabilityBinding" type="tns:TellerSystemAvailabilityPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="TellerSystemAvailability">
+      <soap:operation/>
+      <wsdl:input name="TellerSystemAvailability_Input">
+        <soap:body parts="TellerSystemAvailabilityRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TellerSystemAvailability_Output">
+        <soap:body parts="TellerSystemAvailabilityResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TellerSystemAvailabilityService">
+    <wsdl:port binding="tns:TellerSystemAvailabilityBinding" name="TellerSystemAvailabilityProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/TellerSystemAvailability"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

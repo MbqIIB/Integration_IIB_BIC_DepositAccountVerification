@@ -1,0 +1,7 @@
+
+
+Importing file: C:\Documents and Settings\T906078\My Documents\WSDL Files\FormDataWS.wsdl
+
+Parsing wsdl binding {http://teller.tcfbank.com}BasicHttpBinding_FormData.
+Parsing wsdl binding input AddFormData.
+Parsing wsdl binding output AddFormData.

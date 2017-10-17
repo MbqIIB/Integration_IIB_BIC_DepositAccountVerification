@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema targetNamespace="http://www.tcfbank.com" xmlns:tns="http://www.tcfbank.com" xmlns:wns="http://webservices.webapps.wolterskluwer.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:include schemaLocation="tcfbank.mxsd"/>
+    <xsd:complexType name="WoltersKluwerRiskIDRequest_Type">
+    <xsd:sequence>
+      <xsd:element ref="tns:EnterpriseHeader"/>
+            <xsd:element ref="tns:TCFHeader"/>
+            <xsd:element ref="tns:riskIdRequest"/>
+        </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="WoltersKluwerRiskIDRequest" type="tns:WoltersKluwerRiskIDRequest_Type">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/WoltersKluwerRiskIDRequest;XSDElementDeclaration$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:simpleType name="LawsonID_Type">
+    <xsd:restriction base="xsd:string">
+      <xsd:maxLength value="6"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:simpleType name="LU_Type">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+    <xsd:simpleType name="SoftwareVersion_Type">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+    <xsd:simpleType name="WindowsUserID_Type">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+    <xsd:simpleType name="WorkstationIPAddress_Type">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+    <xsd:simpleType name="TCFTemplateID_Type">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+    <xsd:element name="LawsonID" type="tns:LawsonID_Type"/>
+    <xsd:element name="LU" type="tns:LU_Type"/>
+    <xsd:element name="SoftwareVersion" type="tns:SoftwareVersion_Type"/>
+    <xsd:element name="WindowsUserID" type="tns:WindowsUserID_Type"/>
+    <xsd:element name="WorkstationIPAddress" type="tns:WorkstationIPAddress_Type"/>
+    <xsd:element name="TCFTemplateID" type="tns:TCFTemplateID_Type"/>
+    <xsd:complexType name="TCFHeader_Type">
+    <xsd:sequence>
+      <xsd:element ref="tns:BankNumber"/>
+      <xsd:element ref="tns:BranchNumber"/>
+      <xsd:element ref="tns:TellerNumber"/>
+      <xsd:element ref="tns:LawsonID"/>
+      <xsd:element ref="tns:LU"/>
+      <xsd:element ref="tns:SoftwareVersion"/>
+      <xsd:element ref="tns:WindowsUserID"/>
+      <xsd:element ref="tns:WorkstationIPAddress"/>
+      <xsd:element ref="tns:TCFTemplateID"/>
+            <xsd:element ref="tns:ExitFlag"/>
+            <xsd:element ref="tns:TCFRiskScore"/>
+            <xsd:element ref="tns:TCFEffectiveDate"/>
+        </xsd:sequence>
+  </xsd:complexType>
+    <xsd:element name="TCFHeader" type="tns:TCFHeader_Type"/>
+    <xsd:complexType name="WoltersKluwerRiskIDResponse_Type">
+    <xsd:sequence>
+            <xsd:element ref="tns:Status"/>
+            <xsd:element ref="tns:EnterpriseHeader"/>
+      <xsd:element ref="tns:TCFHeader"/>
+        </xsd:sequence>
+  </xsd:complexType>
+    <xsd:element name="WoltersKluwerRiskIDResponse" type="tns:WoltersKluwerRiskIDResponse_Type">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/WoltersKluwerRiskIDResponse;XSDElementDeclaration=8$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:simpleType name="riskIdRequest_Type">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+    <xsd:element name="riskIdRequest" type="tns:riskIdRequest_Type"/>
+    <xsd:simpleType name="TCFRiskLevel_Type">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+    <xsd:simpleType name="TCFRiskScore_Type">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+    <xsd:simpleType name="TCFEffectiveDate_Type">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+    <xsd:element name="ExitFlag" type="tns:TCFRiskLevel_Type"/>
+    <xsd:element name="TCFRiskScore" type="tns:TCFRiskScore_Type"/>
+    <xsd:element name="TCFEffectiveDate" type="tns:TCFEffectiveDate_Type"/>
+    <xsd:complexType name="AnderaPrescreenRequest_Type">
+    <xsd:sequence>
+      <xsd:element ref="tns:EnterpriseHeader"/>
+      <xsd:element name="PrescreenRequest" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:complexType name="AnderaPrescreenResponse_Type">
+    <xsd:sequence>
+      <xsd:element ref="tns:Status"/>
+      <xsd:element ref="tns:EnterpriseHeader"/>
+      <xsd:element name="PrescreenResponse" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:element name="AnderaPrescreenRequest" type="tns:AnderaPrescreenRequest_Type">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AnderaPrescreenRequest;XSDElementDeclaration=13$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:element name="AnderaPrescreenResponse" type="tns:AnderaPrescreenResponse_Type">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AnderaPrescreenResponse;XSDElementDeclaration=14$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:complexType name="AAIQRetryExpiry_Type">
+    <xsd:sequence>
+      <xsd:element name="AccountNumber" type="xsd:string"/>
+      <xsd:element name="InitialRetryDate" type="xsd:date"/>
+    </xsd:sequence>
+  </xsd:complexType>
+    <xsd:element name="AAIQRetryExpiryData" type="tns:AAIQRetryExpiry_Type">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/AAIQRetryExpiryData;XSDElementDeclaration=15$MRObject"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+  </xsd:element>
+</xsd:schema>

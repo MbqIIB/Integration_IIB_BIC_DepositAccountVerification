@@ -1,0 +1,22 @@
+
+
+Importing file: H:\CustomerWS.wsdl
+
+Copying source WSDL CustomerWS.wsdl to CustomerWS.wsdl.
+The WSDL import will proceed with bindings CustomerWSSoap.
+Creating wsdl schema document for file:///H:/CustomerWS.wsdl.
+Parsing wsdl binding {http://teller.tcfbank.com}CustomerWSSoap.
+Parsing wsdl binding input PreScreen.
+Parsing wsdl binding output PreScreen.
+Processing doc style for operation PreScreen.
+Populating WSDL schema Web_Services_Message_Setv1.1/com/tcfbank/teller/CustomerWS.mxsd.
+Creating file Web_Services_Message_Setv1.1/com/tcfbank/teller/CustomerWS.mxsd in the workspace.
+Creating file Web_Services_Message_Setv1.1/com/tcfbank/teller/CustomerWS_InlineSchema1.mxsd in the workspace.
+
+Elapsed time processing this message definition file: 0.437 seconds
+Number of warnings for this message definition file: 0
+
+
+Number of files processed: 1
+
+

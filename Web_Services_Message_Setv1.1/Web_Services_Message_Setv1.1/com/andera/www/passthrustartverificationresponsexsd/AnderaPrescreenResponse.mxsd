@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.andera.com/PassThruStartVerificationResponse.xsd" xmlns="http://www.andera.com/PassThruStartVerificationResponse.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Root Element -->
+  <xs:element name="PassThruStartVerificationResponse">
+        <xs:annotation>
+      <xs:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/PassThruStartVerificationResponse;XSDElementDeclaration$MRObject"/>
+      </xs:appinfo>
+    </xs:annotation>
+        <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="1" minOccurs="1" name="PassThruId" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>The application id value; this value is echoed back from the request</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="0" name="Errors" type="ErrorCollection">
+          <xs:annotation>
+            <xs:documentation>Collection of error details</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="0" name="CrossSellResults" type="CrossSellResultsCollection">
+          <xs:annotation>
+            <xs:documentation>Collection of cross sell results</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="0" name="ProductApprovalResults" type="ProductApprovalResultsCollection">
+          <xs:annotation>
+            <xs:documentation>Collection of product approval results</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="0" name="WatchlistResult" type="WatchlistResultDetails">
+          <xs:annotation>
+            <xs:documentation>Watch list result for specified applicant</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- base element -->
+  <xs:complexType name="ResultDetails">
+    <xs:annotation>
+      <xs:documentation>
+        The base element for common result elements
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Decision" type="DecisionDetails">
+        <xs:annotation>
+          <xs:documentation>
+            Recommended decision for this applicant
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Complex types (alphabetical) -->
+  <xs:complexType name="CrossSellResultDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="ApplicantId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The id of the applicant that is associated with the cross sell inquiry        
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="CrossSellOffersReferenceId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The reference id that relates to the cross sell offers returned
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="CrossSellOffers" type="CrossSellOfferCollection">
+        <xs:annotation>
+          <xs:documentation>A collection of cross sell offers</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CrossSellResultsCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="CrossSellResult" type="CrossSellResultDetails"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CrossSellOfferCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="CrossSellOffer" type="CrossSellOfferDetails"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CrossSellOfferDetails">
+    <xs:sequence>
+      <xs:choice maxOccurs="1" minOccurs="1">
+        <xs:element maxOccurs="1" minOccurs="1" name="OfferCode" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              When the cross sell offer refrences a product being offered,
+              this element is used to represent the cross sell offer code identifying the product being offered;
+              When this element is present, the OfferName optional element is not needed
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="1" name="OfferName" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              The cross sell offer name, used for cross selling account options;
+              When this element is present, the OfferCode optional element is not needed
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+      <xs:element maxOccurs="1" minOccurs="0" name="OfferLimit" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The cross sell offer limit</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="OfferRate" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The cross sell offer rate</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="OfferMiscellaneous" type="NameValueDetails">
+        <xs:annotation>
+          <xs:documentation>Name/value pair miscellaneous information regarding the cross sell offer</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="DecisionDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="DecisionType" type="DecisionType">
+        <xs:annotation>
+          <xs:documentation>ACCEPT, DECLINE, REVIEW or ERROR status</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Description" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Description of result</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ErrorCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="ErrorInfo" type="ErrorDetails"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+	<xs:complexType name="ErrorDetails">
+		<xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="ErrorCode" type="xs:int">
+        <xs:annotation>
+          <xs:documentation>The error code applicable to the error being returned</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="ErrorDescription" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A description of the error being returned</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="ErrorStatus" type="ErrorStatusType">
+        <xs:annotation>
+          <xs:documentation>The applicable error status type for the error being returned</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+	</xs:complexType>
+
+  <xs:complexType name="NameValueDetails">
+    <xs:annotation>
+      <xs:documentation>
+        Describes Miscellaneous field data details
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:sequence>
+        <xs:element maxOccurs="1" minOccurs="1" name="Name" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              The field name
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="1" name="Value" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              The field value
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ProductApprovalResultDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="ApplicantId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The id of the applicant that is associated with the product approval inquiry;
+            This is the same value as the ApplicantDetails Id element in the request
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Products" type="ProductCollection">
+        <xs:annotation>
+          <xs:documentation>A collection of products for the product approval result</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  
+	<xs:complexType name="ProductApprovalResultsCollection">
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" minOccurs="1" name="ProductApprovalResult" type="ProductApprovalResultDetails"/>
+		</xs:sequence>
+	</xs:complexType>
+
+  <xs:complexType name="ProductCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="Product" type="ProductDetails"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ProductDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="ProductCode" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The product code; this value is echoed back from the request</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="ProductSubCode" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The product sub-code; this value is echoed back from the request</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="ProductType" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The product type; this value is echoed back from the request</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="ProductName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The product name; this value is echoed back from the request</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="ApprovalStatus" type="ProductApprovalStatus">
+        <xs:annotation>
+          <xs:documentation>The product approval status</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="WatchlistCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="Watchlist" type="WatchlistDetails">
+        <xs:annotation>
+          <xs:documentation>Collection of all watchlist information</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="WatchlistDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="WatchlistNames" type="WatchlistNamesCollection">
+        <xs:annotation>
+          <xs:documentation>Collection of alias names</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="NumberOfHits" type="xs:nonNegativeInteger">
+        <xs:annotation>
+          <xs:documentation>The number of records found associated with applicant</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="WatchlistScore" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Proprietary score returned by 3rd party</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="WatchlistNamesCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="AliasName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>all associated names found for desired applicant</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="WatchlistResultDetails">
+    <xs:complexContent>
+      <xs:extension base="ResultDetails">
+        <xs:sequence>
+          <xs:element maxOccurs="1" minOccurs="1" name="ApplicantId" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>
+                The id of the applicant that is associated with the watch list inquiry;
+                This is the same value as the ApplicantDetails Id element in the request
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element maxOccurs="1" minOccurs="1" name="Watchlists" type="WatchlistCollection">
+            <xs:annotation>
+              <xs:documentation>A collection of watchlist information for the result</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- Simple Types (alphabetical)-->
+  <xs:simpleType name="DecisionType">
+    <xs:annotation>
+      <xs:documentation>
+        The applicable decision statuses
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ACCEPT"/>
+      <xs:enumeration value="DECLINE"/>
+      <xs:enumeration value="ERROR"/>
+      <xs:enumeration value="REVIEW"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ErrorStatusType">
+    <xs:annotation>
+      <xs:documentation>
+        The applicable error status
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Authentication"/>
+      <xs:enumeration value="Configuration"/>
+      <xs:enumeration value="Connection"/>
+      <xs:enumeration value="InvalidApplicantData"/>
+      <xs:enumeration value="InvalidProduct"/>
+      <xs:enumeration value="InvalidRequest"/>
+      <xs:enumeration value="NotSupported"/>
+      <xs:enumeration value="Undefined"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="ProductApprovalStatus">
+    <xs:annotation>
+      <xs:documentation>
+        The applicable product approval statuses
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="APPROVE"/>
+      <xs:enumeration value="DECLINE"/>
+      <xs:enumeration value="UNKNOWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

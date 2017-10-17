@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MerchantVerification" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="MerchantVerificationBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="MerchantVerification_in">
+    <wsdl:part element="tns:MerchantVerificationRequest" name="MerchantVerificationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="MerchantVerification_out">
+    <wsdl:part element="tns:MerchantVerificationResponse" name="MerchantVerificationResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="MerchantVerificationPortType">
+    <wsdl:operation name="MerchantVerification">
+      <wsdl:input message="tns:MerchantVerification_in" name="MerchantVerification_Input"/>
+      <wsdl:output message="tns:MerchantVerification_out" name="MerchantVerification_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MerchantVerificationBinding" type="tns:MerchantVerificationPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="MerchantVerification">
+      <soap:operation/>
+      <wsdl:input name="MerchantVerification_Input">
+        <soap:body parts="MerchantVerificationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="MerchantVerification_Output">
+        <soap:body parts="MerchantVerificationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MerchantVerificationService">
+    <wsdl:port binding="tns:MerchantVerificationBinding" name="MerchantVerificationProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/MerchantVerification"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

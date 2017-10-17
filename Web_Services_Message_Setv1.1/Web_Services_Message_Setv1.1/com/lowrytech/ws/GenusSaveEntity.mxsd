@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.lowrytech.com" targetNamespace="http://ws.lowrytech.com">
+  <xsd:complexType name="saveEntity_type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="inputStr1" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="inputStr2" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="messages_type">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="infomessage" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="errormessage" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="warningmessage" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="messages" type="tns:messages_type">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/messages;XSDElementDeclaration$MRObject"/>
+      </xsd:appinfo>
+    <xsd:documentation source="WMQI_DOCUMENTATION">Response\smessage\sreceived\sfrom\sSaveEntity\sservice</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="saveEntity" type="tns:saveEntity_type">
+    <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/saveEntity;XSDElementDeclaration=1$MRObject"/>
+      </xsd:appinfo>
+    <xsd:documentation source="WMQI_DOCUMENTATION">Request\smessage\ssent\sto\sSaveEntity\sservice</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+    <xsd:annotation>
+    <xsd:documentation source="WMQI_DOCUMENTATION">Contains\smessage\sdefinitions\srequired\sto\scall\sthe\sSaveEntity\sservice</xsd:documentation>
+  </xsd:annotation>
+</xsd:schema>

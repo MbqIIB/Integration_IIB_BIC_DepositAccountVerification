@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://teller.tcfbank.com" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://teller.tcfbank.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides methods to deal with customers</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://teller.tcfbank.com">
+      <s:element name="PreScreen">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cpsRequest" type="tns:cpsCustomerRequestRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="cpsCustomerRequestRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="cpsBankNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsBranchNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsTellerNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsLawsonID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsPersonalNonpersonal" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsExistingNew" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsFullLegalName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsStreetAddress" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsAddressSupplement" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsCityCountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsZipCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsTaxIDNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsGender" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsPhone1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsPhone2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsIDNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsIDType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsIssueByState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsIssueByCountry" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsIssueDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsExpirationDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsInquiryNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsVersion" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="PreScreenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PreScreenResult" type="tns:cpsCustomerResponseRecord" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="cpsCustomerResponseRecord">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="cpsSuccessIndicator" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsStatusFlag" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsInquiryNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpsErrorMessage" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="PreScreenSoapIn">
+    <wsdl:part name="parameters" element="tns:PreScreen" />
+  </wsdl:message>
+  <wsdl:message name="PreScreenSoapOut">
+    <wsdl:part name="parameters" element="tns:PreScreenResponse" />
+  </wsdl:message>
+  <wsdl:portType name="CustomerWSSoap">
+    <wsdl:operation name="PreScreen">
+      <wsdl:input message="tns:PreScreenSoapIn" />
+      <wsdl:output message="tns:PreScreenSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CustomerWSSoap" type="tns:CustomerWSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="PreScreen">
+      <soap:operation soapAction="http://teller.tcfbank.com/PreScreen" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CustomerWSSoap12" type="tns:CustomerWSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="PreScreen">
+      <soap12:operation soapAction="http://teller.tcfbank.com/PreScreen" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CustomerWS">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Provides methods to deal with customers</wsdl:documentation>
+    <wsdl:port name="CustomerWSSoap" binding="tns:CustomerWSSoap">
+      <soap:address location="https://teller.tcfbank.com/CustomerWS/CustomerWS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CustomerWSSoap12" binding="tns:CustomerWSSoap12">
+      <soap12:address location="https://teller.tcfbank.com/CustomerWS/CustomerWS.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

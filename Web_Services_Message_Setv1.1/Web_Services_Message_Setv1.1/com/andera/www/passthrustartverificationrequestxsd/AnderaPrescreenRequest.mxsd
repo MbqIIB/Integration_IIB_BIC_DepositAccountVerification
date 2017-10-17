@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" id="PassThruStartVerificationRequest" targetNamespace="http://www.andera.com/PassThruStartVerificationRequest.xsd" xmlns="http://www.andera.com/PassThruStartVerificationRequest.xsd" xmlns:Q1="http://www.andera.com/DMS/XMLTemplates/DMSCommonTypes.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!-- Root Element -->
+    <xs:import namespace="http://www.andera.com/DMS/XMLTemplates/DMSCommonTypes.xsd" schemaLocation="../dms/xmltemplates/dmscommontypesxsd/DMSCommonTypes.mxsd"/>
+    <xs:element name="PassThruStartVerificationRequest">
+        <xs:annotation>
+      <xs:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/PassThruStartVerificationRequest;XSDElementDeclaration$MRObject"/>
+      </xs:appinfo>
+    </xs:annotation>
+        <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="1" minOccurs="1" name="ClientId" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Client id value used to identify the FI</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="1" name="PassThruId" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>The application id value</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="1" name="FunctionsToExecute" type="FunctionsToExecuteCollection">
+          <xs:annotation>
+            <xs:documentation>The requested functions to execute</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="1" name="Applicants" type="ApplicantsCollection">
+          <xs:annotation>
+            <xs:documentation>The applicant data for each person associated with the application</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="1" name="Products" type="ProductCollection">
+          <xs:annotation>
+            <xs:documentation>Requested products contained in the application</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Complex types (alphabetical) -->
+  <xs:complexType name="AddressDetails">
+    <xs:annotation>
+      <xs:documentation>Contains details describing address-specific data elements</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="StreetLine1" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Address line 1/street value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="StreetLine2" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Optional address line 2 value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="City" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The city value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="State" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Used for residential address details; the state value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="PostalCode" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The zip code value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Country" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The address country of origin value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="YearsAtAddress" type="xs:int">
+        <xs:annotation>
+          <xs:documentation>The time spent at the address in years</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ApplicantsCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="ApplicantInfo" type="ApplicantDetails"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ApplicantDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Type" type="ApplicantType">
+        <xs:annotation>
+          <xs:documentation>The applicant type</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Id" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The applicant id</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="FirstName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>First name value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="MiddleName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Optional middle name/initial value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="LastName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Last name value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="NameSuffix" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Optional suffix value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="PhoneData" type="PhoneDetails">
+        <xs:annotation>
+          <xs:documentation>Contains details describing phone-specific data elements</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="TaxId" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The applicant's tax id value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="DateOfBirth" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>The applicant's date of birth</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="EmailAddress" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The applicant's email address</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="CurrentAddress" type="AddressDetails">
+        <xs:annotation>
+          <xs:documentation>
+            Contains details describing address-specific data elements for the applicant's current address
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="FormerAddress" type="AddressDetails">
+        <xs:annotation>
+          <xs:documentation>
+            Contains details describing address-specific data elements for the applicant's previous address
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="IdentificationDocuments" type="Q1:IdentificationDocuments">
+        <xs:annotation>
+          <xs:documentation>
+            Contains a collection describing identification type specific data elements for the applicant
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Employments" type="EmploymentCollection">
+        <xs:annotation>
+          <xs:documentation>A collection of the applicant's employment data</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Incomes" type="IncomeCollection">
+        <xs:annotation>
+          <xs:documentation>A collection of the applicant's income source data</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Expenses" type="ExpenseCollection">
+        <xs:annotation>
+          <xs:documentation>A collection of the applicant's expense data</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="DriversLicenseDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Number" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Drivers license identification number value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="StateOfIssue" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The state that issued the drivers license</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Address" type="AddressDetails">
+        <xs:annotation>
+          <xs:documentation>The address associated with the drivers license</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="EmploymentCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="EmploymentData" type="EmploymentDetails"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="EmploymentDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Type" type="EmploymentType">
+        <xs:annotation>
+          <xs:documentation>The type of employment</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Employer" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The name of the employer</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Position" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The employee's position</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="EmploymentAddress" type="AddressDetails">
+        <xs:annotation>
+          <xs:documentation>The employer's address</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="EmploymentPhone" type="PhoneDetails">
+        <xs:annotation>
+          <xs:documentation>Contains details describing phone-specific data elements</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="DateFrom" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>The employment start date</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="DateTo" type="xs:date">
+        <xs:annotation>
+          <xs:documentation>The employment end date</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="YearsEmployed" type="xs:nonNegativeInteger">
+        <xs:annotation>
+          <xs:documentation>The whole years employed</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="MonthsEmployed" type="xs:nonNegativeInteger">
+        <xs:annotation>
+          <xs:documentation>The whole months employed in addition to whole years</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ExpenseCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="Expense" type="ExpenseDetails"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ExpenseDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Type" type="ExpenseType">
+        <xs:annotation>
+          <xs:documentation>The type of expense the details represent</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Frequency" type="ExpenseFrequency">
+        <xs:annotation>
+          <xs:documentation>The frequency of the expense</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="Amount" type="xs:decimal">
+        <xs:annotation>
+          <xs:documentation>The expense amount</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="FunctionsToExecuteCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="FunctionToExecute" type="FunctionToExecuteType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IncomeCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="IncomeData" type="IncomeDetails"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IncomeDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Amount" type="xs:decimal">
+        <xs:annotation>
+          <xs:documentation>The income amount</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="IncomeSchedule" type="IncomeScheduleType">
+        <xs:annotation>
+          <xs:documentation>The type of income frequency schedule</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="Type" type="IncomeType">
+        <xs:annotation>
+          <xs:documentation>The type of income</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PhoneDetails">
+    <xs:annotation>
+      <xs:documentation>Contains details describing phone-specific data elements</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:sequence>
+        <xs:element maxOccurs="1" minOccurs="1" name="Type" type="PhoneType">
+          <xs:annotation>
+            <xs:documentation>Indicates which type of phone the details represent</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="1" name="Number" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>The phone number value</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="0" name="Extension" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>The phone number extension value</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ProductCollection">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="Product" type="ProductDetails"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ProductDetails">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="ProductCode" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The product code</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="ProductSubCode" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The product sub-code</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="ProductType" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The product type (Account Category)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="ProductName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The product name</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Simple Types (alphabetical)-->
+  <xs:simpleType name="ApplicantType">
+    <xs:annotation>
+      <xs:documentation>The type of applicant</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Primary"/>
+      <xs:enumeration value="Joint"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="FunctionToExecuteType">
+    <xs:annotation>
+      <xs:documentation>The types of functions available to be sent in the request</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CrossSellChecks"/>
+      <xs:enumeration value="ProductApprovalChecks"/>
+      <xs:enumeration value="WatchlistsChecks"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="EmploymentType">
+    <xs:annotation>
+      <xs:documentation>The type of employment</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Current"/>
+      <xs:enumeration value="Previous"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ExpenseFrequency">
+    <xs:annotation>
+      <xs:documentation>The expense frequency</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Weekly"/>
+      <xs:enumeration value="Monthly"/>
+      <xs:enumeration value="Annually"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ExpenseType">
+    <xs:annotation>
+      <xs:documentation>The type of expense</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Rent"/>
+      <xs:enumeration value="Mortgage"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="IncomeScheduleType">
+    <xs:annotation>
+      <xs:documentation>The type for how the income frequency is scheduled</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NA"/>
+      <xs:enumeration value="Hourly"/>
+      <xs:enumeration value="Weekly"/>
+      <xs:enumeration value="2 weeks (26/year)"/>
+      <xs:enumeration value="Semi-Monthly(24/year)"/>
+      <xs:enumeration value="Monthly"/>
+      <xs:enumeration value="Semi-Annually"/>
+      <xs:enumeration value="Annually"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="IncomeType">
+    <xs:annotation>
+      <xs:documentation>The type of income</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Salary"/>
+      <xs:enumeration value="Alimony"/>
+      <xs:enumeration value="Child Support"/>
+      <xs:enumeration value="Social Security"/>
+      <xs:enumeration value="Rental Property"/>
+      <xs:enumeration value="Other"/>
+      <xs:enumeration value="Benefits"/>
+      <xs:enumeration value="Self-Employed/Verified"/>
+      <xs:enumeration value="Self-Employed/Stated"/>
+      <xs:enumeration value="Retirement/Disability"/>
+      <xs:enumeration value="Interest/Dividends"/>
+      <xs:enumeration value="Self-Employ Inc"/>
+      <xs:enumeration value="Bonuses"/>
+      <xs:enumeration value="Commissions"/>
+      <xs:enumeration value="Overtime"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PhoneType">
+    <xs:annotation>
+      <xs:documentation>The type of phone</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Business"/>
+      <xs:enumeration value="Home"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

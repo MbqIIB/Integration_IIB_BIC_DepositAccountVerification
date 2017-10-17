@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="DepositsSystemAvailability" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="DepositsSystemAvailabilityBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="DepositsSystemAvailability_in">
+    <wsdl:part element="tns:DepositsSystemAvailabilityRequest" name="DepositsSystemAvailabilityRequest"/>
+  </wsdl:message>
+  <wsdl:message name="DepositsSystemAvailability_out">
+    <wsdl:part element="tns:DepositsSystemAvailabilityResponse" name="DepositsSystemAvailabilityResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="DepositsSystemAvailabilityPortType">
+    <wsdl:operation name="DepositsSystemAvailability">
+      <wsdl:input message="tns:DepositsSystemAvailability_in" name="DepositsSystemAvailability_Input"/>
+      <wsdl:output message="tns:DepositsSystemAvailability_out" name="DepositsSystemAvailability_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DepositsSystemAvailabilityBinding" type="tns:DepositsSystemAvailabilityPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="DepositsSystemAvailability">
+      <soap:operation/>
+      <wsdl:input name="DepositsSystemAvailability_Input">
+        <soap:body parts="DepositsSystemAvailabilityRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="DepositsSystemAvailability_Output">
+        <soap:body parts="DepositsSystemAvailabilityResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DepositsSystemAvailabilityService">
+    <wsdl:port binding="tns:DepositsSystemAvailabilityBinding" name="DepositsSystemAvailabilityProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/DepositsSystemAvailability"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

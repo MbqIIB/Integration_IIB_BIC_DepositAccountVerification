@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CardActivation" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="CardActivationBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="CardActivation_in">
+    <wsdl:part element="tns:CardActivationRequest" name="CardActivationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="CardActivation_out">
+    <wsdl:part element="tns:CardActivationResponse" name="CardActivationResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="CardActivationPortType">
+    <wsdl:operation name="CardActivation">
+      <wsdl:input message="tns:CardActivation_in" name="CardActivation_Input"/>
+      <wsdl:output message="tns:CardActivation_out" name="CardActivation_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CardActivationBinding" type="tns:CardActivationPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CardActivation">
+      <soap:operation/>
+      <wsdl:input name="CardActivation_Input">
+        <soap:body parts="CardActivationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CardActivation_Output">
+        <soap:body parts="CardActivationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CardActivationService">
+    <wsdl:port binding="tns:CardActivationBinding" name="CardActivationProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/CardActivation"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

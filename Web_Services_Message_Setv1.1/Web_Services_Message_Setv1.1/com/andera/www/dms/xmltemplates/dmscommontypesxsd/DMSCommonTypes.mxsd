@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.andera.com/DMS/XMLTemplates/DMSCommonTypes.xsd" xmlns="http://www.andera.com/DMS/XMLTemplates/DMSCommonTypes.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+  <xs:simpleType name="NonEmptyString">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="EmptyString">
+    <xs:restriction base="xs:string">
+      <xs:maxLength value="0"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="typeTestMode">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(test(Pass|Failure|Review).*)|testUnavailable|testGarbageResponse|testError"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="typeCheckToExecute">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="IDAChecks|IDVChecks|DebitHistoryChecks|CreditHistoryChecks|WatchlistsChecks|ProductApprovalChecks|CrossSellChecks|AccountHistoryChecks|IPIntelligenceChecks|SubmissionHistoryChecks"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="typeAdapterName">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="typeFieldInfo">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Name" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="DisplayName" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="HelpText" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="IsEditable" type="xs:boolean"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="IsRequired" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="typeFieldBody">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="Value" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="ValueIdentifier" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="FieldType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="TEXT"/>
+            <xs:enumeration value="IF_PASSWORD"/>
+            <xs:enumeration value="OPTIONS"/>
+            <xs:enumeration value="IF_LOGIN"/>
+            <xs:enumeration value="IF_CUSTOM"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="ValidValues">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidValue" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="DisplayValidValues">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="DisplayValidValue" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="DefaultValue" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="ValueMask" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="ValidationRules">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationRule">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element maxOccurs="1" minOccurs="0" name="Rule" type="xs:string"/>
+                  <xs:element maxOccurs="1" minOccurs="0" name="Message" type="xs:string"/>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="0" name="MaxSize" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="Size" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="typeFieldInfoSingle">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="FieldInfo" type="typeFieldInfo"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="FieldBody" type="typeFieldBody"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="typeFieldInfoMultiFixed">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="FieldInfo" type="typeFieldInfo"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="FieldBodies">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="FieldBody" type="typeFieldBody"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Workflow">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="StepName" type="NonEmptyString"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="ExecutionMode" type="WorkflowExecutionMode"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="WorkflowExecutionMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Rerun"/>
+      <xs:enumeration value="Normal"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="typeRequestHeader">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="ClientCode" type="NonEmptyString"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="Strategy" type="NonEmptyString"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="Workflow" type="Workflow"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="AdaptersToTest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="AdapterToTest">
+              <xs:complexType>
+                <xs:attribute name="name" type="typeAdapterName" use="required"/>
+                <xs:attribute name="testMode" type="typeTestMode" use="required"/>
+                <xs:attribute name="testDelay" type="xs:unsignedLong" use="optional"/>
+                <xs:attribute name="testStep" type="xs:string" use="optional"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="SinksToExecute">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="SinkToExecute" type="typeCheckToExecute"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element maxOccurs="1" minOccurs="1" name="PassThroughId" type="NonEmptyString"/>
+      <xs:element default="false" maxOccurs="1" minOccurs="1" name="IncludeProviderResponses" type="xs:boolean"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="TestingAdapterSettingsOverrideName" type="NonEmptyString"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="ConfigurationVersionId" type="NonEmptyString"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="typeStatus">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="StatusCode" type="xs:int"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="StatusDescription" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="typeResponseHeader">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="Status" type="typeStatus"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="PassThroughId" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="DMSTransactionId" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="NextWorkflowStep" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="typeUserFilledForm">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded" minOccurs="0">
+        <xs:element name="FieldInfoSingle" type="typeFieldInfoSingle"/>
+        <xs:element name="FieldInfoMultiFixed" type="typeFieldInfoMultiFixed"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="typeDynamicMfaField">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="QuestionInfo" type="typeFieldInfo"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="AnswerInfo" type="typeFieldBody"/>
+    </xs:sequence>
+    <xs:attribute default="false" name="isToken" type="xs:boolean"/>
+  </xs:complexType>
+
+  <xs:complexType name="typeDynamicMfaFields">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="DynamicMfaField" type="typeDynamicMfaField"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="typeDynamicMfaData">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="1" name="DynamicMfaFields" type="typeDynamicMfaFields"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="MfaTransactionId" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="IdentificationType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DriversLicense"/>
+      <xs:enumeration value="StateId"/>
+      <xs:enumeration value="MilitaryId"/>
+      <xs:enumeration value="Passport"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="State">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AK"/>
+      <xs:enumeration value="AL"/>
+      <xs:enumeration value="AR"/>
+      <xs:enumeration value="AZ"/>
+      <xs:enumeration value="CA"/>
+      <xs:enumeration value="CO"/>
+      <xs:enumeration value="CT"/>
+      <xs:enumeration value="DC"/>
+      <xs:enumeration value="DE"/>
+      <xs:enumeration value="FL"/>
+      <xs:enumeration value="GA"/>
+      <xs:enumeration value="HI"/>
+      <xs:enumeration value="IA"/>
+      <xs:enumeration value="ID"/>
+      <xs:enumeration value="IL"/>
+      <xs:enumeration value="IN"/>
+      <xs:enumeration value="KS"/>
+      <xs:enumeration value="KY"/>
+      <xs:enumeration value="LA"/>
+      <xs:enumeration value="MA"/>
+      <xs:enumeration value="MD"/>
+      <xs:enumeration value="ME"/>
+      <xs:enumeration value="MI"/>
+      <xs:enumeration value="MN"/>
+      <xs:enumeration value="MO"/>
+      <xs:enumeration value="MS"/>
+      <xs:enumeration value="MT"/>
+      <xs:enumeration value="NC"/>
+      <xs:enumeration value="ND"/>
+      <xs:enumeration value="NE"/>
+      <xs:enumeration value="NH"/>
+      <xs:enumeration value="NJ"/>
+      <xs:enumeration value="NM"/>
+      <xs:enumeration value="NV"/>
+      <xs:enumeration value="NY"/>
+      <xs:enumeration value="OH"/>
+      <xs:enumeration value="OK"/>
+      <xs:enumeration value="OR"/>
+      <xs:enumeration value="PA"/>
+      <xs:enumeration value="RI"/>
+      <xs:enumeration value="SC"/>
+      <xs:enumeration value="SD"/>
+      <xs:enumeration value="TN"/>
+      <xs:enumeration value="TX"/>
+      <xs:enumeration value="UT"/>
+      <xs:enumeration value="VA"/>
+      <xs:enumeration value="VT"/>
+      <xs:enumeration value="WA"/>
+      <xs:enumeration value="WI"/>
+      <xs:enumeration value="WV"/>
+      <xs:enumeration value="WY"/>
+      <xs:enumeration value="AA"/>
+      <xs:enumeration value="AE"/>
+      <xs:enumeration value="AP"/>
+      <xs:enumeration value="AB"/>
+      <xs:enumeration value="BC"/>
+      <xs:enumeration value="MB"/>
+      <xs:enumeration value="NB"/>
+      <xs:enumeration value="NL"/>
+      <xs:enumeration value="NT"/>
+      <xs:enumeration value="NS"/>
+      <xs:enumeration value="NU"/>
+      <xs:enumeration value="ON"/>
+      <xs:enumeration value="PE"/>
+      <xs:enumeration value="QC"/>
+      <xs:enumeration value="SK"/>
+      <xs:enumeration value="YT"/>
+      <xs:enumeration value="PR"/>
+      <xs:enumeration value="AS"/>
+      <xs:enumeration value="FM"/>
+      <xs:enumeration value="GU"/>
+      <xs:enumeration value="MH"/>
+      <xs:enumeration value="MP"/>
+      <xs:enumeration value="PW"/>
+      <xs:enumeration value="VI"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="IdentificationDocuments">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="IdentificationDocument" type="IdentificationDocument"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="IdentificationDocument">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="0" name="ExpirationDate" type="xs:dateTime"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="IdentificationType" type="IdentificationType"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="IssuedDate" type="xs:dateTime"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="Number" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="StateOfIssue" type="State"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="Address" type="StreetAddress"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="StreetAddress">
+    <xs:sequence>
+      <xs:element maxOccurs="1" minOccurs="1" name="City" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="Country" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="CountryCode" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="Province" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="State" type="State"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="StreetLine1" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="0" name="StreetLine2" type="xs:string"/>
+      <xs:element maxOccurs="1" minOccurs="1" name="PostalCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="RequestHeader" type="typeRequestHeader"/>
+  <xs:element name="ResponseHeader" type="typeResponseHeader"/>
+  <xs:element name="UserFilledForm" type="typeUserFilledForm"/>
+  <xs:element name="DynamicMfaData" type="typeDynamicMfaData"/>
+
+</xs:schema>

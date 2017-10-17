@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="DepositsPostedTransactions" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="DepositsPostedTransactionsBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="DepositsPostedTransactions_in">
+    <wsdl:part element="tns:DepositsPostedTransactionsRequest" name="DepositsPostedTransactionsRequest"/>
+  </wsdl:message>
+  <wsdl:message name="DepositsPostedTransactions_out">
+    <wsdl:part element="tns:DepositsPostedTransactionsResponse" name="DepositsPostedTransactionsResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="DepositsPostedTransactionsPortType">
+    <wsdl:operation name="DepositsPostedTransactions">
+      <wsdl:input message="tns:DepositsPostedTransactions_in" name="DepositsPostedTransactions_Input"/>
+      <wsdl:output message="tns:DepositsPostedTransactions_out" name="DepositsPostedTransactions_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DepositsPostedTransactionsBinding" type="tns:DepositsPostedTransactionsPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="DepositsPostedTransactions">
+      <soap:operation/>
+      <wsdl:input name="DepositsPostedTransactions_Input">
+        <soap:body parts="DepositsPostedTransactionsRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="DepositsPostedTransactions_Output">
+        <soap:body parts="DepositsPostedTransactionsResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DepositsPostedTransactionsService">
+    <wsdl:port binding="tns:DepositsPostedTransactionsBinding" name="DepositsPostedTransactionsProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/DepositsPostedTransactions"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

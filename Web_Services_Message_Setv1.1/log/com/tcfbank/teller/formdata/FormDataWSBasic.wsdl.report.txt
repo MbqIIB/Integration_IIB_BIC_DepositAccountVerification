@@ -1,0 +1,22 @@
+
+
+Importing file: H:\FormDataWSBasic.wsdl
+
+Copying source WSDL FormDataWSBasic.wsdl to FormDataWSBasic.wsdl.
+The WSDL import will proceed with bindings FormDataWSSoap.
+Creating wsdl schema document for file:///H:/FormDataWSBasic.wsdl.
+Parsing wsdl binding {http://teller.tcfbank.com/formdata}FormDataWSSoap.
+Parsing wsdl binding input AddFormData.
+Parsing wsdl binding output AddFormData.
+Processing doc style for operation AddFormData.
+Populating WSDL schema Web_Services_Message_Setv1.1/com/tcfbank/teller/formdata/FormDataWSBasic.mxsd.
+Creating file Web_Services_Message_Setv1.1/com/tcfbank/teller/formdata/FormDataWSBasic.mxsd in the workspace.
+Creating file Web_Services_Message_Setv1.1/com/tcfbank/teller/formdata/FormDataWSBasic_InlineSchema1.mxsd in the workspace.
+
+Elapsed time processing this message definition file: 0.312 seconds
+Number of warnings for this message definition file: 0
+
+
+Number of files processed: 1
+
+

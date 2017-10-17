@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema elementFormDefault="qualified" targetNamespace="http://teller.tcfbank.com" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:tns="http://teller.tcfbank.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:element name="PreScreen">
+        <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/PreScreen;XSDElementDeclaration$MRObject" schemaObject="/0/PreScreen;XSDElementDeclaration">
+          <xmlMsgRep messageSetDefaultRep="XML1" outputPolicyForXsiTypeAttribute="Never"/>
+        </MRMessage>
+      </xsd:appinfo>
+    </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="0" name="cpsRequest" type="tns:cpsCustomerRequestRecord"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="cpsCustomerRequestRecord">
+        <xsd:sequence>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsBankNumber" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsBranchNumber" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsTellerNumber" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsLawsonID" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsPersonalNonpersonal" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsExistingNew" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsFullLegalName" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsStreetAddress" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsAddressSupplement" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsCityCountryCode" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsCity" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsState" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsZipCode" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsTaxIDNumber" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsDate" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsGender" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsPhone1" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsPhone2" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsIDNumber" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsIDType" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsIssueByState" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsIssueByCountry" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsIssueDate" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsExpirationDate" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsInquiryNumber" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsVersion" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="PreScreenResponse">
+        <xsd:annotation>
+      <xsd:appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/PreScreenResponse;XSDElementDeclaration=1$MRObject" schemaObject="/0/PreScreenResponse;XSDElementDeclaration=1">
+          <xmlMsgRep messageSetDefaultRep="XML1" outputPolicyForXsiTypeAttribute="Never"/>
+        </MRMessage>
+      </xsd:appinfo>
+    </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="0" name="PreScreenResult" type="tns:cpsCustomerResponseRecord"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="cpsCustomerResponseRecord">
+        <xsd:sequence>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsSuccessIndicator" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsStatusFlag" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsInquiryNumber" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="cpsErrorMessage" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>

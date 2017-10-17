@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="AccountRelationship" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="AccountRelationshipBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="AccountRelationship_in">
+    <wsdl:part element="tns:AccountRelationshipRequest" name="AccountRelationshipRequest"/>
+  </wsdl:message>
+  <wsdl:message name="AccountRelationship_out">
+    <wsdl:part element="tns:AccountRelationshipResponse" name="AccountRelationshipResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="AccountRelationshipPortType">
+    <wsdl:operation name="AccountRelationship">
+      <wsdl:input message="tns:AccountRelationship_in" name="AccountRelationship_Input"/>
+      <wsdl:output message="tns:AccountRelationship_out" name="AccountRelationship_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AccountRelationshipBinding" type="tns:AccountRelationshipPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="AccountRelationship">
+      <soap:operation/>
+      <wsdl:input name="AccountRelationship_Input">
+        <soap:body parts="AccountRelationshipRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="AccountRelationship_Output">
+        <soap:body parts="AccountRelationshipResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AccountRelationshipService">
+    <wsdl:port binding="tns:AccountRelationshipBinding" name="AccountRelationshipProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/AccountRelationship"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CallerAuthentication" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="CallerAuthenticationBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="CallerAuthentication_in">
+    <wsdl:part element="tns:CallerAuthenticationRequest" name="CallerAuthenticationRequest"/>
+  </wsdl:message>
+  <wsdl:message name="CallerAuthentication_out">
+    <wsdl:part element="tns:CallerAuthenticationResponse" name="CallerAuthenticationResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="CallerAuthenticationPortType">
+    <wsdl:operation name="CallerAuthentication">
+      <wsdl:input message="tns:CallerAuthentication_in" name="CallerAuthentication_Input"/>
+      <wsdl:output message="tns:CallerAuthentication_out" name="CallerAuthentication_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CallerAuthenticationBinding" type="tns:CallerAuthenticationPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CallerAuthentication">
+      <soap:operation/>
+      <wsdl:input name="CallerAuthentication_Input">
+        <soap:body parts="CallerAuthenticationRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CallerAuthentication_Output">
+        <soap:body parts="CallerAuthenticationResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CallerAuthenticationService">
+    <wsdl:port binding="tns:CallerAuthenticationBinding" name="CallerAuthenticationProvider">
+      <soap:address location="https://hera.tcfbank.com:7900/mb/claws/CallerAuthentication"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

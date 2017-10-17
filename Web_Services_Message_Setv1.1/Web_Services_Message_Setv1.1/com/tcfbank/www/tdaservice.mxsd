@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:tns="http://www.tcfbank.com" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" elementFormDefault="qualified" jaxb:extensionBindingPrefixes="xjc" jaxb:version="1.0" targetNamespace="http://www.tcfbank.com">
+	
+	<include schemaLocation="tcfbank.mxsd"/>
+	
+	<complexType name="TimeAccountInformationRequest_Type">
+		<complexContent>
+			<extension base="tns:Request_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="TimeAccountInformationResponse_Type">
+		<complexContent>
+			<extension base="tns:Response_Type">
+				<sequence>
+					<element ref="tns:AccountIdentifier"/>
+					<element maxOccurs="1" minOccurs="0" ref="tns:TimeAccountInformationOutput"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<element name="TimeAccountInformationRequest" type="tns:TimeAccountInformationRequest_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TimeAccountInformationRequest;XSDElementDeclaration$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	<element name="TimeAccountInformationResponse" type="tns:TimeAccountInformationResponse_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TimeAccountInformationResponse;XSDElementDeclaration=1$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+	
+	
+	
+    <element name="TimeAccountInformationOutput" type="tns:TimeAccountInformationOutput_Type">
+        <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TimeAccountInformationOutput;XSDElementDeclaration=2$MRObject"/>
+      </appinfo>
+    </annotation>
+    </element>
+
+
+    <complexType name="TimeAccountInformationOutput_Type">
+    	<sequence>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:AvailableBalance">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:CurrentBalance">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:FederalExpirationDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:FederalTaxExemptCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:FederalTaxWithholdAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:FederalTaxWithheldYTDAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:FederalTaxWithheld1099Amount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestAccountNumber">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestApplication">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestAvailableAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestCompoundingDay">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestCompoundingFrequency">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestCompoundingTerm">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestPaymentDay">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestPaymentDisposition">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestEarnedSinceLastPayment">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestPaymentFrequency">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestMethod">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:NextInterestPaymentDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastInterestPaymentAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastInterestPaymentDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestPenaltyYTDAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestPenalty1099Amount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestRate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestPaymentTerm">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestPaidYTDAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestPaid1099Amount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:IRAKeoghCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:CertificateIssueDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:CertificateIssueValue">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastActivityDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:AccountDesignationCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:PrincipleTransferAccountNumber">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:PrincipleTransferApplication">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:FinalDispositionCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:FinalMaturityDispositionCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:FinalMaturityDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:AccountCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastContactDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastDepositAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastDepositDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:DormantCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:DormantDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:EmployeeCode">
+    		</element>
+    		<element maxOccurs="9" minOccurs="0" ref="tns:CustomerFloatAccount">
+    		</element>
+    		<element maxOccurs="9" minOccurs="0" ref="tns:BankFloatAccount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:Flag3">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:Flag5">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastMaintenanceDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:NewBranchNumber">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:NewAccountType">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:TDACloseToPostingStatus">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:PenaltyRoutine">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:TaxIdentificationNumber">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:AccountStatusCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastWithdrawlAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:InterestPerDiem">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:AssignmentFlag">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastWithdrawlDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:CautionFlag">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:TotalChecksOutstandingAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:AccountClosingValueAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:SpecificRenewalDay">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:RenewalFrequencyCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:LastRenewalDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:NextRenewalDate">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:RenewalOptionCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:RenewalTerm">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:RenewalUseCode">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:FederalTaxWithheldAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:TotalAssignmentsAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:PenaltyAmount">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:StatementDisposition">
+    		</element>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:UserArea"/>
+
+    		<element maxOccurs="1" minOccurs="0" ref="tns:TypeName"/>
+    		<element maxOccurs="1" minOccurs="0" ref="tns:MaturityDate"/>
+    	</sequence>
+    </complexType>
+
+    <element name="FederalExpirationDate" type="date"/>
+
+    <simpleType name="FederalTaxExemptCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="FederalTaxExemptCode" type="tns:FederalTaxExemptCode_Type"/>
+
+    <simpleType name="FederalTaxWithholdAmount_Type">
+    	<restriction base="string"/>
+    </simpleType>
+
+    <element name="FederalTaxWithholdAmount" type="tns:FederalTaxWithholdAmount_Type">
+    </element>
+
+    <simpleType name="FederalTaxWithheldYTDAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="FederalTaxWithheldYTDAmount" type="tns:FederalTaxWithheldYTDAmount_Type">
+    </element>
+
+    <simpleType name="FederalTaxWithheld1099Amount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="FederalTaxWithheld1099Amount" type="tns:FederalTaxWithheld1099Amount_Type">
+    </element>
+
+    <simpleType name="InterestAccountNumber_Type">
+    	<restriction base="string">
+    		<maxLength value="11"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="InterestAccountNumber" type="tns:InterestAccountNumber_Type"/>
+
+    <simpleType name="InterestApplication_Type">
+    	<restriction base="string">
+    		<maxLength value="2"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="InterestApplication" type="tns:InterestApplication_Type">
+    </element>
+
+    <simpleType name="InterestAvailableAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="InterestAvailableAmount" type="tns:InterestAvailableAmount_Type">
+    </element>
+
+    <simpleType name="InterestCompoundingDay_Type">
+    	<restriction base="string">
+    		<maxLength value="2"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="InterestCompoundingDay" type="tns:InterestCompoundingDay_Type"/>
+
+    <simpleType name="InterestCompoundingFrequency_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="InterestCompoundingFrequency" type="tns:InterestCompoundingFrequency_Type">
+    </element>
+
+    <simpleType name="InterestCompoundingTerm_Type">
+    	<restriction base="string">
+    		<maxLength value="3"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="InterestCompoundingTerm" type="tns:InterestCompoundingTerm_Type"/>
+
+    <simpleType name="InterestPaymentDay_Type">
+    	<restriction base="string">
+    		<maxLength value="2"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="InterestPaymentDay" type="tns:InterestPaymentDay_Type"/>
+
+    <simpleType name="InterestPaymentDisposition_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="InterestPaymentDisposition" type="tns:InterestPaymentDisposition_Type">
+    </element>
+
+    <simpleType name="InterestEarnedSinceLastPayment_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="InterestEarnedSinceLastPayment" type="tns:InterestEarnedSinceLastPayment_Type"/>
+
+    <simpleType name="InterestPaymentFrequency_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="InterestPaymentFrequency" type="tns:InterestPaymentFrequency_Type">
+    </element>
+
+    <simpleType name="InterestMethod_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="InterestMethod" type="tns:InterestMethod_Type"/>
+
+    <element name="NextInterestPaymentDate" type="date"/>
+
+    <simpleType name="LastInterestPaymentAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="LastInterestPaymentAmount" type="tns:LastInterestPaymentAmount_Type">
+    </element>
+
+    <element name="LastInterestPaymentDate" type="date"/>
+
+    <simpleType name="InterestPenaltyYTDAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="InterestPenaltyYTDAmount" type="tns:InterestPenaltyYTDAmount_Type">
+    </element>
+
+    <simpleType name="InterestPenalty1099Amount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="InterestPenalty1099Amount" type="tns:InterestPenalty1099Amount_Type">
+    </element>
+
+    <simpleType name="InterestRate_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="InterestRate" type="tns:InterestRate_Type"/>
+
+    <simpleType name="InterestPaymentTerm_Type">
+    	<restriction base="string">
+    		<maxLength value="2"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="InterestPaymentTerm" type="tns:InterestPaymentTerm_Type">
+    </element>
+
+    <simpleType name="InterestPaidYTDAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="InterestPaidYTDAmount" type="tns:InterestPaidYTDAmount_Type">
+    </element>
+
+    <simpleType name="InterestPaid1099Amount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="InterestPaid1099Amount" type="tns:InterestPaid1099Amount_Type">
+    </element>
+
+    <simpleType name="IRAKeoghCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="IRAKeoghCode" type="tns:IRAKeoghCode_Type"/>
+
+
+    <element name="CertificateIssueDate" type="date"/>
+
+    <simpleType name="CertificateIssueValue_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="CertificateIssueValue" type="tns:CertificateIssueValue_Type">
+    </element>
+
+    <element name="LastActivityDate" type="date"/>
+
+    <simpleType name="AccountDesignationCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="AccountDesignationCode" type="tns:AccountDesignationCode_Type">
+    </element>
+
+    <simpleType name="PrincipleTransferAccountNumber_Type">
+    	<restriction base="string">
+    		<maxLength value="11"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="PrincipleTransferAccountNumber" type="tns:PrincipleTransferAccountNumber_Type">
+    </element>
+
+    <simpleType name="PrincipleTransferApplication_Type">
+    	<restriction base="string">
+    		<maxLength value="2"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="PrincipleTransferApplication" type="tns:PrincipleTransferApplication_Type">
+    </element>
+
+    <simpleType name="FinalDispositionCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="FinalDispositionCode" type="tns:FinalDispositionCode_Type">
+    </element>
+
+    <simpleType name="FinalMaturityDispositionCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="FinalMaturityDispositionCode" type="tns:FinalMaturityDispositionCode_Type"/>
+
+    <element name="FinalMaturityDate" type="date"/>
+
+    <simpleType name="AccountCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="AccountCode" type="tns:AccountCode_Type">
+    </element>
+
+    <element name="LastContactDate" type="date"/>
+
+    <simpleType name="LastDepositAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="LastDepositAmount" type="tns:LastDepositAmount_Type">
+    </element>
+
+    <element name="LastDepositDate" type="date"/>
+
+    <simpleType name="DormantCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="DormantCode" type="tns:DormantCode_Type">
+    </element>
+
+    <element name="DormantDate" type="date"/>
+
+    <simpleType name="EmployeeCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="EmployeeCode" type="tns:EmployeeCode_Type">
+    </element>
+
+    <simpleType name="CustomerFloatAccount_Type">
+    	<restriction base="string">
+    		<maxLength value="9"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="CustomerFloatAccount" type="tns:CustomerFloatAccount_Type">
+    </element>
+
+    <simpleType name="Flag3_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <simpleType name="Flag5_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="Flag3" type="tns:Flag3_Type"/>
+
+    <element name="Flag5" type="tns:Flag5_Type"/>
+
+    <element name="LastMaintenanceDate" type="date"/>
+
+    <element name="NewBranchNumber" type="tns:BranchNumber_Type">
+    </element>
+
+    <simpleType name="NewAccountType_Type">
+    	<restriction base="string">
+    		<maxLength value="3"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="NewAccountType" type="tns:NewAccountType_Type">
+    </element>
+
+    <simpleType name="PenaltyRoutine_Type">
+    	<restriction base="string">
+    		<maxLength value="2"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="PenaltyRoutine" type="tns:PenaltyRoutine_Type">
+    </element>
+
+    <simpleType name="AccountStatusCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="AccountStatusCode" type="tns:AccountStatusCode_Type">
+    </element>
+
+    <simpleType name="LastWithdrawlAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="LastWithdrawlAmount" type="tns:LastWithdrawlAmount_Type">
+    </element>
+
+    <element name="LastWithdrawlDate" type="date"/>
+
+    <simpleType name="InterestPerDiem_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="InterestPerDiem" type="tns:InterestPerDiem_Type"/>
+
+    <simpleType name="AssignmentFlag_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="AssignmentFlag" type="tns:AssignmentFlag_Type"/>
+
+    <simpleType name="TotalChecksOutstandingAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="TotalChecksOutstandingAmount" type="tns:TotalChecksOutstandingAmount_Type">
+    </element>
+
+    <simpleType name="AccountClosingValueAmount_Type">
+    	<restriction base="string"/>
+    </simpleType>
+
+    <element name="AccountClosingValueAmount" type="tns:AccountClosingValueAmount_Type">
+    </element>
+
+    <simpleType name="SpecificRenewalDay_Type">
+    	<restriction base="string">
+    		<maxLength value="2"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="SpecificRenewalDay" type="tns:SpecificRenewalDay_Type">
+    </element>
+
+    <simpleType name="RenewalFrequencyCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="RenewalFrequencyCode" type="tns:RenewalFrequencyCode_Type">
+    </element>
+
+    <element name="LastRenewalDate" type="date"/>
+
+    <element name="NextRenewalDate" type="date"/>
+
+    <simpleType name="RenewalOptionCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+    
+    <element name="RenewalOptionCode" type="tns:RenewalOptionCode_Type">
+    </element>
+
+    <simpleType name="RenewalTerm_Type">
+    	<restriction base="string">
+    		<maxLength value="3"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="RenewalTerm" type="tns:RenewalTerm_Type"/>
+
+    <simpleType name="RenewalUseCode_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="RenewalUseCode" type="tns:RenewalUseCode_Type"/>
+
+    <simpleType name="FederalTaxWithheldAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="FederalTaxWithheldAmount" type="tns:FederalTaxWithheldAmount_Type">
+    </element>
+
+    <simpleType name="TotalAssignmentsAmount_Type">
+    	<restriction base="double"/>
+    </simpleType>
+
+    <element name="TotalAssignmentsAmount" type="tns:TotalAssignmentsAmount_Type">
+    </element>
+
+    <simpleType name="UserArea_Type">
+    	<restriction base="string">
+    		<maxLength value="1"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="UserArea" type="tns:UserArea_Type"/>
+
+    <simpleType name="TypeName_Type">
+    	<restriction base="string">
+    		<maxLength value="30"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="TypeName" type="tns:TypeName_Type"/>
+    
+    <simpleType name="BankFloatAccount_Type">
+    	<restriction base="string">
+    		<maxLength value="9"/>
+    	</restriction>
+    </simpleType>
+
+    <element name="BankFloatAccount" type="tns:BankFloatAccount_Type">
+    </element>
+    
+    <simpleType name="TDACloseToPostingStatus_Type">
+		<restriction base="string">
+			<enumeration value="A"/>
+			<enumeration value="D"/>
+			<enumeration value="C"/>
+			<enumeration value="N"/>
+		</restriction>
+    </simpleType>     
+    
+    <element name="TDACloseToPostingStatus" type="tns:TDACloseToPostingStatus_Type">
+    </element>   
+    <element name="TimeAccountInformationRequest_Type" type="tns:TimeAccountInformationRequest_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TimeAccountInformationRequest_Type;XSDElementDeclaration=72$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+    <element name="TimeAccountInformationResponse_Type" type="tns:TimeAccountInformationResponse_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TimeAccountInformationResponse_Type;XSDElementDeclaration=73$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+    <element name="TimeAccountInformationOutput_Type" type="tns:TimeAccountInformationOutput_Type">
+    <annotation>
+      <appinfo source="WMQI_APPINFO">
+        <MRMessage messageDefinition="/0/TimeAccountInformationOutput_Type;XSDElementDeclaration=74$MRObject"/>
+      </appinfo>
+    </annotation>
+  </element>
+</schema>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions name="OfficialBankCheckStopPayment" targetNamespace="http://www.tcfbank.com" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="OfficialBankCheckStopPaymentBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.tcfbank.com" xmlns:mrm="http://www.tcfbank.com">
+      <xsd:include schemaLocation="mutual.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="OfficialBankCheckStopPayment_in">
+    <wsdl:part element="tns:OfficialBankCheckStopPaymentRequest" name="OfficialBankCheckStopPaymentRequest"/>
+  </wsdl:message>
+  <wsdl:message name="OfficialBankCheckStopPayment_out">
+    <wsdl:part element="tns:OfficialBankCheckStopPaymentResponse" name="OfficialBankCheckStopPaymentResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="OfficialBankCheckStopPaymentPortType">
+    <wsdl:operation name="OfficialBankCheckStopPayment">
+      <wsdl:input message="tns:OfficialBankCheckStopPayment_in" name="OfficialBankCheckStopPayment_Input"/>
+      <wsdl:output message="tns:OfficialBankCheckStopPayment_out" name="OfficialBankCheckStopPayment_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OfficialBankCheckStopPaymentBinding" type="tns:OfficialBankCheckStopPaymentPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="OfficialBankCheckStopPayment">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="OfficialBankCheckStopPayment_Input">
+        <soap:body parts="OfficialBankCheckStopPaymentRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="OfficialBankCheckStopPayment_Output">
+        <soap:body parts="OfficialBankCheckStopPaymentResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OfficialBankCheckStopPaymentService">
+    <wsdl:port binding="tns:OfficialBankCheckStopPaymentBinding" name="OfficialBankCheckStopPaymentProvider">
+      <soap:address location="https://msgbrk-test1-officialbankcheckstoppayment.tcfbank.com:7900/mb/claws/OfficialBankCheckStopPayment"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="OnlineBankingSystemAvailability" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="OnlineBankingSystemAvailabilityBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="OnlineBankingSystemAvailability_in">
+    <wsdl:part element="tns:OnlineBankingSystemAvailabilityRequest" name="OnlineBankingSystemAvailabilityRequest"/>
+  </wsdl:message>
+  <wsdl:message name="OnlineBankingSystemAvailability_out">
+    <wsdl:part element="tns:OnlineBankingSystemAvailabilityResponse" name="OnlineBankingSystemAvailabilityResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="OnlineBankingSystemAvailabilityPortType">
+    <wsdl:operation name="OnlineBankingSystemAvailability">
+      <wsdl:input message="tns:OnlineBankingSystemAvailability_in" name="OnlineBankingSystemAvailability_Input"/>
+      <wsdl:output message="tns:OnlineBankingSystemAvailability_out" name="OnlineBankingSystemAvailability_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OnlineBankingSystemAvailabilityBinding" type="tns:OnlineBankingSystemAvailabilityPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="OnlineBankingSystemAvailability">
+      <soap:operation/>
+      <wsdl:input name="OnlineBankingSystemAvailability_Input">
+        <soap:body parts="OnlineBankingSystemAvailabilityRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="OnlineBankingSystemAvailability_Output">
+        <soap:body parts="OnlineBankingSystemAvailabilityResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OnlineBankingSystemAvailabilityService">
+    <wsdl:port binding="tns:OnlineBankingSystemAvailabilityBinding" name="OnlineBankingSystemAvailabilityProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/OnlineBankingSystemAvailability"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

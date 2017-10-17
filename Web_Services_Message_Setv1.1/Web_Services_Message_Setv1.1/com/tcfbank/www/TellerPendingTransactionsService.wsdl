@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TellerPendingTransactions" targetNamespace="http://www.tcfbank.com">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="TellerPendingTransactionsBinding" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema xmlns:mrm="http://www.tcfbank.com" targetNamespace="http://www.tcfbank.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <xsd:include schemaLocation="tcfbank.mxsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="TellerPendingTransactions_in">
+    <wsdl:part element="tns:TellerPendingTransactionsRequest" name="TellerPendingTransactionsRequest"/>
+  </wsdl:message>
+  <wsdl:message name="TellerPendingTransactions_out">
+    <wsdl:part element="tns:TellerPendingTransactionsResponse" name="TellerPendingTransactionsResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="TellerPendingTransactionsPortType">
+    <wsdl:operation name="TellerPendingTransactions">
+      <wsdl:input message="tns:TellerPendingTransactions_in" name="TellerPendingTransactions_Input"/>
+      <wsdl:output message="tns:TellerPendingTransactions_out" name="TellerPendingTransactions_Output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TellerPendingTransactionsBinding" type="tns:TellerPendingTransactionsPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="TellerPendingTransactions">
+      <soap:operation/>
+      <wsdl:input name="TellerPendingTransactions_Input">
+        <soap:body parts="TellerPendingTransactionsRequest" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TellerPendingTransactions_Output">
+        <soap:body parts="TellerPendingTransactionsResponse" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TellerPendingTransactionsService">
+    <wsdl:port binding="tns:TellerPendingTransactionsBinding" name="TellerPendingTransactionsProvider">
+      <soap:address location="http://hera.tcfbank.com:7800/mb/ws/TellerPendingTransactions"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
